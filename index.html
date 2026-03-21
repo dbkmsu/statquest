@@ -44,6 +44,7 @@
     .summary-box { margin-top:18px; padding:16px; border:1px solid var(--border); border-radius:12px; background:#fbfdff; }
     .restart-btn { margin-top:12px; }
     input[type=text] { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:14px; }
+    .banner { border:1px solid #bfdbfe; background:#eff6ff; border-radius:12px; padding:12px 14px; margin-bottom:14px; display:none; }
     @media (max-width:860px) { .grid { grid-template-columns:1fr; } }
   </style>
 </head>
@@ -58,6 +59,8 @@
         <div class="pill">Confidence calibration: <span id="calibration">0%</span></div>
       </div>
     </div>
+
+    <div id="returnBanner" class="banner"></div>
 
     <div id="landingPage" class="card" style="margin-bottom:18px;">
       <div class="summary-box" style="margin-bottom:16px; background:#f8fbff;">
@@ -79,7 +82,7 @@
         <div>
           <div class="pill" style="display:inline-block; margin-bottom:10px;">State Policy Analysis Unit</div>
           <h2 style="font-size:32px; line-height:1.2; margin-bottom:10px;">Train students to think like policy analysts, not just memorize statistics.</h2>
-          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, review claims under pressure, identify weak evidence, and make defensible recommendations. Each week focuses on one major course concept through a public policy case.</p>
+          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, complete an interactive lecture when available, then move directly into the matching policy case.</p>
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
             <button class="nav-btn" onclick="startSelectedWeek()">Start selected week</button>
             <button class="confidence-btn" onclick="scrollToSelector()">Choose a week</button>
@@ -89,8 +92,8 @@
             <strong>How students use this</strong>
             <ul>
               <li>Select a week below.</li>
-              <li>Complete the narrative policy case.</li>
-              <li>Review the score summary screen.</li>
+              <li>Start the week. If a lecture module exists, it opens first.</li>
+              <li>Finish the lecture and return automatically to the matching policy case.</li>
               <li>Export or submit results at the end.</li>
             </ul>
           </div>
@@ -110,9 +113,9 @@
       <div id="instructorNotes" class="summary-box" style="display:none; margin-top:16px;">
         <strong>Instructor notes</strong>
         <ul>
-          <li>Use one case per week as a pre-discussion or post-lecture activity.</li>
-          <li>Ask students to submit the exported score file or a screenshot plus a short reflection.</li>
-          <li>The app stores the most recent result in the browser for simple local tracking.</li>
+          <li>The main button now acts as a week launcher rather than just a case launcher.</li>
+          <li>For weeks with lecture files, students start there first and then flow into the matching case.</li>
+          <li>Week 4 is already wired to use <code>week4_lecture1.html</code>.</li>
         </ul>
       </div>
     </div>
@@ -145,28 +148,38 @@
   <script>
     let currentWeekFile = null, currentWeekName = null;
     let studentInfo = { name:'', id:'' };
+
     const weekCatalog = [
-      { file:'week1.json', label:'Week 1: Research questions' },
-      { file:'week2.json', label:'Week 2: Measurement' },
-      { file:'week3.json', label:'Week 3: Sampling and bias' },
-      { file:'week4.json', label:'Week 4: Research design and causality' },
-      { file:'week5.json', label:'Week 5: Significance and errors' },
-      { file:'week6.json', label:'Week 6: Correlation vs causation' },
-      { file:'week7.json', label:'Week 7: Regression and prediction' }
+      { file:'week1.json', label:'Week 1: Research questions', lecture:null },
+      { file:'week2.json', label:'Week 2: Measurement', lecture:null },
+      { file:'week3.json', label:'Week 3: Sampling and bias', lecture:null },
+      { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html' },
+      { file:'week5.json', label:'Week 5: Significance and errors', lecture:null },
+      { file:'week6.json', label:'Week 6: Correlation vs causation', lecture:null },
+      { file:'week7.json', label:'Week 7: Regression and prediction', lecture:null }
     ];
+
     function buildWeekButtons() {
-      document.getElementById('weekButtons').innerHTML = weekCatalog.map(week =>
-        `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')">${week.label}</button>`
-      ).join('');
+      document.getElementById('weekButtons').innerHTML = weekCatalog.map(week => {
+        const tag = week.lecture ? '<span class="small">Lecture + case</span>' : '<span class="small">Case only</span>';
+        return `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')"><strong>${week.label}</strong><br>${tag}</button>`;
+      }).join('');
     }
+
+    function getWeekMeta(file) {
+      return weekCatalog.find(w => w.file === file) || null;
+    }
+
     function selectWeek(file, label) {
       currentWeekFile = file; currentWeekName = label;
-      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">Selected and ready to load</span>`;
+      const weekMeta = getWeekMeta(file);
+      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">${weekMeta && weekMeta.lecture ? 'Lecture will launch first' : 'Case will launch directly'}</span>`;
       document.querySelectorAll('#weekButtons .option').forEach(btn => {
         btn.style.borderColor = '#dbe3ee'; btn.style.background = 'white';
-        if (btn.textContent === label) { btn.style.borderColor = '#1d4ed8'; btn.style.background = '#dbeafe'; }
+        if (btn.textContent.includes(label)) { btn.style.borderColor = '#1d4ed8'; btn.style.background = '#dbeafe'; }
       });
     }
+
     function saveStudentInfo() {
       studentInfo = {
         name: document.getElementById('studentNameInput').value.trim(),
@@ -174,6 +187,7 @@
       };
       localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
     }
+
     function loadStudentInfo() {
       const raw = localStorage.getItem('statquest_student_info');
       if (!raw) return;
@@ -181,6 +195,7 @@
       document.getElementById('studentNameInput').value = studentInfo.name || '';
       document.getElementById('studentIdInput').value = studentInfo.id || '';
     }
+
     function startSelectedWeek() {
       saveStudentInfo();
       if (!studentInfo.name.trim()) {
@@ -189,14 +204,49 @@
         return;
       }
       if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+      const weekMeta = getWeekMeta(currentWeekFile);
+      if (weekMeta && weekMeta.lecture) {
+        localStorage.setItem('statquest_pending_case', JSON.stringify({
+          weekFile: currentWeekFile,
+          weekName: currentWeekName,
+          studentName: studentInfo.name,
+          studentId: studentInfo.id
+        }));
+        window.location.href = `${weekMeta.lecture}?return_case=${encodeURIComponent(currentWeekFile)}`;
+        return;
+      }
       loadWeek(currentWeekFile);
       window.scrollTo({ top: document.querySelector('.grid').offsetTop - 10, behavior:'smooth' });
     }
+
+    function checkForLectureReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const autocase = params.get('autocase');
+      if (!autocase) return;
+      const pendingRaw = localStorage.getItem('statquest_pending_case');
+      if (!pendingRaw) return;
+      try {
+        const pending = JSON.parse(pendingRaw);
+        currentWeekFile = pending.weekFile;
+        currentWeekName = pending.weekName;
+        studentInfo = { name: pending.studentName || '', id: pending.studentId || '' };
+        document.getElementById('studentNameInput').value = studentInfo.name || '';
+        document.getElementById('studentIdInput').value = studentInfo.id || '';
+        const banner = document.getElementById('returnBanner');
+        banner.style.display = 'block';
+        banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Your matching policy case is loading now.`;
+        loadWeek(autocase);
+        history.replaceState({}, '', window.location.pathname);
+        localStorage.removeItem('statquest_pending_case');
+      } catch (e) {}
+    }
+
     function scrollToSelector() { document.getElementById('weekSelectorBox').scrollIntoView({ behavior:'smooth', block:'center' }); }
     function showInstructorNotes() {
       const notes = document.getElementById('instructorNotes');
       notes.style.display = notes.style.display === 'none' ? 'block' : 'none';
     }
+
     function saveLatestResult(result) {
       localStorage.setItem('statquest_latest_result', JSON.stringify(result));
       renderSavedResult();
@@ -329,19 +379,26 @@
     function restartWeek() { if (currentWeekFile) loadWeek(currentWeekFile); }
     function returnToLanding() {
       document.getElementById('landingPage').style.display = 'block';
-      document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the case.</p>';
+      document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
+      document.getElementById('returnBanner').style.display = 'none';
       window.scrollTo({ top:0, behavior:'smooth' });
     }
+
     window.setConfidence = setConfidence; window.selectOption = selectOption; window.nextStep = nextStep; window.restartWeek = restartWeek;
     window.returnToLanding = returnToLanding; window.selectWeek = selectWeek; window.startSelectedWeek = startSelectedWeek;
     window.scrollToSelector = scrollToSelector; window.showInstructorNotes = showInstructorNotes;
     window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult;
+
     window.addEventListener('resize', () => { if (currentCase < cases.length && cases.length > 0) drawBarChart('caseChart', cases[currentCase].chartData); });
-    buildWeekButtons(); selectWeek(weekCatalog[0].file, weekCatalog[0].label); loadStudentInfo();
+
+    buildWeekButtons();
+    selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+    loadStudentInfo();
     document.getElementById('studentNameInput').addEventListener('change', saveStudentInfo);
     document.getElementById('studentIdInput').addEventListener('change', saveStudentInfo);
     renderSavedResult();
-    document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the case.</p>';
+    document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
+    checkForLectureReturn();
   </script>
 </body>
 </html>

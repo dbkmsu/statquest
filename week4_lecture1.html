@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 4 Lecture 1 - Research Design and Causality</title>
+  <style>
+    :root { --bg:#f3f6fb; --panel:#fff; --text:#1f2937; --muted:#6b7280; --border:#dbe3ee; --accent:#1d4ed8; --accent-soft:#dbeafe; --good:#065f46; --good-bg:#ecfdf5; --warn-bg:#fff7ed; --shadow:0 10px 30px rgba(15,23,42,.08); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--text); background:linear-gradient(180deg, #eef4ff 0%, #f7f9fc 100%); line-height:1.5; }
+    .wrap { max-width:1120px; margin:0 auto; padding:24px; }
+    .hero, .panel { background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); }
+    .hero { padding:24px; margin-bottom:18px; }
+    .kicker { display:inline-block; padding:6px 10px; border-radius:999px; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; font-size:13px; margin-bottom:8px; }
+    h1, h2, h3 { margin:0 0 10px 0; }
+    .sub { color:var(--muted); max-width:860px; }
+    .hero-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:18px; margin-top:18px; }
+    .hero-card { border:1px solid var(--border); background:#fbfdff; border-radius:14px; padding:16px; }
+    .hero-card ul { margin:8px 0 0 18px; padding:0; }
+    .layout { display:grid; grid-template-columns:1.25fr .75fr; gap:18px; }
+    .panel { padding:22px; }
+    .meta-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+    .pill { background:#f8fafc; border:1px solid var(--border); border-radius:999px; padding:8px 12px; font-size:13px; }
+    .screen-title { font-size:28px; line-height:1.2; margin-bottom:8px; }
+    .screen-subtitle { color:var(--muted); margin-bottom:14px; }
+    .scenario { background:#f8fbff; border:1px solid var(--border); border-radius:14px; padding:16px; margin:14px 0 16px; }
+    .quote { font-style:italic; color:#374151; }
+    .bar-chart { margin:16px 0; display:grid; gap:12px; }
+    .bar-row label { display:block; font-size:14px; margin-bottom:5px; }
+    .bar { height:22px; border-radius:999px; background:linear-gradient(90deg, #3b82f6, #93c5fd); position:relative; }
+    .bar span { position:absolute; right:10px; top:2px; font-size:12px; font-weight:bold; color:#0f172a; }
+    .choices, .checklist { display:grid; gap:10px; margin:12px 0 0; }
+    .choice-btn { width:100%; text-align:left; border-radius:12px; border:1px solid var(--border); background:white; padding:13px 14px; font-size:15px; cursor:pointer; }
+    .choice-btn:hover { border-color:var(--accent); transform:translateY(-1px); }
+    .feedback { margin-top:14px; border-radius:12px; padding:14px; background:var(--warn-bg); border-left:5px solid #f59e0b; }
+    .feedback.good { background:var(--good-bg); border-left-color:#10b981; }
+    .button-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    button.nav { border-radius:12px; border:1px solid var(--border); background:white; padding:12px 16px; cursor:pointer; font-size:14px; }
+    button.primary { background:var(--accent); color:white; border-color:var(--accent); }
+    button:disabled { opacity:.55; cursor:not-allowed; }
+    .progress { height:10px; background:#e5edf7; border-radius:999px; overflow:hidden; margin-bottom:14px; }
+    .progress-fill { height:100%; background:linear-gradient(90deg, #2563eb, #60a5fa); width:0%; transition:width .2s ease; }
+    .side-section + .side-section { margin-top:14px; }
+    .side-title { font-size:16px; margin-bottom:8px; }
+    .mini-card { border:1px solid var(--border); border-radius:12px; background:#fbfdff; padding:14px; }
+    .timeline { display:grid; gap:8px; }
+    .timeline-item { border-left:3px solid #bfdbfe; padding-left:10px; font-size:14px; }
+    .threat-list { display:grid; gap:8px; }
+    .threat-item { border:1px solid var(--border); border-radius:12px; padding:12px; background:white; }
+    .muted { color:var(--muted); }
+    .check { border:1px solid var(--border); border-radius:12px; padding:12px; background:white; }
+    .success-box { border:1px solid #bbf7d0; background:#f0fdf4; border-radius:14px; padding:16px; margin-top:12px; }
+    a.cta-link { display:inline-block; margin-top:10px; color:white; background:var(--accent); text-decoration:none; padding:12px 16px; border-radius:12px; border:1px solid var(--accent); }
+    @media (max-width:900px) { .layout, .hero-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="kicker">MC295 • Week 4 • Lecture 1</div>
+      <h1>Research Design, Causality, and Validity</h1>
+      <div class="sub">Complete this lecture module, then move directly into the matching Week 4 policy case.</div>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <strong>What students should learn</strong>
+          <ul>
+            <li>Why group differences do not automatically imply causation</li>
+            <li>How true, natural, and observational designs differ</li>
+            <li>Why random assignment matters</li>
+            <li>How MRS SMITH threats undermine internal validity</li>
+          </ul>
+        </div>
+        <div class="hero-card">
+          <strong>What happens next</strong>
+          <ul>
+            <li>Finish the 12 short lecture screens</li>
+            <li>Click the return button at the end</li>
+            <li>The Week 4 case will load automatically in the main app</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="meta-row">
+          <div class="pill">Screen <span id="screenCount">1</span> of 12</div>
+          <div class="pill">Topic: <span id="topicLabel">Hook</span></div>
+        </div>
+        <div id="screenArea"></div>
+        <div class="button-row">
+          <button id="backBtn" class="nav" onclick="prevScreen()">Back</button>
+          <button id="nextBtn" class="nav primary" onclick="nextScreen()">Next</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="side-section">
+          <div class="side-title">Lecture notes guide</div>
+          <div class="mini-card">This module reflects the Week 4 material on research design, experiments, validity, and threats to internal validity.</div>
+        </div>
+        <div class="side-section">
+          <div class="side-title">MRS SMITH quick reference</div>
+          <div class="threat-list">
+            <div class="threat-item"><strong>M</strong>aturation</div>
+            <div class="threat-item"><strong>R</strong>egression to the mean</div>
+            <div class="threat-item"><strong>S</strong>election of subjects</div>
+            <div class="threat-item"><strong>S</strong>election by maturation interaction</div>
+            <div class="threat-item"><strong>M</strong>ortality</div>
+            <div class="threat-item"><strong>I</strong>nstrumentation</div>
+            <div class="threat-item"><strong>T</strong>esting</div>
+            <div class="threat-item"><strong>H</strong>istory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const returnCase = params.get('return_case') || 'week4.json';
+
+    const screens = [
+      { topic:'Hook', render: () => `<div class="screen-title">The policy that “worked”</div><div class="screen-subtitle">Start with the mistake policy analysts make all the time.</div><div class="scenario"><div class="quote">“Participants in our city job program have higher employment rates than non-participants. This proves the program works. We should expand it statewide.”</div></div><div class="choices"><button class="choice-btn" onclick="answerHook(0)">Yes. Higher outcomes prove the program caused improvement.</button><button class="choice-btn" onclick="answerHook(1)">Not yet. A difference in outcomes is not enough by itself.</button></div><div id="hookFeedback"></div>` },
+      { topic:'Difference vs cause', render: () => `<div class="screen-title">Difference does not automatically mean causation</div><div class="screen-subtitle">Before claiming causation, ask whether something else explains the gap.</div><div class="bar-chart"><div class="bar-row"><label>Program participants</label><div class="bar" style="width:68%;"><span>68%</span></div></div><div class="bar-row"><label>Non-participants</label><div class="bar" style="width:52%;"><span>52%</span></div></div></div><div class="checklist"><div class="check"><strong>Motivation</strong> may differ</div><div class="check"><strong>Prior experience</strong> may differ</div><div class="check"><strong>Education</strong> may differ</div></div>` },
+      { topic:'Research design', render: () => `<div class="screen-title">What is research design?</div><div class="scenario"><strong>Plain-language translation:</strong><p>Research design is the architecture of your study. It determines whether your evidence supports a causal conclusion, a correlational conclusion, or only a descriptive one.</p></div><div class="checklist"><div class="check"><strong>Independent variable:</strong> the treatment or intervention</div><div class="check"><strong>Dependent variable:</strong> the outcome</div><div class="check"><strong>Design question:</strong> does the structure isolate the treatment effect?</div></div>` },
+      { topic:'Sorting designs', render: () => `<div class="screen-title">Which kind of design is this?</div><div class="choices"><button class="choice-btn" onclick="answerSort()">Scenario A: Researchers randomly assign applicants into treatment and control groups, measure outcomes before and after, then compare groups.</button><button class="choice-btn" onclick="answerSort()">Scenario B: A draft lottery creates treatment-like and control-like groups without researchers assigning anyone.</button><button class="choice-btn" onclick="answerSort()">Scenario C: Researchers compare existing groups in survey data and control statistically.</button></div><div id="sortFeedback"></div>` },
+      { topic:'True experiments', render: () => `<div class="screen-title">True experiments are the gold standard</div><div class="timeline"><div class="timeline-item"><strong>1.</strong> Random assignment</div><div class="timeline-item"><strong>2.</strong> Measure before treatment</div><div class="timeline-item"><strong>3.</strong> Apply treatment</div><div class="timeline-item"><strong>4.</strong> Measure after treatment</div><div class="timeline-item"><strong>5.</strong> Compare groups</div></div><div class="success-box">Random assignment makes later group differences much more plausibly attributable to the treatment itself.</div>` },
+      { topic:'Random assignment', render: () => `<div class="screen-title">Why random assignment matters</div><div class="choices"><button class="choice-btn" onclick="answerRandom(0)"><strong>Version 1:</strong> Motivated people volunteer for the program.</button><button class="choice-btn" onclick="answerRandom(1)"><strong>Version 2:</strong> Eligible people are randomly assigned.</button></div><div id="randomFeedback"></div>` },
+      { topic:'Natural experiments', render: () => `<div class="screen-title">Natural experiments</div><div class="scenario"><p>In a natural experiment, the researcher does not assign treatment. Some outside process creates treatment-like and control-like groups.</p></div><div class="checklist"><div class="check"><strong>Strength:</strong> often stronger than ordinary observational data</div><div class="check"><strong>Weakness:</strong> still requires careful reasoning about comparability</div><div class="check"><strong>Policy value:</strong> useful where true experiments are not feasible</div></div>` },
+      { topic:'Internal validity', render: () => `<div class="screen-title">Internal validity</div><div class="scenario"><strong>Definition:</strong><p>Internal validity asks whether the study successfully isolates the effect of the independent variable on the dependent variable.</p></div><h3>Can we reasonably say the treatment caused the outcome, rather than something else?</h3>` },
+      { topic:'MRS SMITH', render: () => `<div class="screen-title">Threats to internal validity</div><div class="choices"><button class="choice-btn" onclick="toggleThreat('m')">Maturation</button><button class="choice-btn" onclick="toggleThreat('r')">Regression to the mean</button><button class="choice-btn" onclick="toggleThreat('s')">Selection of subjects</button><button class="choice-btn" onclick="toggleThreat('h')">History</button></div><div id="threatFeedback" class="feedback" style="display:none;"></div>` },
+      { topic:'Apply a threat', render: () => `<div class="screen-title">Apply the idea</div><div class="scenario">Students improve after a year-long intervention, but they are also older, more experienced, and more familiar with school routines than they were at the start.</div><div class="choices"><button class="choice-btn" onclick="answerThreat(0)">This is mainly a maturation threat.</button><button class="choice-btn" onclick="answerThreat(1)">This proves the treatment worked.</button></div><div id="applyThreatFeedback"></div>` },
+      { topic:'External validity', render: () => `<div class="screen-title">External validity</div><div class="scenario"><strong>Question:</strong> If a study seems credible in one setting, can we generalize the finding to other places, populations, or contexts?</div><div class="checklist"><div class="check"><strong>Population external validity:</strong> generalize from sample to population</div><div class="check"><strong>Ecological external validity:</strong> generalize across settings</div></div>` },
+      { topic:'Wrap-up', render: () => `<div class="screen-title">Put it all together</div><div class="scenario"><div class="quote">“Participants in our job program have higher employment rates, so the program works.”</div></div><div class="checklist"><div class="check"><strong>Random assignment?</strong> No</div><div class="check"><strong>Possible confounding variables?</strong> Yes</div><div class="check"><strong>Can we infer causation confidently?</strong> Not yet</div></div><div class="success-box">Now move directly into the matching Week 4 policy case.</div><a class="cta-link" href="index.html?autocase=${encodeURIComponent(returnCase)}">Begin Week 4 policy case</a>` }
+    ];
+
+    const state = { index:0 };
+    function renderScreen() {
+      const screen = screens[state.index];
+      document.getElementById('screenArea').innerHTML = screen.render();
+      document.getElementById('screenCount').textContent = state.index + 1;
+      document.getElementById('topicLabel').textContent = screen.topic;
+      document.getElementById('progressFill').style.width = ((state.index + 1) / screens.length * 100) + '%';
+      document.getElementById('backBtn').disabled = state.index === 0;
+      document.getElementById('nextBtn').disabled = state.index === screens.length - 1;
+    }
+    function nextScreen(){ if (state.index < screens.length - 1) { state.index += 1; renderScreen(); } }
+    function prevScreen(){ if (state.index > 0) { state.index -= 1; renderScreen(); } }
+    function answerHook(choice) {
+      document.getElementById('hookFeedback').innerHTML = choice === 1
+        ? '<div class="feedback good"><strong>Correct.</strong> Observed differences may be real, but they do not by themselves establish a causal relationship.</div>'
+        : '<div class="feedback"><strong>Not yet.</strong> A difference in outcomes could reflect motivation, selection, or other confounding variables.</div>';
+    }
+    function answerSort() {
+      document.getElementById('sortFeedback').innerHTML = '<div class="feedback good"><strong>Correct matching:</strong><br><br><strong>Scenario A:</strong> True experiment<br><strong>Scenario B:</strong> Natural experiment<br><strong>Scenario C:</strong> Observational study</div>';
+    }
+    function answerRandom(choice) {
+      document.getElementById('randomFeedback').innerHTML = choice === 1
+        ? '<div class="feedback good"><strong>Correct.</strong> Random assignment helps prevent preexisting differences from driving the result.</div>'
+        : '<div class="feedback"><strong>This is the weaker design.</strong> Volunteer-based participation invites selection bias.</div>';
+    }
+    function toggleThreat(letter) {
+      const content = {
+        m: '<strong>Maturation:</strong> outcomes change because people age, gain experience, or otherwise change over time.',
+        r: '<strong>Regression to the mean:</strong> extremely high or low scores often become less extreme on retesting.',
+        s: '<strong>Selection of subjects:</strong> treatment and control groups may differ before the intervention.',
+        h: '<strong>History:</strong> outside events during the study period may affect the outcome.'
+      };
+      const box = document.getElementById('threatFeedback');
+      box.style.display = 'block';
+      box.innerHTML = content[letter];
+    }
+    function answerThreat(choice) {
+      document.getElementById('applyThreatFeedback').innerHTML = choice === 0
+        ? '<div class="feedback good"><strong>Correct.</strong> Change over time can happen even without the treatment.</div>'
+        : '<div class="feedback"><strong>Reconsider.</strong> The main issue is that maturation can threaten internal validity.</div>';
+    }
+    renderScreen();
+  </script>
+</body>
+</html>
