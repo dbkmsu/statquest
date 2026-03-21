@@ -1,37 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StatQuest: Policy Lab</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StatQuest: Policy Lab</title>
+  <style>
+    :root { --bg:#f3f6fb; --panel:#fff; --text:#1f2937; --muted:#6b7280; --border:#dbe3ee; --accent:#1d4ed8; --accent-soft:#dbeafe; --good-bg:#ecfdf5; --good-border:#10b981; --warn-bg:#fff7ed; --warn-border:#f59e0b; --bad-bg:#fef2f2; --bad-border:#ef4444; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .wrap { max-width:1100px; margin:0 auto; padding:24px; }
+    .header, .card { background:var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
+    .header { padding:20px 24px; margin-bottom:18px; }
+    h1,h2,h3 { margin:0 0 8px 0; }
+    .sub { color:var(--muted); margin-top:6px; }
+    .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+    .pill { background:#f8fafc; border:1px solid var(--border); border-radius:999px; padding:8px 12px; font-size:14px; }
+    .grid { display:grid; grid-template-columns:1.25fr .75fr; gap:18px; }
+    .card { padding:22px; }
+    .case-brief { background:#f8fbff; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:16px; }
+    .chart-box { margin:16px 0; border:1px solid var(--border); border-radius:12px; padding:14px; background:#fcfdff; }
+    canvas { width:100%; height:260px; display:block; margin-top:8px; border-radius:8px; background:#fff; }
+    .question { font-size:20px; font-weight:bold; margin:16px 0 12px; }
+    .option { display:block; width:100%; text-align:left; margin:10px 0; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--text); cursor:pointer; font-size:15px; transition:.15s ease; }
+    .option:hover:not(:disabled) { border-color:var(--accent); transform:translateY(-1px); }
+    .option:disabled { cursor:default; opacity:.92; }
+    .confidence { margin:18px 0; padding:14px; background:#f8fafc; border:1px solid var(--border); border-radius:12px; }
+    .confidence-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .confidence-btn, .nav-btn, .restart-btn { border-radius:10px; border:1px solid var(--border); background:#fff; padding:10px 14px; cursor:pointer; font-size:14px; }
+    .confidence-btn.selected { border-color:var(--accent); background:var(--accent-soft); font-weight:bold; }
+    .nav-btn { background:var(--accent); color:#fff; border-color:var(--accent); margin-top:16px; }
+    .nav-btn:disabled { opacity:.55; cursor:not-allowed; }
+    .feedback { margin-top:16px; padding:14px; border-left:5px solid var(--border); border-radius:10px; }
+    .feedback.good { background:var(--good-bg); border-left-color:var(--good-border); }
+    .feedback.warn { background:var(--warn-bg); border-left-color:var(--warn-border); }
+    .feedback.bad { background:var(--bad-bg); border-left-color:var(--bad-border); }
+    .side-section + .side-section { margin-top:14px; }
+    .side-title { font-size:16px; margin-bottom:8px; }
+    ul { margin:8px 0 0 18px; padding:0; }
+    .case-list { display:grid; gap:10px; }
+    .case-item { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#f8fafc; font-size:14px; }
+    .case-item.active { border-color:var(--accent); background:var(--accent-soft); }
+    .small { color:var(--muted); font-size:13px; }
+    .summary-box { margin-top:18px; padding:16px; border:1px solid var(--border); border-radius:12px; background:#fbfdff; }
+    .restart-btn { margin-top:12px; }
+    input[type=text] { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:14px; }
+    .banner { border:1px solid #bfdbfe; background:#eff6ff; border-radius:12px; padding:12px 14px; margin-bottom:14px; display:none; }
+    @media (max-width:860px) { .grid { grid-template-columns:1fr; } }
+  </style>
 </head>
 <body>
-<h1>StatQuest: Policy Lab (Updated)</h1>
+  <div class="wrap">
+    <div class="header">
+      <h1>StatQuest: Policy Lab</h1>
+      <div class="sub">Interactive policy cases for research design, statistical reasoning, and evidence-based decision-making.</div>
+      <div class="meta">
+        <div class="pill">Cases completed: <span id="casesCompleted">0</span></div>
+        <div class="pill">Correct answers: <span id="score">0</span></div>
+        <div class="pill">Confidence calibration: <span id="calibration">0%</span></div>
+      </div>
+    </div>
 
-<script>
-const weekCatalog = [
-  { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html' },
-  { file:'week2.json', label:'Week 2: Measurement', lecture:'week2_lecture1.html' },
-  { file:'week3.json', label:'Week 3: Sampling and bias', lecture:'week3_lecture1.html' },
-  { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html' },
-  { file:'week5.json', label:'Week 5: Significance and errors', lecture:'week5_lecture1.html' },
-  { file:'week6.json', label:'Week 6: Correlation vs causation', lecture:'week6_lecture1.html' },
-  { file:'week7.json', label:'Week 7: Regression and prediction', lecture:'week7_lecture1.html' }
-];
+    <div id="returnBanner" class="banner"></div>
 
-function startWeek(week) {
-  if (week.lecture) {
-    window.location.href = week.lecture + "?return_case=" + week.file;
-  } else {
-    alert("No lecture for this week.");
-  }
-}
+    <div id="landingPage" class="card" style="margin-bottom:18px;">
+      <div class="summary-box" style="margin-bottom:16px; background:#f8fbff;">
+        <strong style="display:block; margin-bottom:10px;">Student information</strong>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label for="studentNameInput" class="small" style="display:block; margin-bottom:6px;">Student name</label>
+            <input id="studentNameInput" type="text" placeholder="Enter your name" />
+          </div>
+          <div>
+            <label for="studentIdInput" class="small" style="display:block; margin-bottom:6px;">Student ID or email (optional)</label>
+            <input id="studentIdInput" type="text" placeholder="Optional identifier" />
+          </div>
+        </div>
+        <div class="small" style="margin-top:8px;">This information is stored only in this browser and will be added to exported result files.</div>
+      </div>
 
-document.write("<h2>Select a week</h2>");
-weekCatalog.forEach(w => {
-  document.write(`<button onclick="startWeek(weekCatalog[${weekCatalog.indexOf(w)}])">${w.label}</button><br><br>`);
-});
-</script>
+      <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px; align-items:start;">
+        <div>
+          <div class="pill" style="display:inline-block; margin-bottom:10px;">State Policy Analysis Unit</div>
+          <h2 style="font-size:32px; line-height:1.2; margin-bottom:10px;">Train students to think like policy analysts, not just memorize statistics.</h2>
+          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, complete an interactive lecture when available, then move directly into the matching policy case.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+            <button class="nav-btn" onclick="startSelectedWeek()">Start selected week</button>
+            <button class="confidence-btn" onclick="scrollToSelector()">Choose a week</button>
+            <button class="confidence-btn" onclick="showInstructorNotes()">Instructor notes</button>
+          </div>
+          <div class="summary-box">
+            <strong>How students use this</strong>
+            <ul>
+              <li>Select a week below.</li>
+              <li>Start the week. If a lecture module exists, it opens first.</li>
+              <li>Finish the lecture and return automatically to the matching policy case.</li>
+              <li>Export or submit results at the end.</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="summary-box" id="weekSelectorBox" style="margin-top:0;">
+            <strong style="display:block; margin-bottom:10px;">Weekly case menu</strong>
+            <div id="weekButtons" style="display:grid; gap:8px;"></div>
+          </div>
+          <div class="summary-box" style="margin-top:14px;">
+            <strong style="display:block; margin-bottom:8px;">Course arc</strong>
+            <div class="small">Weeks 1–7 move from research questions and measurement to sampling, causality, significance, correlation, and regression.</div>
+          </div>
+        </div>
+      </div>
 
+      <div id="instructorNotes" class="summary-box" style="display:none; margin-top:16px;">
+        <strong>Instructor notes</strong>
+        <ul>
+          <li>The main button now acts as a week launcher rather than just a case launcher.</li>
+          <li>All current weeks are configured to launch a lecture first and then return to the matching case.</li>
+          <li>Lecture files should be kept in the same repository root as this index file and the weekly JSON files.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><div id="app"></div></div>
+      <div class="card">
+        <div class="side-section"><div class="side-title">Policy cases</div><div id="caseList" class="case-list"></div></div>
+        <div class="side-section"><div class="side-title">Current week</div><div id="currentWeekLabel" class="case-item">No week loaded yet</div></div>
+        <div class="side-section">
+          <div class="side-title">Latest saved result</div>
+          <div id="savedResultBox" class="case-item small">No saved result yet.</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+            <button class="confidence-btn" onclick="downloadLatestResult()">Export latest result</button>
+            <button class="confidence-btn" onclick="clearSavedResult()">Clear saved result</button>
+          </div>
+        </div>
+        <div class="side-section">
+          <div class="side-title">How scoring works</div>
+          <ul><li>1 point for each correct answer</li><li>Choose a confidence level before answering</li><li>Calibration improves when your confidence matches performance</li></ul>
+        </div>
+        <div class="side-section">
+          <div class="side-title">Learning goals</div>
+          <ul><li>Interpret evidence without overclaiming</li><li>Notice bias, confounding, and uncertainty</li><li>Connect statistical reasoning to policy decisions</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentWeekFile = null, currentWeekName = null;
+    let studentInfo = { name:'', id:'' };
+
+    const weekCatalog = [
+      { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html' },
+      { file:'week2.json', label:'Week 2: Measurement', lecture:'week2_lecture1.html' },
+      { file:'week3.json', label:'Week 3: Sampling and bias', lecture:'week3_lecture1.html' },
+      { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html' },
+      { file:'week5.json', label:'Week 5: Significance and errors', lecture:'week5_lecture1.html' },
+      { file:'week6.json', label:'Week 6: Correlation vs causation', lecture:'week6_lecture1.html' },
+      { file:'week7.json', label:'Week 7: Regression and prediction', lecture:'week7_lecture1.html' }
+    ];
+
+    function buildWeekButtons() {
+      document.getElementById('weekButtons').innerHTML = weekCatalog.map(week => {
+        const tag = week.lecture ? '<span class="small">Lecture + case</span>' : '<span class="small">Case only</span>';
+        return `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')"><strong>${week.label}</strong><br>${tag}</button>`;
+      }).join('');
+    }
+
+    function getWeekMeta(file) {
+      return weekCatalog.find(w => w.file === file) || null;
+    }
+
+    function selectWeek(file, label) {
+      currentWeekFile = file; currentWeekName = label;
+      const weekMeta = getWeekMeta(file);
+      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">${weekMeta && weekMeta.lecture ? 'Lecture will launch first' : 'Case will launch directly'}</span>`;
+      document.querySelectorAll('#weekButtons .option').forEach(btn => {
+        btn.style.borderColor = '#dbe3ee'; btn.style.background = 'white';
+        if (btn.textContent.includes(label)) { btn.style.borderColor = '#1d4ed8'; btn.style.background = '#dbeafe'; }
+      });
+    }
+
+    function saveStudentInfo() {
+      studentInfo = {
+        name: document.getElementById('studentNameInput').value.trim(),
+        id: document.getElementById('studentIdInput').value.trim()
+      };
+      localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
+    }
+
+    function loadStudentInfo() {
+      const raw = localStorage.getItem('statquest_student_info');
+      if (!raw) return;
+      try { studentInfo = JSON.parse(raw); } catch (e) { studentInfo = { name:'', id:'' }; }
+      document.getElementById('studentNameInput').value = studentInfo.name || '';
+      document.getElementById('studentIdInput').value = studentInfo.id || '';
+    }
+
+    function startSelectedWeek() {
+      saveStudentInfo();
+      if (!studentInfo.name.trim()) {
+        alert('Please enter the student name before starting the case.');
+        document.getElementById('studentNameInput').focus();
+        return;
+      }
+      if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+      const weekMeta = getWeekMeta(currentWeekFile);
+      if (weekMeta && weekMeta.lecture) {
+        localStorage.setItem('statquest_pending_case', JSON.stringify({
+          weekFile: currentWeekFile,
+          weekName: currentWeekName,
+          studentName: studentInfo.name,
+          studentId: studentInfo.id
+        }));
+        window.location.href = `${weekMeta.lecture}?return_case=${encodeURIComponent(currentWeekFile)}`;
+        return;
+      }
+      loadWeek(currentWeekFile);
+      window.scrollTo({ top: document.querySelector('.grid').offsetTop - 10, behavior:'smooth' });
+    }
+
+    function checkForLectureReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const autocase = params.get('autocase');
+      if (!autocase) return;
+      const pendingRaw = localStorage.getItem('statquest_pending_case');
+      if (!pendingRaw) return;
+      try {
+        const pending = JSON.parse(pendingRaw);
+        currentWeekFile = pending.weekFile;
+        currentWeekName = pending.weekName;
+        studentInfo = { name: pending.studentName || '', id: pending.studentId || '' };
+        document.getElementById('studentNameInput').value = studentInfo.name || '';
+        document.getElementById('studentIdInput').value = studentInfo.id || '';
+        const banner = document.getElementById('returnBanner');
+        banner.style.display = 'block';
+        banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Your matching policy case is loading now.`;
+        loadWeek(autocase);
+        history.replaceState({}, '', window.location.pathname);
+        localStorage.removeItem('statquest_pending_case');
+      } catch (e) {}
+    }
+
+    function scrollToSelector() { document.getElementById('weekSelectorBox').scrollIntoView({ behavior:'smooth', block:'center' }); }
+    function showInstructorNotes() {
+      const notes = document.getElementById('instructorNotes');
+      notes.style.display = notes.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function saveLatestResult(result) {
+      localStorage.setItem('statquest_latest_result', JSON.stringify(result));
+      renderSavedResult();
+    }
+    function getLatestResult() {
+      const raw = localStorage.getItem('statquest_latest_result');
+      return raw ? JSON.parse(raw) : null;
+    }
+    function renderSavedResult() {
+      const box = document.getElementById('savedResultBox'), saved = getLatestResult();
+      if (!saved) { box.textContent = 'No saved result yet.'; return; }
+      box.innerHTML = `<strong>${saved.weekName || 'Unknown week'}</strong><br>
+        Student: ${saved.studentName || 'Not provided'}<br>
+        ${saved.studentId ? `ID: ${saved.studentId}<br>` : ''}
+        Score: ${saved.score}/${saved.totalQuestions}<br>
+        Calibration: ${saved.calibration}%<br>
+        Completed: ${saved.completedAt}`;
+    }
+    function downloadLatestResult() {
+      const saved = getLatestResult(); if (!saved) return;
+      const blob = new Blob([JSON.stringify(saved, null, 2)], { type:'application/json' });
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = `${(saved.weekFile || 'statquest').replace('.json','')}_result.json`;
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+    function clearSavedResult() { localStorage.removeItem('statquest_latest_result'); renderSavedResult(); }
+
+    const cases = [];
+    let currentCase = 0, currentStep = 0, score = 0, answered = false, selectedConfidence = null, confidenceRecords = [];
+    function loadWeek(weekFile) {
+      fetch(weekFile).then(res => res.json()).then(data => {
+        cases.length = 0; data.forEach(item => cases.push(item));
+        currentCase = 0; currentStep = 0; score = 0; answered = false; selectedConfidence = null; confidenceRecords = [];
+        document.getElementById('landingPage').style.display = 'none';
+        document.getElementById('currentWeekLabel').innerHTML = `<strong>${currentWeekName}</strong><br><span class="small">Loaded and in progress</span>`;
+        renderStep();
+      }).catch(() => {
+        document.getElementById('app').innerHTML = '<h2>Could not load this week.</h2><p>Check that the JSON file exists and is formatted correctly.</p>';
+      });
+    }
+    function confidenceToProbability(label) { if (label === 'Low') return 0.4; if (label === 'Medium') return 0.7; return 0.9; }
+    function renderCaseList() {
+      document.getElementById('caseList').innerHTML = cases.map((item, index) => {
+        const active = index === currentCase ? 'active' : '';
+        return `<div class="case-item ${active}"><strong>${item.title}</strong><br><span class="small">${item.policyArea}</span></div>`;
+      }).join('');
+    }
+    function drawBarChart(canvasId, chartData) {
+      const canvas = document.getElementById(canvasId); if (!canvas) return;
+      const ctx = canvas.getContext('2d'), dpr = window.devicePixelRatio || 1, width = canvas.clientWidth, height = canvas.clientHeight;
+      canvas.width = width * dpr; canvas.height = height * dpr; ctx.scale(dpr, dpr); ctx.clearRect(0,0,width,height);
+      const margin = { top:18, right:20, bottom:54, left:56 }, plotW = width - margin.left - margin.right, plotH = height - margin.top - margin.bottom;
+      ctx.strokeStyle = '#cbd5e1'; ctx.fillStyle = '#475569'; ctx.lineWidth = 1; ctx.font = '12px Arial';
+      for (let i = 0; i <= 5; i++) {
+        const value = (chartData.yMax / 5) * i, y = margin.top + plotH - (value / chartData.yMax) * plotH;
+        ctx.beginPath(); ctx.moveTo(margin.left, y); ctx.lineTo(margin.left + plotW, y); ctx.stroke(); ctx.fillText(String(Math.round(value)), 12, y + 4);
+      }
+      ctx.beginPath(); ctx.moveTo(margin.left, margin.top); ctx.lineTo(margin.left, margin.top + plotH); ctx.lineTo(margin.left + plotW, margin.top + plotH);
+      ctx.strokeStyle = '#64748b'; ctx.stroke();
+      const barWidth = plotW / chartData.values.length * 0.45;
+      chartData.values.forEach((value, i) => {
+        const xCenter = margin.left + (plotW / chartData.values.length) * (i + 0.5), barHeight = (value / chartData.yMax) * plotH;
+        const x = xCenter - barWidth / 2, y = margin.top + plotH - barHeight;
+        ctx.fillStyle = i === 0 ? '#3b82f6' : '#93c5fd'; ctx.fillRect(x, y, barWidth, barHeight);
+        ctx.strokeStyle = '#1e3a8a'; ctx.strokeRect(x, y, barWidth, barHeight);
+        ctx.fillStyle = '#111827'; ctx.fillText(value.toString(), x + barWidth / 2 - 8, y - 8); ctx.fillText(chartData.labels[i], xCenter - 48, margin.top + plotH + 22);
+      });
+      ctx.save(); ctx.translate(14, margin.top + plotH / 2); ctx.rotate(-Math.PI / 2); ctx.fillStyle = '#475569'; ctx.fillText(chartData.yLabel, 0, 0); ctx.restore();
+    }
+    function renderConfidenceButtons() {
+      return ['Low','Medium','High'].map(level => `<button class="confidence-btn ${selectedConfidence === level ? 'selected' : ''}" onclick="setConfidence('${level}')">${level}</button>`).join('');
+    }
+    function calibrationPercent() {
+      if (confidenceRecords.length === 0) return 0;
+      let totalError = 0; confidenceRecords.forEach(record => { totalError += Math.abs(record.predicted - record.actual); });
+      return Math.max(0, Math.round((1 - totalError / confidenceRecords.length) * 100));
+    }
+    function updateHeader() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('casesCompleted').textContent = currentCase;
+      document.getElementById('calibration').textContent = calibrationPercent() + '%';
+    }
+    function renderStep() {
+      updateHeader(); renderCaseList();
+      if (currentCase >= cases.length) { renderCompletion(); return; }
+      const current = cases[currentCase], step = current.steps[currentStep], app = document.getElementById('app');
+      app.innerHTML = `<h2>${current.title}</h2>
+        <div class="case-brief"><strong>Policy brief:</strong> ${current.brief.replace(/\n/g, '<br><br>')}</div>
+        <div class="chart-box"><strong>${current.chartTitle}</strong><div class="small">Students should read the visual before making a decision.</div><canvas id="caseChart" width="640" height="260"></canvas></div>
+        ${step.context ? `<div class="summary-box" style="margin-bottom:12px;"><strong>Case note:</strong> ${step.context}</div>` : ''}
+        <div class="small">Question ${currentStep + 1} of ${current.steps.length}</div>
+        <div class="question">${step.question}</div>
+        <div class="confidence"><strong>How confident are you before answering?</strong><div class="small">This builds self-assessment and helps students calibrate certainty against evidence.</div><div class="confidence-row">${renderConfidenceButtons()}</div></div>
+        <div id="options">${step.options.map((option, index) => `<button class="option" ${!selectedConfidence ? 'disabled title="Choose a confidence level first"' : ''} onclick="selectOption(${index})">${option}</button>`).join('')}</div>
+        <div id="feedbackArea"></div><button id="nextBtn" class="nav-btn" style="display:none;" onclick="nextStep()">Next</button>`;
+      drawBarChart('caseChart', current.chartData);
+    }
+    function setConfidence(level) { if (answered) return; selectedConfidence = level; renderStep(); }
+    function feedbackClass(isCorrect, confidence) { if (isCorrect && confidence === 'High') return 'good'; if (!isCorrect && confidence === 'High') return 'bad'; return 'warn'; }
+    function selectOption(index) {
+      if (answered || !selectedConfidence) return;
+      answered = true;
+      const step = cases[currentCase].steps[currentStep], isCorrect = index === step.correct, feedbackArea = document.getElementById('feedbackArea');
+      document.querySelectorAll('#options button').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === step.correct) { btn.style.borderColor = '#10b981'; btn.style.background = '#ecfdf5'; }
+        if (i === index && !isCorrect) { btn.style.borderColor = '#ef4444'; btn.style.background = '#fef2f2'; }
+      });
+      if (isCorrect) score += 1;
+      confidenceRecords.push({ predicted: confidenceToProbability(selectedConfidence), actual: isCorrect ? 1 : 0 });
+      const wrongIndex = index < step.correct ? 0 : (step.feedback.wrong.length > 1 ? 1 : 0);
+      const branchFeedback = isCorrect ? step.feedback.correct : step.feedback.wrong[wrongIndex];
+      const confidenceNote = isCorrect ? `You answered correctly with <strong>${selectedConfidence.toLowerCase()}</strong> confidence.` : `You answered incorrectly with <strong>${selectedConfidence.toLowerCase()}</strong> confidence.`;
+      const consequenceHtml = step.consequence ? `<br><br><strong>Likely consequence:</strong> ${isCorrect ? step.consequence.correct : step.consequence.wrong}` : '';
+      feedbackArea.innerHTML = `<div class="feedback ${feedbackClass(isCorrect, selectedConfidence)}"><strong>${isCorrect ? 'Good reasoning.' : 'Reconsider the evidence.'}</strong><br><br>${branchFeedback}<br><br><strong>Confidence check:</strong> ${confidenceNote}<br><br><strong>Debrief:</strong> ${step.teach}${consequenceHtml}</div>`;
+      document.getElementById('nextBtn').style.display = 'inline-block'; updateHeader();
+    }
+    function nextStep() {
+      currentStep += 1; selectedConfidence = null; answered = false;
+      if (currentStep >= cases[currentCase].steps.length) { currentCase += 1; currentStep = 0; }
+      renderStep();
+    }
+    function renderCompletion() {
+      updateHeader(); renderCaseList();
+      const totalQuestions = cases.reduce((sum, item) => sum + item.steps.length, 0), completedAt = new Date().toLocaleString();
+      const result = { weekFile: currentWeekFile, weekName: currentWeekName, studentName: studentInfo.name, studentId: studentInfo.id, score, totalQuestions, calibration: calibrationPercent(), completedAt };
+      saveLatestResult(result);
+      document.getElementById('app').innerHTML = `<h2>Case complete</h2><p>You finished ${currentWeekName || 'this week'}.</p><div class="summary-box"><strong>Results</strong><ul><li>Student: ${studentInfo.name || 'Not provided'}</li>${studentInfo.id ? `<li>ID: ${studentInfo.id}</li>` : ''}<li>Correct answers: ${score} out of ${totalQuestions}</li><li>Confidence calibration: ${calibrationPercent()}%</li><li>Main lesson: good policy analysis requires caution, context, and appropriate statistical interpretation.</li></ul><div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;"><button class="restart-btn" onclick="restartWeek()">Restart week</button><button class="restart-btn" onclick="downloadLatestResult()">Export result</button><button class="restart-btn" onclick="returnToLanding()">Back to landing page</button></div></div>`;
+    }
+    function restartWeek() { if (currentWeekFile) loadWeek(currentWeekFile); }
+    function returnToLanding() {
+      document.getElementById('landingPage').style.display = 'block';
+      document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
+      document.getElementById('returnBanner').style.display = 'none';
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+
+    window.setConfidence = setConfidence; window.selectOption = selectOption; window.nextStep = nextStep; window.restartWeek = restartWeek;
+    window.returnToLanding = returnToLanding; window.selectWeek = selectWeek; window.startSelectedWeek = startSelectedWeek;
+    window.scrollToSelector = scrollToSelector; window.showInstructorNotes = showInstructorNotes;
+    window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult;
+
+    window.addEventListener('resize', () => { if (currentCase < cases.length && cases.length > 0) drawBarChart('caseChart', cases[currentCase].chartData); });
+
+    buildWeekButtons();
+    selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+    loadStudentInfo();
+    document.getElementById('studentNameInput').addEventListener('change', saveStudentInfo);
+    document.getElementById('studentIdInput').addEventListener('change', saveStudentInfo);
+    renderSavedResult();
+    document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
+    checkForLectureReturn();
+  </script>
 </body>
 </html>
