@@ -68,15 +68,21 @@
         <strong style="display:block; margin-bottom:10px;">Student information</strong>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
           <div>
-            <label for="studentNameInput" class="small" style="display:block; margin-bottom:6px;">Student name</label>
-            <input id="studentNameInput" type="text" placeholder="Enter your name" />
+            <label for="studentNameInput" class="small" style="display:block; margin-bottom:6px;">Last name</label>
+            <input id="studentNameInput" type="text" placeholder="Enter your last name" />
           </div>
           <div>
-            <label for="studentIdInput" class="small" style="display:block; margin-bottom:6px;">Student ID or email (optional)</label>
-            <input id="studentIdInput" type="text" placeholder="Optional identifier" />
+            <label for="studentIdInput" class="small" style="display:block; margin-bottom:6px;">MSU email address</label>
+            <input id="studentIdInput" type="text" placeholder="Enter your @msu.edu email" />
           </div>
         </div>
-        <div class="small" style="margin-top:8px;">This information is stored only in this browser and will be added to exported result files.</div>
+        <div class="small" style="margin-top:8px;">This information is required, stored only in this browser, and added to exported result files.</div>
+        <div id="studentSavedMessage" class="require-note" style="display:none; margin-top:10px;"></div>
+        <div id="studentIdentityBox" class="summary-box" style="display:none; margin-top:12px; background:#ffffff;">
+          <strong style="display:block; margin-bottom:6px;">Saved identity</strong>
+          <div id="studentIdentityText" class="small" style="margin-bottom:10px;"></div>
+          <button class="confidence-btn" type="button" onclick="resetStudentInfo()">Edit / reset identity</button>
+        </div>
       </div>
 
       <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px; align-items:start;">
@@ -165,25 +171,70 @@
       });
     }
 
-    function saveStudentInfo() {
+    function updateStudentIdentityUI(showSavedNotice=false) {
+      const savedBox = document.getElementById('studentIdentityBox');
+      const savedText = document.getElementById('studentIdentityText');
+      const savedMsg = document.getElementById('studentSavedMessage');
+      const hasIdentity = !!(studentInfo.name && studentInfo.id);
+      if (hasIdentity) {
+        savedBox.style.display = 'block';
+        savedText.textContent = `Logged in as: ${studentInfo.name} (${studentInfo.id})`;
+      } else {
+        savedBox.style.display = 'none';
+        savedText.textContent = '';
+      }
+      if (showSavedNotice && hasIdentity) {
+        savedMsg.style.display = 'block';
+        savedMsg.textContent = 'Information saved — you will not need to re-enter it on this device unless you reset it or clear your browser data.';
+      } else if (!hasIdentity) {
+        savedMsg.style.display = 'none';
+        savedMsg.textContent = '';
+      }
+    }
+    function saveStudentInfo(showSavedNotice=false) {
       studentInfo = { name: document.getElementById('studentNameInput').value.trim(), id: document.getElementById('studentIdInput').value.trim() };
       localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
+      updateStudentIdentityUI(showSavedNotice);
     }
     function loadStudentInfo() {
       const raw = localStorage.getItem('statquest_student_info');
-      if (!raw) return;
+      if (!raw) { updateStudentIdentityUI(false); return; }
       try { studentInfo = JSON.parse(raw); } catch(e) { studentInfo = { name:'', id:'' }; }
       document.getElementById('studentNameInput').value = studentInfo.name || '';
       document.getElementById('studentIdInput').value = studentInfo.id || '';
+      updateStudentIdentityUI(false);
+    }
+    function resetStudentInfo() {
+      studentInfo = { name:'', id:'' };
+      localStorage.removeItem('statquest_student_info');
+      document.getElementById('studentNameInput').value = '';
+      document.getElementById('studentIdInput').value = '';
+      document.getElementById('studentNameInput').focus();
+      updateStudentIdentityUI(false);
     }
 
     function startSelectedWeek() {
-      saveStudentInfo();
+      saveStudentInfo(false);
       if (!studentInfo.name.trim()) {
-        alert('Please enter the student name before starting the case.');
+        alert('Please enter your last name before starting.');
         document.getElementById('studentNameInput').focus();
         return;
       }
+      const email = studentInfo.id.trim().toLowerCase();
+      if (!email) {
+        alert('Please enter your MSU email address before starting.');
+        document.getElementById('studentIdInput').focus();
+        return;
+      }
+      if (!/^[^\s@]+@msu\.edu$/.test(email)) {
+        alert('Please enter a valid MSU email address ending in @msu.edu.');
+        document.getElementById('studentIdInput').focus();
+        return;
+      }
+      studentInfo.id = email;
+      document.getElementById('studentIdInput').value = email;
+      localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
+      updateStudentIdentityUI(true);
       if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
       const weekMeta = getWeekMeta(currentWeekFile);
       localStorage.setItem('statquest_pending_case', JSON.stringify({
@@ -237,7 +288,9 @@
       const saved = getLatestResult(); if (!saved) return;
       const blob = new Blob([JSON.stringify(saved, null, 2)], { type:'application/json' });
       const url = URL.createObjectURL(blob), a = document.createElement('a');
-      a.href = url; a.download = `${(saved.weekFile || 'statquest').replace('.json','')}_result.json`;
+      const safeLast = (saved.studentName || 'lastname').toLowerCase().replace(/[^a-z0-9_-]+/g, '_');
+      const safeEmail = (saved.studentId || 'msu_email').toLowerCase().replace(/[^a-z0-9@._-]+/g, '_').replace('@', '_at_');
+      a.href = url; a.download = `${(saved.weekFile || 'statquest').replace('.json','')}_${safeLast}_${safeEmail}_result.json`;
       document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
     function clearSavedResult() { localStorage.removeItem('statquest_latest_result'); renderSavedResult(); }
@@ -366,7 +419,7 @@
     window.setConfidence = setConfidence; window.selectOption = selectOption; window.nextStep = nextStep; window.restartWeek = restartWeek;
     window.returnToLanding = returnToLanding; window.selectWeek = selectWeek; window.startSelectedWeek = startSelectedWeek;
     window.scrollToSelector = scrollToSelector; window.showInstructorNotes = showInstructorNotes;
-    window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult;
+    window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult; window.resetStudentInfo = resetStudentInfo;
 
     buildWeekButtons();
     selectWeek(weekCatalog[0].file, weekCatalog[0].label);
