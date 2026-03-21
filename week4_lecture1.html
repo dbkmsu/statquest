@@ -1,147 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week 4: Research Design & Causality (Interaction Upgrade)</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 4 Lecture 1 - Interactive Causality Lab</title>
 <style>
-body{font-family:Arial;background:#eef3fb;margin:0;padding:20px}
-.container{max-width:1000px;margin:auto;background:#fff;padding:28px;border-radius:12px}
-h1,h2{margin-top:0}
-.section{margin:26px 0}
-.card{background:#f8fbff;padding:18px;border-left:6px solid #3b82f6;margin:14px 0}
-.choice{display:block;margin:8px 0;padding:12px;border:1px solid #dbe3ee;border-radius:10px;cursor:pointer}
-.choice:hover{border-color:#3b82f6}
-.feedback{margin-top:10px;padding:12px;border-radius:8px;display:none}
-.good{background:#ecfdf5}
-.bad{background:#fef2f2}
-.hidden{display:none}
-.reveal{margin-top:10px;padding:12px;background:#fff;border:1px solid #ddd;border-radius:8px}
-.diagram{background:#fff;border:1px solid #ccc;padding:12px;margin-top:10px}
+  :root{
+    --bg:#eef3fb; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --border:#dbe3ee;
+    --accent:#1d4ed8; --accent2:#60a5fa; --good:#065f46; --goodbg:#ecfdf5;
+    --warn:#92400e; --warnbg:#fff7ed; --bad:#991b1b; --badbg:#fef2f2; --shadow:0 10px 30px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eaf2ff 0%,#f7f9fc 100%);color:var(--text);line-height:1.55}
+  .wrap{max-width:1120px;margin:0 auto;padding:24px}
+  .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
+  .hero{padding:24px;margin-bottom:18px}
+  .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px}
+  h1,h2,h3{margin:0 0 10px 0}
+  .sub{color:var(--muted);max-width:920px}
+  .layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+  .panel{padding:22px}
+  .pill{display:inline-block;background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px;margin:0 8px 8px 0}
+  .section{margin-top:18px}
+  .card,.diagram,.simbox,.feedback,.note{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fbfdff}
+  .card{background:#f8fbff}
+  .feedback{display:none;margin-top:10px}
+  .feedback.good{display:block;background:var(--goodbg);border-left:5px solid #10b981}
+  .feedback.bad{display:block;background:var(--badbg);border-left:5px solid #ef4444}
+  .feedback.warn{display:block;background:var(--warnbg);border-left:5px solid #f59e0b}
+  .choices{display:grid;gap:10px;margin-top:12px}
+  .choice-btn,.nav-btn,.ghost-btn,.tiny-btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;text-align:left}
+  .choice-btn:hover,.ghost-btn:hover,.tiny-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .navrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .nav-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .2s ease}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .small{font-size:13px;color:var(--muted)}
+  .checklist{display:grid;gap:10px;margin-top:10px}
+  .check{padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .lane{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:10px}
+  .box{padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff;text-align:center}
+  .arrow{font-size:26px;color:var(--accent);text-align:center}
+  .hidden{display:none}
+  .people-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+  .person{border:1px solid var(--border);border-radius:12px;padding:10px;background:#fff;text-align:center;font-size:13px}
+  .person.high{background:#fff7ed}
+  .person.low{background:#eff6ff}
+  .groups{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .group{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fcfdff}
+  .statline{margin-top:8px;font-size:14px}
+  .sim-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .slider-row{margin-top:12px}
+  input[type=range]{width:100%}
+  .bar-wrap{display:grid;gap:10px;margin-top:12px}
+  .bar-row label{display:block;font-size:14px;margin-bottom:4px}
+  .bar{height:24px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));position:relative}
+  .bar span{position:absolute;right:10px;top:3px;font-size:12px;font-weight:bold;color:#0f172a}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tag{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:999px;font-size:12px;background:#fff}
+  a.cta{display:inline-block;margin-top:12px;color:#fff;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)}
+  @media (max-width:900px){.layout,.twocol,.groups,.lane,.people-grid{grid-template-columns:1fr}.arrow{display:none}}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">MC295 • Week 4 • Lecture 1</div>
+    <h1>Research Design, Causality, and Validity</h1>
+    <div class="sub">
+      This lecture asks a simple but difficult question: when does evidence justify a causal claim?
+      Work through the examples, diagrams, and mini-simulations, then continue to the Week 4 policy case.
+    </div>
+  </div>
 
-<div class="container">
-<h1>Week 4: Research Design & Causality</h1>
+  <div class="layout">
+    <div class="panel">
+      <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+      <div class="meta">
+        <div class="pill">Screen <span id="screenNum">1</span> of <span id="screenTotal"></span></div>
+        <div class="pill">Topic: <span id="screenTopic"></span></div>
+      </div>
+      <div id="screenArea"></div>
+      <div class="navrow">
+        <button id="backBtn" class="ghost-btn" onclick="prevScreen()">Back</button>
+        <button id="nextBtn" class="nav-btn primary" onclick="nextScreen()">Next</button>
+      </div>
+    </div>
 
-<div class="section">
-<h2>Start with a judgment</h2>
-<div class="card">
-Participants in a job training program have higher employment rates.
-</div>
+    <div class="panel">
+      <h3>Week 4 roadmap</h3>
+      <div class="card">
+        <div class="checklist">
+          <div class="check">Difference versus cause</div>
+          <div class="check">Confounding variables</div>
+          <div class="check">True, natural, and observational designs</div>
+          <div class="check">Random assignment and internal validity</div>
+          <div class="check">Threats to validity</div>
+          <div class="check">Generalizing evidence</div>
+        </div>
+      </div>
 
-<div>
-<div class="choice" onclick="answer('s1',0)">The program works</div>
-<div class="choice" onclick="answer('s1',1)">There is a difference, but causation is unclear</div>
-</div>
+      <div class="section">
+        <h3>What to keep asking</h3>
+        <div class="card">
+          <div class="checklist">
+            <div class="check">Could something else explain this pattern?</div>
+            <div class="check">How were the groups formed?</div>
+            <div class="check">What kind of design produced this evidence?</div>
+            <div class="check">Would the result travel to other settings?</div>
+          </div>
+        </div>
+      </div>
 
-<div id="s1" class="feedback"></div>
-
-<div id="s1_explain" class="reveal hidden">
-Most people initially pick “the program works.” That response is intuitive—but it assumes that the program caused the outcome. The key Week 4 skill is slowing down and asking what else could explain the difference.
-</div>
-</div>
-
-<div class="section">
-<h2>What could go wrong?</h2>
-<p>Before seeing any explanation, list a possible alternative cause.</p>
-
-<div>
-<div class="choice" onclick="reveal('s2')">Show possible explanations</div>
-</div>
-
-<div id="s2" class="reveal hidden">
-Motivation, prior experience, and education may influence both program participation and employment. These are <strong>confounding variables</strong>.
-</div>
-
-<div class="diagram">
-Motivation → Program Participation<br>
-Motivation → Employment
-</div>
-</div>
-
-<div class="section">
-<h2>Design determines credibility</h2>
-
-<div>
-<div class="choice" onclick="answer('s3',0)">Observational study</div>
-<div class="choice" onclick="answer('s3',1)">True experiment</div>
-</div>
-
-<div id="s3" class="feedback"></div>
-
-<div id="s3_explain" class="reveal hidden">
-A true experiment uses random assignment, which helps balance groups before treatment. Observational studies do not, so alternative explanations remain plausible.
-</div>
-</div>
-
-<div class="section">
-<h2>Test your intuition</h2>
-
-<div>
-<div class="choice" onclick="answer('s4',0)">Volunteers choose the program</div>
-<div class="choice" onclick="answer('s4',1)">Participants are randomly assigned</div>
-</div>
-
-<div id="s4" class="feedback"></div>
-
-<div id="s4_explain" class="reveal hidden">
-Random assignment distributes characteristics like motivation across groups, making them more comparable. This strengthens causal inference.
-</div>
-</div>
-
-<div class="section">
-<h2>Apply before explanation</h2>
-
-<div>
-<div class="choice" onclick="answer('s5',1)">Scores improved due to maturation</div>
-<div class="choice" onclick="answer('s5',0)">The program caused improvement</div>
-</div>
-
-<div id="s5" class="feedback"></div>
-
-<div id="s5_explain" class="reveal hidden">
-Students naturally improve over time. Without a strong design, we cannot attribute improvement to the program.
-</div>
-</div>
-
-<div class="section">
-<h2>Final check</h2>
-<p>Before accepting a policy claim, what should you ask first?</p>
-
-<div>
-<div class="choice" onclick="answer('s6',1)">What research design produced this evidence?</div>
-<div class="choice" onclick="answer('s6',0)">Are the numbers large?</div>
-</div>
-
-<div id="s6" class="feedback"></div>
-
-</div>
-
-<a href="index.html?autocase=week4.json">→ Start Week 4 Case</a>
-
+      <div class="section">
+        <h3>Bridge to the case</h3>
+        <div class="card">
+          The Week 4 case asks you to evaluate a job training program under real policy pressure.
+          This lecture gives you the framework you will need to resist weak causal claims.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-function answer(id, correct){
+const screens = [
+{
+topic:"Difference versus cause",
+html:`
+  <h2>The central problem</h2>
+  <div class="card">
+    A city reports that participants in a job training program have higher employment rates than non-participants.
+  </div>
+  <p>That sounds like evidence the program works. But the safest first response is not to celebrate. It is to ask whether the observed difference really reflects a treatment effect.</p>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer('f1', false, '', 'This is too strong. A difference in outcomes does not, by itself, prove the program caused the outcome.')">The program works.</button>
+    <button class="choice-btn" onclick="answer('f1', true, 'Correct. There is a difference, but causation is not yet established.', '')">There is a difference, but causation is not established.</button>
+  </div>
+  <div id="f1" class="feedback"></div>
+  <div class="bar-wrap">
+    <div class="bar-row"><label>Program participants</label><div class="bar" style="width:68%"><span>68%</span></div></div>
+    <div class="bar-row"><label>Non-participants</label><div class="bar" style="width:52%"><span>52%</span></div></div>
+  </div>
+`
+},
+{
+topic:"Confounding diagram",
+html:`
+  <h2>Why the difference may be misleading</h2>
+  <p>If people choose to enter the program, they may already differ from non-participants before the program begins.</p>
+  <div class="twocol">
+    <div class="diagram">
+      <strong>Possible preexisting differences</strong>
+      <div class="checklist">
+        <div class="check">Motivation</div>
+        <div class="check">Education</div>
+        <div class="check">Prior work experience</div>
+      </div>
+    </div>
+    <div class="diagram">
+      <strong>Why these matter</strong>
+      <div class="checklist">
+        <div class="check">They can affect participation</div>
+        <div class="check">They can affect employment</div>
+      </div>
+    </div>
+  </div>
+  <div class="diagram">
+    <div class="lane">
+      <div class="box">Motivation</div><div class="arrow">→</div><div class="box">Program participation</div>
+    </div>
+    <div class="lane">
+      <div class="box">Motivation</div><div class="arrow">→</div><div class="box">Employment</div>
+    </div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="toggleReveal('r2')">Reveal the interpretation</button>
+  </div>
+  <div id="r2" class="feedback warn hidden">
+    This is confounding. If motivation affects both participation and employment, the observed relationship between the program and employment may partly reflect motivation rather than the program itself.
+  </div>
+`
+},
+{
+topic:"Design hierarchy",
+html:`
+  <h2>Three broad kinds of research design</h2>
+  <div class="checklist">
+    <div class="check"><strong>True experiment:</strong> researchers randomly assign treatment and control groups.</div>
+    <div class="check"><strong>Natural experiment:</strong> some outside process creates treatment-like and comparison-like groups.</div>
+    <div class="check"><strong>Observational study:</strong> researchers compare groups that already exist.</div>
+  </div>
+  <p>These categories matter because they tell you how strongly the evidence supports a causal interpretation.</p>
+  <div class="choices">
+    <button class="choice-btn" onclick="showSort()">Show worked matching example</button>
+  </div>
+  <div id="sortbox" class="feedback hidden"></div>
+`
+},
+{
+topic:"Interactive group assignment",
+html:`
+  <h2>Mini-simulation: build the groups</h2>
+  <p>Below are 12 hypothetical participants. Some are highly motivated and some are less motivated. Compare two ways of forming groups.</p>
+  <div class="legend">
+    <span class="tag">Orange = higher motivation</span>
+    <span class="tag">Blue = lower motivation</span>
+  </div>
+  <div class="people-grid" id="peopleGrid"></div>
+  <div class="sim-controls">
+    <button class="tiny-btn" onclick="loadVolunteerGroups()">Show self-selection</button>
+    <button class="tiny-btn" onclick="loadRandomGroups()">Show random assignment</button>
+  </div>
+  <div class="groups">
+    <div class="group">
+      <strong>Treatment group</strong>
+      <div id="treatList" class="statline small"></div>
+      <div id="treatStats" class="statline"></div>
+    </div>
+    <div class="group">
+      <strong>Comparison group</strong>
+      <div id="controlList" class="statline small"></div>
+      <div id="controlStats" class="statline"></div>
+    </div>
+  </div>
+  <div id="simExplain" class="feedback warn hidden"></div>
+`
+},
+{
+topic:"Outcome simulation",
+html:`
+  <h2>Mini-simulation: how bias appears</h2>
+  <p>This slider changes how strongly motivation affects employment. When motivation matters a lot, self-selection can make the program look effective even if the treatment itself does nothing.</p>
+  <div class="slider-row">
+    <label><strong>Motivation effect on employment</strong>: <span id="motivationValue">30</span>%</label>
+    <input type="range" min="0" max="80" value="30" id="motivationSlider" oninput="runOutcomeSimulation()">
+  </div>
+  <div class="sim-controls">
+    <button class="tiny-btn" onclick="setSimMode('volunteer')">Use self-selection groups</button>
+    <button class="tiny-btn" onclick="setSimMode('random')">Use random assignment groups</button>
+  </div>
+  <div class="bar-wrap">
+    <div class="bar-row"><label>Treatment employment rate</label><div id="empTreat" class="bar" style="width:0%"><span>0%</span></div></div>
+    <div class="bar-row"><label>Comparison employment rate</label><div id="empControl" class="bar" style="width:0%"><span>0%</span></div></div>
+  </div>
+  <div id="simOutcomeExplain" class="feedback warn hidden"></div>
+`
+},
+{
+topic:"Random assignment",
+html:`
+  <h2>Why random assignment matters</h2>
+  <div class="twocol">
+    <div class="diagram">
+      <strong>Without random assignment</strong>
+      <div class="checklist">
+        <div class="check">Groups may differ before treatment</div>
+        <div class="check">Selection bias remains plausible</div>
+        <div class="check">Alternative explanations are harder to rule out</div>
+      </div>
+    </div>
+    <div class="diagram">
+      <strong>With random assignment</strong>
+      <div class="checklist">
+        <div class="check">Groups begin more comparable on average</div>
+        <div class="check">Preexisting differences are reduced</div>
+        <div class="check">Later differences are more plausibly due to treatment</div>
+      </div>
+    </div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer('f6', false, '', 'This is the weaker design because group differences may exist before treatment begins.')">Let people choose whether to enter the program.</button>
+    <button class="choice-btn" onclick="answer('f6', true, 'Correct. Random assignment strengthens causal inference by reducing systematic preexisting differences between groups.', '')">Randomly assign people to treatment and comparison groups.</button>
+  </div>
+  <div id="f6" class="feedback"></div>
+`
+},
+{
+topic:"Internal validity",
+html:`
+  <h2>Internal validity</h2>
+  <div class="card">
+    Internal validity asks whether the study isolates the effect of the treatment on the outcome.
+  </div>
+  <p>In plain language, the question is:</p>
+  <div class="card"><strong>Did the treatment actually cause the outcome, rather than something else?</strong></div>
+  <p>This is why research design matters so much. A weak design leaves too many alternative explanations open.</p>
+`
+},
+{
+topic:"Threats to validity",
+html:`
+  <h2>Threats to internal validity</h2>
+  <p>Even when outcomes change, the treatment may not be the cause. Click each threat to see how it works.</p>
+  <div class="choices">
+    <button class="choice-btn" onclick="threat('tbox','Maturation','People change over time. Students learn, workers gain experience, and participants age or adapt even without treatment.')">Maturation</button>
+    <button class="choice-btn" onclick="threat('tbox','Regression to the mean','Extremely high or low scores often become less extreme on retesting, even when no meaningful treatment effect exists.')">Regression to the mean</button>
+    <button class="choice-btn" onclick="threat('tbox','Selection','Treatment and comparison groups may differ before the treatment starts.')">Selection</button>
+    <button class="choice-btn" onclick="threat('tbox','History','An outside event during the study period may affect the outcome and be mistaken for a treatment effect.')">History</button>
+  </div>
+  <div id="tbox" class="feedback hidden"></div>
+`
+},
+{
+topic:"Worked example",
+html:`
+  <h2>Worked example</h2>
+  <div class="card">
+    A school introduces a new academic program. One year later, scores improve.
+  </div>
+  <p>That pattern is not useless. But before accepting the program as the cause, you should ask what else changed during the year.</p>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer('f9', true, 'Correct. This is the right move: generate plausible non-treatment explanations before endorsing a causal claim.', '')">First ask what alternative explanations could account for the change.</button>
+    <button class="choice-btn" onclick="answer('f9', false, '', 'This is too quick. Change over time does not by itself isolate the treatment effect.')">Conclude that the program caused the improvement.</button>
+  </div>
+  <div id="f9" class="feedback"></div>
+`
+},
+{
+topic:"Apply a threat",
+html:`
+  <h2>Apply the idea</h2>
+  <div class="card">
+    Students improve after one year in a program. They are also older, more experienced, and more familiar with school routines than they were at the beginning.
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer('f10', true, 'Correct. Maturation is a plausible alternative explanation because change over time may occur even without the treatment.', '')">A likely threat here is maturation.</button>
+    <button class="choice-btn" onclick="answer('f10', false, '', 'Not yet. This conclusion ignores the possibility that students changed over time even without the program.')">The program clearly caused the improvement.</button>
+  </div>
+  <div id="f10" class="feedback"></div>
+`
+},
+{
+topic:"External validity",
+html:`
+  <h2>External validity</h2>
+  <div class="card">
+    Even if a study identifies a real causal effect, we still need to ask whether the result would hold in other places, populations, or settings.
+  </div>
+  <div class="checklist">
+    <div class="check"><strong>Would it work in another city?</strong></div>
+    <div class="check"><strong>Would it work with different people?</strong></div>
+    <div class="check"><strong>Would it work under different institutional conditions?</strong></div>
+  </div>
+  <p>A study can have strong internal validity and still be limited in how far it generalizes.</p>
+`
+},
+{
+topic:"Final framework",
+html:`
+  <h2>Final framework for evaluating policy evidence</h2>
+  <div class="checklist">
+    <div class="check">What type of research design produced the evidence?</div>
+    <div class="check">Was there random assignment?</div>
+    <div class="check">What alternative explanations remain plausible?</div>
+    <div class="check">Which threats to internal validity are still present?</div>
+    <div class="check">Would the result generalize to other contexts?</div>
+  </div>
+  <div class="card">
+    The main Week 4 habit is simple: do not jump from an observed difference to a causal conclusion without interrogating the design.
+  </div>
+  <a class="cta" href="index.html?autocase=week4.json">Begin Week 4 policy case</a>
+`
+}
+];
+
+let current = 0;
+const population = [
+  {name:'A', motivation:'high'}, {name:'B', motivation:'high'}, {name:'C', motivation:'high'},
+  {name:'D', motivation:'high'}, {name:'E', motivation:'high'}, {name:'F', motivation:'high'},
+  {name:'G', motivation:'low'}, {name:'H', motivation:'low'}, {name:'I', motivation:'low'},
+  {name:'J', motivation:'low'}, {name:'K', motivation:'low'}, {name:'L', motivation:'low'}
+];
+let simMode = 'volunteer';
+let volunteerGroups = null;
+let randomGroups = null;
+
+function renderScreen(){
+  const s = screens[current];
+  document.getElementById('screenArea').innerHTML = s.html;
+  document.getElementById('screenNum').textContent = current + 1;
+  document.getElementById('screenTotal').textContent = screens.length;
+  document.getElementById('screenTopic').textContent = s.topic;
+  document.getElementById('progressFill').style.width = (((current+1)/screens.length)*100) + '%';
+  document.getElementById('backBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === screens.length - 1;
+
+  if (current === 3) initGroupSimulation();
+  if (current === 4) initOutcomeSimulation();
+}
+function nextScreen(){ if(current < screens.length - 1){ current++; renderScreen(); } }
+function prevScreen(){ if(current > 0){ current--; renderScreen(); } }
+
+function answer(id, isCorrect, correctText, wrongText){
   const el = document.getElementById(id);
-  const exp = document.getElementById(id + "_explain");
-  el.style.display = "block";
-  if(correct){
-    el.className = "feedback good";
-    el.innerHTML = "Correct.";
-  } else {
-    el.className = "feedback bad";
-    el.innerHTML = "Not quite.";
+  el.className = 'feedback ' + (isCorrect ? 'good' : 'bad');
+  el.style.display = 'block';
+  el.innerHTML = '<strong>' + (isCorrect ? 'Correct.' : 'Reconsider.') + '</strong> ' + (isCorrect ? correctText : wrongText);
+}
+function toggleReveal(id){
+  const el = document.getElementById(id);
+  el.className = 'feedback warn';
+  el.style.display = 'block';
+}
+function showSort(){
+  const el = document.getElementById('sortbox');
+  el.className = 'feedback good';
+  el.style.display = 'block';
+  el.innerHTML = '<strong>Worked example:</strong><br><br><strong>Random assignment by researchers</strong> = true experiment<br><strong>Outside event or lottery creates groups</strong> = natural experiment<br><strong>Compare already-existing groups</strong> = observational study';
+}
+function threat(id, title, text){
+  const el = document.getElementById(id);
+  el.className = 'feedback warn';
+  el.style.display = 'block';
+  el.innerHTML = '<strong>' + title + ':</strong> ' + text;
+}
+
+function initGroupSimulation(){
+  volunteerGroups = {
+    treatment: population.slice(0,6),
+    control: population.slice(6,12)
+  };
+  randomGroups = {
+    treatment: [population[0],population[2],population[5],population[7],population[9],population[11]],
+    control: [population[1],population[3],population[4],population[6],population[8],population[10]]
+  };
+  const grid = document.getElementById('peopleGrid');
+  if (!grid) return;
+  grid.innerHTML = population.map(p => `<div class="person ${p.motivation}">${p.name}<br>${p.motivation}</div>`).join('');
+  loadVolunteerGroups();
+}
+function summarizeGroup(list){
+  const high = list.filter(p => p.motivation === 'high').length;
+  const low = list.filter(p => p.motivation === 'low').length;
+  return {high, low};
+}
+function paintGroups(groups, explanation){
+  const treatList = document.getElementById('treatList');
+  const controlList = document.getElementById('controlList');
+  const treatStats = document.getElementById('treatStats');
+  const controlStats = document.getElementById('controlStats');
+  const simExplain = document.getElementById('simExplain');
+  if (!treatList) return;
+  const t = summarizeGroup(groups.treatment);
+  const c = summarizeGroup(groups.control);
+  treatList.innerHTML = groups.treatment.map(p => p.name + ' (' + p.motivation + ')').join(', ');
+  controlList.innerHTML = groups.control.map(p => p.name + ' (' + p.motivation + ')').join(', ');
+  treatStats.innerHTML = 'High motivation: ' + t.high + ' | Low motivation: ' + t.low;
+  controlStats.innerHTML = 'High motivation: ' + c.high + ' | Low motivation: ' + c.low;
+  simExplain.className = 'feedback warn';
+  simExplain.style.display = 'block';
+  simExplain.innerHTML = explanation;
+}
+function loadVolunteerGroups(){
+  simMode = 'volunteer';
+  paintGroups(volunteerGroups, 'In this self-selection example, the treatment group is packed with highly motivated people. Even before the program begins, the groups are unequal.');
+}
+function loadRandomGroups(){
+  simMode = 'random';
+  paintGroups(randomGroups, 'In this random-assignment example, motivation is spread more evenly across the two groups. The comparison becomes more credible.');
+}
+function initOutcomeSimulation(){
+  if (!volunteerGroups || !randomGroups){
+    volunteerGroups = {
+      treatment: population.slice(0,6),
+      control: population.slice(6,12)
+    };
+    randomGroups = {
+      treatment: [population[0],population[2],population[5],population[7],population[9],population[11]],
+      control: [population[1],population[3],population[4],population[6],population[8],population[10]]
+    };
   }
-  if(exp){ exp.classList.remove("hidden"); }
+  runOutcomeSimulation();
+}
+function setSimMode(mode){
+  simMode = mode;
+  runOutcomeSimulation();
+}
+function employmentRate(group, motivationEffect){
+  const baseline = 45;
+  const treatEffect = 0;
+  let total = 0;
+  group.forEach(p => {
+    total += baseline + (p.motivation === 'high' ? motivationEffect : 0) + treatEffect;
+  });
+  return Math.round(total / group.length);
+}
+function runOutcomeSimulation(){
+  const slider = document.getElementById('motivationSlider');
+  if (!slider) return;
+  const motivationEffect = parseInt(slider.value, 10);
+  document.getElementById('motivationValue').textContent = motivationEffect;
+  const groups = simMode === 'volunteer' ? volunteerGroups : randomGroups;
+  const treat = employmentRate(groups.treatment, motivationEffect);
+  const control = employmentRate(groups.control, motivationEffect);
+  const empTreat = document.getElementById('empTreat');
+  const empControl = document.getElementById('empControl');
+  empTreat.style.width = treat + '%';
+  empTreat.querySelector('span').textContent = treat + '%';
+  empControl.style.width = control + '%';
+  empControl.querySelector('span').textContent = control + '%';
+  const expl = document.getElementById('simOutcomeExplain');
+  expl.className = 'feedback warn';
+  expl.style.display = 'block';
+  if (simMode === 'volunteer'){
+    expl.innerHTML = 'With self-selection, the treatment group can look better even when the treatment effect is set to zero. The apparent “program effect” is being generated by group differences.';
+  } else {
+    expl.innerHTML = 'With random assignment, the groups are more comparable. Any remaining difference is less likely to be driven by motivation alone.';
+  }
 }
 
-function reveal(id){
-  document.getElementById(id).classList.remove("hidden");
-}
+renderScreen();
 </script>
-
 </body>
 </html>
