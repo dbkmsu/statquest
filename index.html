@@ -20,7 +20,9 @@
       --bad-bg: #fef2f2;
       --bad-border: #ef4444;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -28,32 +30,39 @@
       color: var(--text);
       line-height: 1.5;
     }
+
     .wrap {
-      max-width: 1100px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 24px;
     }
+
     .header, .card {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
     }
+
     .header {
       padding: 20px 24px;
       margin-bottom: 18px;
     }
+
     h1, h2, h3 { margin: 0 0 8px 0; }
+
     .sub {
       color: var(--muted);
       margin-top: 6px;
     }
+
     .meta {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 14px;
     }
+
     .pill {
       background: #f8fafc;
       border: 1px solid var(--border);
@@ -61,20 +70,25 @@
       padding: 8px 12px;
       font-size: 14px;
     }
+
     .grid {
       display: grid;
       grid-template-columns: 1.25fr 0.75fr;
       gap: 18px;
     }
-    .card { padding: 22px; }
+
+    .card {
+      padding: 22px;
+    }
+
     .case-brief {
       background: #f8fbff;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       margin-bottom: 16px;
-      white-space: normal;
     }
+
     .chart-box {
       margin: 16px 0;
       border: 1px solid var(--border);
@@ -82,6 +96,7 @@
       padding: 14px;
       background: #fcfdff;
     }
+
     canvas {
       width: 100%;
       height: 260px;
@@ -90,11 +105,13 @@
       border-radius: 8px;
       background: white;
     }
+
     .question {
       font-size: 20px;
       font-weight: bold;
       margin: 16px 0 12px;
     }
+
     .option {
       display: block;
       width: 100%;
@@ -109,14 +126,17 @@
       font-size: 15px;
       transition: 0.15s ease;
     }
+
     .option:hover:not(:disabled) {
       border-color: var(--accent);
       transform: translateY(-1px);
     }
+
     .option:disabled {
       cursor: default;
       opacity: 0.92;
     }
+
     .confidence {
       margin: 18px 0;
       padding: 14px;
@@ -124,12 +144,14 @@
       border: 1px solid var(--border);
       border-radius: 12px;
     }
+
     .confidence-row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 10px;
     }
+
     .confidence-btn, .nav-btn, .restart-btn {
       border-radius: 10px;
       border: 1px solid var(--border);
@@ -138,52 +160,66 @@
       cursor: pointer;
       font-size: 14px;
     }
+
     .confidence-btn.selected {
       border-color: var(--accent);
       background: var(--accent-soft);
       font-weight: bold;
     }
+
     .nav-btn {
       background: var(--accent);
       color: white;
       border-color: var(--accent);
       margin-top: 16px;
     }
+
     .nav-btn:disabled {
       opacity: 0.55;
       cursor: not-allowed;
     }
+
     .feedback {
       margin-top: 16px;
       padding: 14px;
       border-left: 5px solid var(--border);
       border-radius: 10px;
     }
+
     .feedback.good {
       background: var(--good-bg);
       border-left-color: var(--good-border);
     }
+
     .feedback.warn {
       background: var(--warn-bg);
       border-left-color: var(--warn-border);
     }
+
     .feedback.bad {
       background: var(--bad-bg);
       border-left-color: var(--bad-border);
     }
-    .side-section + .side-section { margin-top: 14px; }
+
+    .side-section + .side-section {
+      margin-top: 14px;
+    }
+
     .side-title {
       font-size: 16px;
       margin-bottom: 8px;
     }
+
     ul {
       margin: 8px 0 0 18px;
       padding: 0;
     }
+
     .case-list {
       display: grid;
       gap: 10px;
     }
+
     .case-item {
       padding: 10px 12px;
       border-radius: 10px;
@@ -191,14 +227,17 @@
       background: #f8fafc;
       font-size: 14px;
     }
+
     .case-item.active {
       border-color: var(--accent);
       background: var(--accent-soft);
     }
+
     .small {
       color: var(--muted);
       font-size: 13px;
     }
+
     .summary-box {
       margin-top: 18px;
       padding: 16px;
@@ -206,9 +245,15 @@
       border-radius: 12px;
       background: #fbfdff;
     }
-    .restart-btn { margin-top: 12px; }
+
+    .restart-btn {
+      margin-top: 12px;
+    }
+
     @media (max-width: 860px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -225,6 +270,20 @@
     </div>
 
     <div id="landingPage" class="card" style="margin-bottom:18px;">
+      <div class="summary-box" style="margin-bottom:16px; background:#f8fbff;">
+        <strong style="display:block; margin-bottom:10px;">Student information</strong>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label for="studentNameInput" class="small" style="display:block; margin-bottom:6px;">Student name</label>
+            <input id="studentNameInput" type="text" placeholder="Enter your name" style="width:100%; padding:10px 12px; border:1px solid #dbe3ee; border-radius:10px; font-size:14px;" />
+          </div>
+          <div>
+            <label for="studentIdInput" class="small" style="display:block; margin-bottom:6px;">Student ID or email (optional)</label>
+            <input id="studentIdInput" type="text" placeholder="Optional identifier" style="width:100%; padding:10px 12px; border:1px solid #dbe3ee; border-radius:10px; font-size:14px;" />
+          </div>
+        </div>
+        <div class="small" style="margin-top:8px;">This information is stored only in this browser and will be added to exported result files.</div>
+      </div>
       <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px; align-items:start;">
         <div>
           <div class="pill" style="display:inline-block; margin-bottom:10px;">State Policy Analysis Unit</div>
@@ -252,7 +311,7 @@
           </div>
           <div class="summary-box" style="margin-top:14px;">
             <strong style="display:block; margin-bottom:8px;">Course arc</strong>
-            <div class="small">Weeks 1–7 move from research questions and measurement to sampling, causality, significance, correlation, and regression.</div>
+            <div class="small">Weeks 1-7 move from research questions and measurement to sampling, causality, significance, correlation, and regression.</div>
           </div>
         </div>
       </div>
@@ -315,6 +374,7 @@
   <script>
     let currentWeekFile = null;
     let currentWeekName = null;
+    let studentInfo = { name: '', id: '' };
     const weekCatalog = [
       { file: 'week1.json', label: 'Week 1: Research questions' },
       { file: 'week2.json', label: 'Week 2: Measurement' },
@@ -348,6 +408,12 @@
     }
 
     function startSelectedWeek() {
+      saveStudentInfo();
+      if (!studentInfo.name.trim()) {
+        alert('Please enter the student name before starting the case.');
+        document.getElementById('studentNameInput').focus();
+        return;
+      }
       if (!currentWeekFile) {
         selectWeek(weekCatalog[0].file, weekCatalog[0].label);
       }
@@ -357,6 +423,26 @@
 
     function scrollToSelector() {
       document.getElementById('weekSelectorBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function saveStudentInfo() {
+      studentInfo = {
+        name: document.getElementById('studentNameInput').value.trim(),
+        id: document.getElementById('studentIdInput').value.trim()
+      };
+      localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
+    }
+
+    function loadStudentInfo() {
+      const raw = localStorage.getItem('statquest_student_info');
+      if (!raw) return;
+      try {
+        studentInfo = JSON.parse(raw);
+      } catch (e) {
+        studentInfo = { name: '', id: '' };
+      }
+      document.getElementById('studentNameInput').value = studentInfo.name || '';
+      document.getElementById('studentIdInput').value = studentInfo.id || '';
     }
 
     function showInstructorNotes() {
@@ -383,6 +469,8 @@
       }
       box.innerHTML = `
         <strong>${saved.weekName || 'Unknown week'}</strong><br>
+        Student: ${saved.studentName || 'Not provided'}<br>
+        ${saved.studentId ? `ID: ${saved.studentId}<br>` : ''}
         Score: ${saved.score}/${saved.totalQuestions}<br>
         Calibration: ${saved.calibration}%<br>
         Completed: ${saved.completedAt}
@@ -409,6 +497,7 @@
     }
 
     const cases = [];
+
     let currentCase = 0;
     let currentStep = 0;
     let score = 0;
@@ -562,7 +651,8 @@
       app.innerHTML = `
         <h2>${current.title}</h2>
         <div class="case-brief">
-          <strong>Policy brief:</strong> ${current.brief.replace(/\n/g, '<br><br>')}
+          <strong>Policy brief:</strong> ${current.brief.replace(/
+/g, '<br><br>')}
         </div>
 
         <div class="chart-box">
@@ -677,6 +767,8 @@
       const completedAt = new Date().toLocaleString();
       const result = {
         weekFile: currentWeekFile,
+        studentName: studentInfo.name,
+        studentId: studentInfo.id,
         weekName: currentWeekName,
         score,
         totalQuestions,
@@ -714,7 +806,7 @@
 
     function returnToLanding() {
       document.getElementById('landingPage').style.display = 'block';
-      document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the case.</p>';
+      document.getElementById('app').innerHTML = '<h2>Select a week to begin</h2><p>Use the landing page controls to choose and launch a weekly case.</p>';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -739,6 +831,9 @@
 
     buildWeekButtons();
     selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+    loadStudentInfo();
+    document.getElementById('studentNameInput').addEventListener('change', saveStudentInfo);
+    document.getElementById('studentIdInput').addEventListener('change', saveStudentInfo);
     renderSavedResult();
     document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the case.</p>';
   </script>
