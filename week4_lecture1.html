@@ -109,7 +109,38 @@
 
 <script>
 const screens = [
-{topic:"A policy claim", required:false, html:`<h2>Start with a real policy claim</h2><div class="card">A city reports that participants in a job training program have higher employment rates than non-participants.</div><p>This sounds like the beginning of a success story. It is also the kind of evidence that often leads policymakers to move too quickly.</p><div class="bar-wrap"><div class="bar-row"><label>Program participants</label><div class="bar" style="width:68%"><span>68%</span></div></div><div class="bar-row"><label>Non-participants</label><div class="bar" style="width:52%"><span>52%</span></div></div></div>`},
+{topic:"A policy claim", required:false, html:`<h2>Start with a real policy claim</h2><div class="card">A city reports that participants in a job training program have higher employment rates than non-participants.</div><p>This sounds like the beginning of a success story. It is also the kind of evidence that often leads policymakers to move too quickly.</p>
+  <div class="diagram" style="margin-top:12px;">
+    <strong>Employment rates by group</strong>
+    <svg viewBox="0 0 520 250" width="100%" height="auto" aria-label="Employment rates by group">
+      <line x1="90" y1="20" x2="90" y2="190" stroke="#64748b" stroke-width="2"></line>
+      <line x1="90" y1="190" x2="470" y2="190" stroke="#64748b" stroke-width="2"></line>
+
+      <line x1="85" y1="190" x2="90" y2="190" stroke="#cbd5e1" stroke-width="2"></line>
+      <line x1="85" y1="150" x2="90" y2="150" stroke="#cbd5e1" stroke-width="2"></line>
+      <line x1="85" y1="110" x2="90" y2="110" stroke="#cbd5e1" stroke-width="2"></line>
+      <line x1="85" y1="70" x2="90" y2="70" stroke="#cbd5e1" stroke-width="2"></line>
+      <line x1="85" y1="30" x2="90" y2="30" stroke="#cbd5e1" stroke-width="2"></line>
+
+      <text x="70" y="194" font-size="12" text-anchor="end" fill="#475569">0</text>
+      <text x="70" y="154" font-size="12" text-anchor="end" fill="#475569">20</text>
+      <text x="70" y="114" font-size="12" text-anchor="end" fill="#475569">40</text>
+      <text x="70" y="74" font-size="12" text-anchor="end" fill="#475569">60</text>
+      <text x="70" y="34" font-size="12" text-anchor="end" fill="#475569">80</text>
+
+      <rect x="160" y="54" width="90" height="136" fill="#3b82f6" stroke="#1e3a8a" stroke-width="1.5"></rect>
+      <rect x="320" y="86" width="90" height="104" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.5"></rect>
+
+      <text x="205" y="46" font-size="12" text-anchor="middle" fill="#111827" font-weight="bold">68%</text>
+      <text x="365" y="78" font-size="12" text-anchor="middle" fill="#111827" font-weight="bold">52%</text>
+
+      <text x="205" y="212" font-size="12" text-anchor="middle" fill="#111827">Program participants</text>
+      <text x="365" y="212" font-size="12" text-anchor="middle" fill="#111827">Non-participants</text>
+
+      <text x="280" y="238" font-size="13" text-anchor="middle" fill="#475569">Group</text>
+      <text x="20" y="112" font-size="13" text-anchor="middle" fill="#475569" transform="rotate(-90 20 112)">Percent Employed</text>
+    </svg>
+  </div>`},
 {topic:"First judgment", required:true, html:`<h2>What is the strongest conclusion so far?</h2><div class="choices"><button class="choice-btn" onclick="answer('f2', false, '', 'This is too strong. The evidence shows a difference, but it does not yet isolate causation.')">The program works.</button><button class="choice-btn" onclick="answer('f2', true, 'Correct. There is a difference, but causation is not yet established.', '')">There is a difference, but causation is not yet established.</button></div><div id="f2" class="feedback"></div><p>Do not jump from an observed difference to a causal claim. First ask what else could explain the pattern.</p>`},
 {topic:"Why this is hard", required:false, html:`<h2>Why the evidence may be misleading</h2><div class="card">People who choose to enter a program may already differ from people who do not.</div><div class="checklist"><div class="check">Motivation</div><div class="check">Education</div><div class="check">Prior work experience</div><div class="check">Access to transportation or childcare</div></div><p>If these preexisting factors affect both participation and employment, the comparison becomes much harder to interpret.</p>`},
 {topic:"Confounding structure", required:true, html:`<h2>See the confounding structure</h2><p>A confounding variable is a third variable that affects both the independent variable and the dependent variable.</p><div class="triangle-wrap"><svg class="triangle-svg" viewBox="0 0 460 280" aria-label="Confounding triangle diagram"><defs><marker id="arrowhead" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#2563eb"></polygon></marker></defs><line id="edgeXY" class="edge edge-active" x1="170" y1="210" x2="290" y2="210"></line><line id="edgeZX" class="edge" x1="200" y1="98" x2="145" y2="168"></line><line id="edgeZY" class="edge" x1="260" y1="98" x2="315" y2="168"></line><circle id="nodeX" class="node node-active" cx="110" cy="210" r="56"></circle><circle id="nodeY" class="node" cx="350" cy="210" r="56"></circle><circle id="nodeZ" class="node" cx="230" cy="60" r="56"></circle><text class="label" x="110" y="205" text-anchor="middle">Program</text><text class="label" x="110" y="223" text-anchor="middle">participation</text><text class="label" x="350" y="205" text-anchor="middle">Employment</text><text class="label" x="350" y="223" text-anchor="middle">outcome</text><text class="label" x="230" y="55" text-anchor="middle">Motivation</text><text class="label" x="230" y="73" text-anchor="middle">(confounder)</text></svg></div><div class="triangle-controls"><button class="tiny-btn" onclick="showTriangleStep('xy')">1. Observed relationship</button><button class="tiny-btn" onclick="showTriangleStep('zx')">2. Add Motivation → Program</button><button class="tiny-btn" onclick="showTriangleStep('zy')">3. Add Motivation → Employment</button><button class="tiny-btn" onclick="showTriangleStep('all')">4. Show full structure</button></div><div id="triangleExplain" class="feedback warn" style="display:block;">Start with the relationship we observe: program participation appears related to employment.</div>`},
