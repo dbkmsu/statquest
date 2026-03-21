@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Week 6 Lecture 1 - Correlation and Causation</title>
+<style>
+:root{--bg:#f3f6fb;--panel:#fff;--text:#1f2937;--muted:#6b7280;--border:#dbe3ee;--accent:#1d4ed8;--accent-soft:#dbeafe;--good-bg:#ecfdf5;--good-border:#10b981;--warn-bg:#fff7ed;--warn-border:#f59e0b;--shadow:0 10px 30px rgba(15,23,42,.08);}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,#eef4ff 0%,#f7f9fc 100%);line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:24px} .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
+.hero{padding:24px;margin-bottom:18px} .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px}
+h1,h2,h3{margin:0 0 10px 0} .sub{color:var(--muted);max-width:860px} .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px} .panel{padding:22px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px} .pill{background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px}
+.screen-title{font-size:28px;line-height:1.2;margin-bottom:8px} .screen-subtitle{color:var(--muted);margin-bottom:14px} .scenario{background:#f8fbff;border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 0 16px}
+.quote{font-style:italic;color:#374151} .checklist,.choices{display:grid;gap:10px;margin:12px 0 0} .choice-btn{width:100%;text-align:left;border-radius:12px;border:1px solid var(--border);background:#fff;padding:13px 14px;font-size:15px;cursor:pointer}
+.choice-btn:hover{border-color:var(--accent);transform:translateY(-1px)} .feedback{margin-top:14px;border-radius:12px;padding:14px;background:var(--warn-bg);border-left:5px solid var(--warn-border)} .feedback.good{background:var(--good-bg);border-left-color:var(--good-border)}
+.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} button.nav{border-radius:12px;border:1px solid var(--border);background:white;padding:12px 16px;cursor:pointer;font-size:14px} button.primary{background:var(--accent);color:white;border-color:var(--accent)} button:disabled{opacity:.55;cursor:not-allowed}
+.progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px} .progress-fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);width:0%;transition:width .2s ease}
+.side-section + .side-section{margin-top:14px} .side-title{font-size:16px;margin-bottom:8px} .mini-card{border:1px solid var(--border);border-radius:12px;background:#fbfdff;padding:14px} .check{border:1px solid var(--border);border-radius:12px;padding:12px;background:white} .success-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px;padding:16px;margin-top:12px}
+a.cta-link{display:inline-block;margin-top:10px;color:white;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)} @media (max-width:900px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero"><div class="kicker">MC295 • Week 6 • Lecture 1</div><h1>Correlation, Causation, and Misleading Relationships</h1><div class="sub">A rough interactive draft based on the Week 6 emphasis on correlation, functional form, and causal interpretation.</div></div>
+<div class="layout">
+<div class="panel">
+<div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+<div class="meta-row"><div class="pill">Screen <span id="screenCount">1</span> of <span id="screenTotal"></span></div><div class="pill">Topic: <span id="topicLabel"></span></div></div>
+<div id="screenArea"></div>
+<div class="button-row"><button id="backBtn" class="nav" onclick="prevScreen()">Back</button><button id="nextBtn" class="nav primary" onclick="nextScreen()">Next</button></div>
+</div>
+<div class="panel">
+<div class="side-section"><div class="side-title">Lecture roadmap</div><div class="mini-card">Move from the meaning of correlation to spuriousness, reverse causality, and mechanism.</div></div>
+<div class="side-section"><div class="side-title">Study note</div><div class="mini-card">This week will benefit later from interactive scatterplots and pattern-matching figures.</div></div>
+<div class="side-section"><div class="side-title">Transition</div><div class="mini-card">This lecture is meant to come immediately before the matching weekly policy case.</div></div>
+</div>
+</div>
+</div>
+<script>
+const screens=[
+{topic:'Correlation trap', html:`<div class="screen-title">A strong relationship can still mislead you</div><div class="scenario">Two variables move together. Does that mean one causes the other?</div>`},
+{topic:'What correlation is', html:`<div class="screen-title">Correlation measures association</div><div class="checklist"><div class="check"><strong>X and Y move together</strong></div><div class="check"><strong>Strength matters</strong></div><div class="check"><strong>Direction matters</strong></div><div class="check"><strong>Causation is not established by correlation alone</strong></div></div>`},
+{topic:'Relationship shapes', html:`<div class="screen-title">Not all relationships are linear</div><div class="checklist"><div class="check">Positive</div><div class="check">Negative</div><div class="check">None</div><div class="check">Curvilinear or non-linear</div></div>`},
+{topic:'Spuriousness', html:`<div class="screen-title">Why correlation can be spurious</div><div class="scenario">A third variable may influence both X and Y, making the relationship look causal when it is not.</div>`},
+{topic:'Need a mechanism', html:`<div class="screen-title">A plausible causal mechanism matters</div><div class="checklist"><div class="check">What process would connect X to Y?</div><div class="check">What alternative explanations remain?</div></div>`},
+{topic:'Wrap-up', html:`<div class="screen-title">Before moving to the case</div><div class="success-box">When you see a striking relationship, ask whether it reflects causation, reverse causation, a confounder, or no meaningful explanatory story at all.</div><a class="cta-link" href="index.html">Return to the main app</a>`}
+];
+const state={index:0};
+function renderScreen(){const s=screens[state.index];document.getElementById('screenArea').innerHTML=s.html;document.getElementById('screenCount').textContent=state.index+1;document.getElementById('screenTotal').textContent=screens.length;document.getElementById('topicLabel').textContent=s.topic;document.getElementById('progressFill').style.width=((state.index+1)/screens.length*100)+'%';document.getElementById('backBtn').disabled=state.index===0;document.getElementById('nextBtn').disabled=state.index===screens.length-1;}
+function nextScreen(){if(state.index<screens.length-1){state.index++;renderScreen();}}
+function prevScreen(){if(state.index>0){state.index--;renderScreen();}}
+function choose(id,html){const el=document.getElementById(id); if(el) el.innerHTML=html;}
+renderScreen();
+</script>
+</body></html>
