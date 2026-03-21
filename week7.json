@@ -1,0 +1,144 @@
+[
+  {
+    "title": "Case 7: What Predicts Life Expectancy?",
+    "policyArea": "Public health policy",
+    "brief": "An international policy group is trying to predict life expectancy across countries to guide aid spending. Analysts build a statistical model using education, income, and healthcare spending. You are asked to interpret the model and evaluate its usefulness.",
+    "chartTitle": "Predicted life expectancy by education level",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Low education",
+        "Medium education",
+        "High education"
+      ],
+      "values": [
+        62,
+        70,
+        78
+      ],
+      "yMax": 90,
+      "yLabel": "Life expectancy (years)"
+    },
+    "steps": [
+      {
+        "question": "The model shows that higher education is associated with higher life expectancy. What does this mean?",
+        "options": [
+          "Education definitely causes people to live longer",
+          "Education is positively associated with life expectancy",
+          "Life expectancy causes education"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The model shows a relationship, not definitive causation.",
+          "wrong": [
+            "This overstates the result—regression alone does not prove causation.",
+            "This is not supported by the model."
+          ]
+        },
+        "teach": "Policy takeaway: Regression identifies relationships while controlling for other factors, but does not automatically prove causation."
+      },
+      {
+        "question": "Why include income and healthcare spending in the model?",
+        "options": [
+          "To make the model more complicated",
+          "To control for other factors that may affect life expectancy",
+          "To reduce sample size"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. These are control variables that help isolate the relationship between education and life expectancy.",
+          "wrong": [
+            "Complexity is not the goal—accuracy is.",
+            "This is not related to sample size."
+          ]
+        },
+        "teach": "Policy takeaway: Control variables help account for alternative explanations."
+      },
+      {
+        "question": "If an important variable (like access to clean water) is missing, what problem occurs?",
+        "options": [
+          "Multicollinearity",
+          "Omitted variable bias",
+          "Sampling error"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Missing relevant variables can bias the estimated relationships.",
+          "wrong": [
+            "This refers to correlation between independent variables.",
+            "This is random variation, not systematic bias."
+          ]
+        },
+        "teach": "Policy takeaway: Omitted variable bias can make relationships appear stronger or weaker than they really are."
+      },
+      {
+        "question": "The model has an R² of 0.65. What does this indicate?",
+        "options": [
+          "65% of the variation in life expectancy is explained by the model",
+          "The model is 65% accurate in predictions",
+          "65% of countries are included in the sample"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. R² measures how much variation in the dependent variable is explained by the model.",
+          "wrong": [
+            "R² is not a direct measure of prediction accuracy.",
+            "This is unrelated to sample size."
+          ]
+        },
+        "teach": "Policy takeaway: A higher R² indicates better model fit, but does not guarantee causal accuracy."
+      },
+      {
+        "question": "If two independent variables (like income and education) are highly correlated, what issue arises?",
+        "options": [
+          "Multicollinearity",
+          "Type I error",
+          "Sampling bias"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Multicollinearity makes it harder to isolate individual effects.",
+          "wrong": [
+            "This relates to hypothesis testing, not regression structure.",
+            "This relates to sampling, not variable relationships."
+          ]
+        },
+        "teach": "Policy takeaway: Highly correlated predictors can make regression results unstable and harder to interpret."
+      },
+      {
+        "question": "The model predicts that increasing education by one year increases life expectancy by 1.5 years. How should this be interpreted?",
+        "options": [
+          "Each additional year of education directly causes a 1.5-year increase in life expectancy",
+          "There is an estimated association between education and life expectancy, holding other variables constant",
+          "Education has no real effect"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Regression coefficients represent associations while controlling for other variables.",
+          "wrong": [
+            "This assumes causation, which may not be justified.",
+            "The model suggests a relationship, not no effect."
+          ]
+        },
+        "teach": "Policy takeaway: Regression coefficients describe conditional relationships, not guaranteed causal effects."
+      },
+      {
+        "question": "Final recommendation: How should policymakers use this model?",
+        "options": [
+          "Use it as definitive proof of what causes life expectancy",
+          "Use it as one piece of evidence to guide decisions, while considering limitations",
+          "Ignore it because it is not perfect"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Models are tools for insight, not definitive answers.",
+          "wrong": [
+            "This overstates the certainty of the model.",
+            "Too dismissive—models can still be very useful."
+          ]
+        },
+        "teach": "Policy takeaway: Regression models inform policy, but must be interpreted cautiously and alongside other evidence."
+      }
+    ]
+  }
+]

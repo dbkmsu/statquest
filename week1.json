@@ -1,0 +1,108 @@
+[
+  {
+    "title": "Case 1: Social Media and Teen Mental Health",
+    "policyArea": "Public health policy",
+    "brief": "A state legislature is considering regulating teen social media use. A report claims that social media is causing a mental health crisis among teenagers. You are asked to evaluate whether this claim is well-formed and testable.",
+    "chartTitle": "Reported relationship between social media use and anxiety",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Low use",
+        "High use"
+      ],
+      "values": [
+        35,
+        55
+      ],
+      "yMax": 100,
+      "yLabel": "Percent reporting high anxiety"
+    },
+    "steps": [
+      {
+        "question": "The report states: 'Social media is harmful to teens.' What is the main problem with this as a research question?",
+        "options": [
+          "It is too specific",
+          "It is too vague and not clearly testable",
+          "It already proves causation"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. This statement is too vague—what does 'harmful' mean, and how would we measure it?",
+          "wrong": [
+            "Not quite. The issue is not that it is too specific—it is actually too vague to test.",
+            "Incorrect. The statement makes a claim but does not provide evidence or a clear way to test causation."
+          ]
+        },
+        "teach": "Policy takeaway: Good research starts with precise, testable questions—not broad claims."
+      },
+      {
+        "question": "Which of the following is the best dependent variable for this study?",
+        "options": [
+          "Time spent on social media",
+          "Level of anxiety or mental health outcomes",
+          "Type of phone used"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The dependent variable is the outcome you are trying to explain—in this case, mental health.",
+          "wrong": [
+            "That is the independent variable—the factor that might explain changes in mental health.",
+            "This is not central to the research question and does not capture the outcome of interest."
+          ]
+        },
+        "teach": "Policy takeaway: Confusing independent and dependent variables leads to flawed analysis."
+      },
+      {
+        "question": "What is the independent variable in this scenario?",
+        "options": [
+          "Mental health status",
+          "Social media usage",
+          "Genetic predisposition"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Social media usage is the factor hypothesized to influence mental health.",
+          "wrong": [
+            "That is the outcome (dependent variable), not the cause.",
+            "This could be a confounding variable, but it is not the main independent variable in this study."
+          ]
+        },
+        "teach": "Policy takeaway: Clearly identifying variables is essential before any analysis begins."
+      },
+      {
+        "question": "Which of the following is a likely confounding variable?",
+        "options": [
+          "Screen time affecting sleep patterns",
+          "The number of survey questions",
+          "The color of the app interface"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Sleep could affect both social media use and mental health, creating a misleading relationship.",
+          "wrong": [
+            "This does not affect both variables in a meaningful way.",
+            "This is not relevant to the relationship being studied."
+          ]
+        },
+        "teach": "Policy takeaway: Confounding variables can create misleading relationships that look causal but are not."
+      },
+      {
+        "question": "What is the strongest conclusion policymakers should draw from this initial report?",
+        "options": [
+          "Social media clearly causes poor mental health",
+          "There may be a relationship, but more careful research is needed",
+          "The report is useless"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The evidence suggests a possible relationship but does not establish causation.",
+          "wrong": [
+            "This overstates the evidence—correlation is not causation.",
+            "Too dismissive. The report may still provide useful preliminary insight."
+          ]
+        },
+        "teach": "Policy takeaway: Early evidence should guide further research—not immediate policy decisions."
+      }
+    ]
+  }
+]

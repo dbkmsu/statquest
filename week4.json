@@ -1,0 +1,155 @@
+[
+  {
+    "title": "Case 4: The Job Program That 'Worked'",
+    "policyArea": "Workforce policy",
+    "brief": "You’ve just joined the State Policy Analysis Unit. Director Alvarez calls you into a meeting.\n\n'Alright, we’ve got a problem. The mayor wants to expand a job training program statewide. They’re claiming it works. I need you to tell me—does it actually work, or are we about to waste millions?'",
+    "chartTitle": "Employment rates: program vs non-program",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Participants",
+        "Non-participants"
+      ],
+      "values": [
+        68,
+        52
+      ],
+      "yMax": 100,
+      "yLabel": "Percent employed"
+    },
+    "steps": [
+      {
+        "context": "Chen (Senior Analyst): 'Participants have higher employment. Looks promising—but be careful.'",
+        "question": "What does this difference actually show?",
+        "options": [
+          "The program caused higher employment",
+          "There is a difference, but causation is unclear",
+          "The data is irrelevant"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Good. You’re not jumping to conclusions.",
+          "wrong": [
+            "Alvarez: That’s a dangerous assumption. We haven’t established causation.",
+            "Chen: No—this is useful data. You just need to interpret it correctly."
+          ]
+        },
+        "teach": "Differences between groups do not automatically imply causation.",
+        "consequence": {
+          "correct": "The team pauses before recommending expansion.",
+          "wrong": "The mayor cites your analysis as proof the program works."
+        }
+      },
+      {
+        "context": "Chen: 'Here’s the catch—people chose to enroll in the program.'",
+        "question": "What problem does this create?",
+        "options": [
+          "Random sampling",
+          "Selection bias",
+          "Measurement error"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Exactly. That’s the core issue.",
+          "wrong": [
+            "That would require random assignment.",
+            "This isn’t about measurement—it’s about who is in each group."
+          ]
+        },
+        "teach": "Selection bias is a major threat to causal inference.",
+        "consequence": {
+          "correct": "You flag the study as potentially biased.",
+          "wrong": "The policy team assumes groups are comparable."
+        }
+      },
+      {
+        "context": "Alvarez: 'So what kind of study are we looking at here?'",
+        "question": "What type of research design is this?",
+        "options": [
+          "True experiment",
+          "Observational study",
+          "Randomized controlled trial"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Right. No random assignment.",
+          "wrong": [
+            "There’s no random assignment here.",
+            "That would require controlled assignment."
+          ]
+        },
+        "teach": "Observational studies are weaker for causal inference.",
+        "consequence": {
+          "correct": "Your report reflects uncertainty about causality.",
+          "wrong": "The study is incorrectly treated as experimental evidence."
+        }
+      },
+      {
+        "context": "Chen: 'Think about who signs up for programs like this…'",
+        "question": "Which is a likely confounding variable?",
+        "options": [
+          "Motivation level",
+          "Chart color",
+          "Survey length"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Yes. Motivation affects both participation and outcomes.",
+          "wrong": [
+            "That’s not relevant here.",
+            "That doesn’t affect employment outcomes."
+          ]
+        },
+        "teach": "Confounding variables can create misleading relationships.",
+        "consequence": {
+          "correct": "You identify a key flaw in the study.",
+          "wrong": "Confounding goes unnoticed in the final recommendation."
+        }
+      },
+      {
+        "context": "Alvarez: 'If we wanted a real answer—what would we do differently?'",
+        "question": "What would improve internal validity the most?",
+        "options": [
+          "Larger sample size",
+          "Random assignment",
+          "More survey questions"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Exactly. That’s the gold standard.",
+          "wrong": [
+            "That doesn’t fix bias.",
+            "That doesn’t address causality."
+          ]
+        },
+        "teach": "Random assignment helps isolate causal effects.",
+        "consequence": {
+          "correct": "You recommend a pilot with random assignment.",
+          "wrong": "The flawed design is accepted as sufficient."
+        }
+      },
+      {
+        "context": "Alvarez: 'Alright. Final call—what do we tell the mayor?'",
+        "question": "What is your recommendation?",
+        "options": [
+          "Expand the program immediately",
+          "The program shows promise but needs stronger evidence",
+          "Reject the program entirely"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Alvarez: Good. That’s a defensible position.",
+          "wrong": [
+            "Alvarez: That’s too aggressive given weak evidence.",
+            "Chen: That’s too strong in the opposite direction."
+          ]
+        },
+        "teach": "Policy decisions should match the strength of the evidence.",
+        "consequence": {
+          "correct": "State launches a controlled pilot before scaling.",
+          "wrong": "Millions are spent expanding a program with unclear impact."
+        }
+      }
+    ]
+  }
+]

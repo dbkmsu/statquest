@@ -1,0 +1,125 @@
+[
+  {
+    "title": "Case 3: The Misleading Election Poll",
+    "policyArea": "Election and public opinion policy",
+    "brief": "A major news outlet reports that 72% of voters support a new education policy. Policymakers are preparing to act on this result. You are asked to evaluate whether the poll is reliable.",
+    "chartTitle": "Poll results: support for education policy",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Support",
+        "Oppose"
+      ],
+      "values": [
+        72,
+        28
+      ],
+      "yMax": 100,
+      "yLabel": "Percent of respondents"
+    },
+    "steps": [
+      {
+        "question": "The poll surveyed 500 people online through a social media platform. What is the biggest initial concern?",
+        "options": [
+          "The sample size is too large",
+          "The sample may not be representative of the population",
+          "The percentages do not add to 100"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The key issue is representativeness—who is included (and excluded) from an online sample?",
+          "wrong": [
+            "This is not the issue—500 is not unusually large.",
+            "The percentages are fine—the concern is who was surveyed."
+          ]
+        },
+        "teach": "Policy takeaway: A sample is only useful if it represents the population."
+      },
+      {
+        "question": "What type of bias is most likely when using only social media users?",
+        "options": [
+          "Selection bias / coverage bias",
+          "Random sampling error",
+          "Measurement reliability"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. People without access to or who do not use social media are excluded.",
+          "wrong": [
+            "Sampling error occurs even in good samples—this is a systematic bias problem.",
+            "This is not about consistency of measurement."
+          ]
+        },
+        "teach": "Policy takeaway: Coverage bias occurs when some groups are systematically excluded from the sample."
+      },
+      {
+        "question": "Only 10% of people who saw the survey responded. What problem does this create?",
+        "options": [
+          "Non-response bias",
+          "Regression to the mean",
+          "External validity improvement"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Those who respond may differ in important ways from those who do not.",
+          "wrong": [
+            "This is unrelated to repeated measurements.",
+            "Low response rates usually weaken validity, not improve it."
+          ]
+        },
+        "teach": "Policy takeaway: Non-response bias can distort results even if the original sample was well-designed."
+      },
+      {
+        "question": "The survey question was: 'Do you support improving schools for children?' What is the issue?",
+        "options": [
+          "The question is too neutral",
+          "The question is leading and introduces response bias",
+          "The question is too long"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The wording encourages agreement and does not neutrally describe the policy.",
+          "wrong": [
+            "It is actually not neutral—it is leading.",
+            "Length is not the issue here."
+          ]
+        },
+        "teach": "Policy takeaway: Question wording can strongly influence responses and introduce bias."
+      },
+      {
+        "question": "Even with a perfect sample, why might results differ from the true population value?",
+        "options": [
+          "Sampling error",
+          "Confounding variables",
+          "Operationalization"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Random sampling error means samples will naturally vary from the population.",
+          "wrong": [
+            "This is about relationships between variables, not sampling variation.",
+            "This relates to measurement, not sampling variation."
+          ]
+        },
+        "teach": "Policy takeaway: Even good samples have uncertainty—this is why margins of error exist."
+      },
+      {
+        "question": "Final decision: What should policymakers conclude from this poll?",
+        "options": [
+          "72% support proves the policy is popular",
+          "The poll provides some information but is likely biased and should not be used alone",
+          "The poll is completely useless"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The poll may contain useful signals, but multiple biases limit its reliability.",
+          "wrong": [
+            "This overstates confidence in flawed data.",
+            "Too extreme—there may still be some useful information."
+          ]
+        },
+        "teach": "Policy takeaway: Policymakers should evaluate how data was collected before trusting the results."
+      }
+    ]
+  }
+]

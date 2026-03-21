@@ -1,0 +1,125 @@
+[
+  {
+    "title": "Case 5: The Policing Policy That 'Worked'",
+    "policyArea": "Criminal justice policy",
+    "brief": "A city implements a new policing strategy and reports that crime dropped by 3%. A statistical test finds the result is 'statistically significant' (p < 0.05). Officials claim the policy was a success and want to expand it statewide.",
+    "chartTitle": "Crime rate before and after policy",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Before policy",
+        "After policy"
+      ],
+      "values": [
+        100,
+        97
+      ],
+      "yMax": 120,
+      "yLabel": "Crime index"
+    },
+    "steps": [
+      {
+        "question": "The report states the result is 'statistically significant (p < 0.05)'. What does this actually mean?",
+        "options": [
+          "The policy definitely worked",
+          "The result is unlikely due to random chance under the null hypothesis",
+          "The effect is large and important"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Statistical significance means the observed result would be unlikely if there were truly no effect.",
+          "wrong": [
+            "This overstates what p-values tell us—significance is not proof.",
+            "Statistical significance does not tell us how large or important the effect is."
+          ]
+        },
+        "teach": "Policy takeaway: Statistical significance is about likelihood, not proof or importance."
+      },
+      {
+        "question": "The crime rate dropped from 100 to 97. What is the key policy concern here?",
+        "options": [
+          "The result is not statistically significant",
+          "The effect size may be too small to matter in practice",
+          "The data is invalid"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Even if statistically significant, a 3% change may not be meaningful for policy.",
+          "wrong": [
+            "The result is statistically significant in this scenario.",
+            "There is no indication the data itself is invalid."
+          ]
+        },
+        "teach": "Policy takeaway: Statistical significance does not equal substantive importance."
+      },
+      {
+        "question": "If the policy actually had no effect but we concluded that it did, what type of error is this?",
+        "options": [
+          "Type I error",
+          "Type II error",
+          "Sampling error"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. A Type I error means falsely rejecting the null hypothesis.",
+          "wrong": [
+            "Type II error is failing to detect a real effect.",
+            "Sampling error is random variation, not a decision mistake."
+          ]
+        },
+        "teach": "Policy takeaway: Type I errors can lead to adopting ineffective or harmful policies."
+      },
+      {
+        "question": "If the policy truly reduced crime but the study failed to detect it, what type of error is this?",
+        "options": [
+          "Type I error",
+          "Type II error",
+          "Measurement error"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. A Type II error means missing a real effect.",
+          "wrong": [
+            "Type I is the opposite problem.",
+            "Measurement error is a different issue."
+          ]
+        },
+        "teach": "Policy takeaway: Type II errors can lead to rejecting policies that actually work."
+      },
+      {
+        "question": "What factor could make a very small effect statistically significant?",
+        "options": [
+          "Large sample size",
+          "Better survey wording",
+          "Shorter study duration"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Large samples can detect very small differences as statistically significant.",
+          "wrong": [
+            "This affects measurement, not statistical power.",
+            "This does not explain statistical significance."
+          ]
+        },
+        "teach": "Policy takeaway: With large data, almost anything can become statistically significant—even trivial effects."
+      },
+      {
+        "question": "Final recommendation: What should policymakers conclude?",
+        "options": [
+          "The policy clearly works and should be expanded",
+          "The policy shows statistically significant results, but the effect size and practical impact must be evaluated",
+          "The study is useless because it uses statistics"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Good policy decisions consider both statistical and substantive significance.",
+          "wrong": [
+            "This overstates the evidence.",
+            "Statistics are useful—misinterpretation is the problem."
+          ]
+        },
+        "teach": "Policy takeaway: Evidence-based policy requires interpreting both statistical results and real-world impact."
+      }
+    ]
+  }
+]

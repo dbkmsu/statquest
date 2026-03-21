@@ -1,0 +1,125 @@
+[
+  {
+    "title": "Case 6: Do Police Cause Crime?",
+    "policyArea": "Criminal justice policy",
+    "brief": "A report shows that cities with more police officers tend to have higher crime rates. Some commentators argue that increasing police presence may actually cause more crime. You are asked to evaluate this claim.",
+    "chartTitle": "Police officers vs crime rate across cities",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Low police presence",
+        "High police presence"
+      ],
+      "values": [
+        40,
+        75
+      ],
+      "yMax": 100,
+      "yLabel": "Crime rate (index)"
+    },
+    "steps": [
+      {
+        "question": "The data show that cities with more police have higher crime rates. What does this establish?",
+        "options": [
+          "Police cause crime",
+          "There is a correlation between police presence and crime",
+          "Crime causes police to disappear"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. The data show a relationship, but not causation.",
+          "wrong": [
+            "This incorrectly assumes causation from correlation.",
+            "This is not supported by the data."
+          ]
+        },
+        "teach": "Policy takeaway: Correlation shows association—not cause and effect."
+      },
+      {
+        "question": "What is the most likely explanation for this relationship?",
+        "options": [
+          "Cities with more crime hire more police",
+          "Police create crime directly",
+          "The data must be wrong"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Higher crime likely leads to more police hiring, not the other way around.",
+          "wrong": [
+            "There is no evidence of this causal direction.",
+            "The data may be valid—the interpretation is the issue."
+          ]
+        },
+        "teach": "Policy takeaway: Reverse causality is a common issue in observational data."
+      },
+      {
+        "question": "What type of variable could explain both higher crime and more police?",
+        "options": [
+          "City population size",
+          "Chart formatting",
+          "Survey wording"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Larger cities tend to have both more crime and more police.",
+          "wrong": [
+            "This does not affect the relationship.",
+            "This is not relevant to the variables shown."
+          ]
+        },
+        "teach": "Policy takeaway: Confounding variables can create misleading correlations."
+      },
+      {
+        "question": "What is missing from the claim 'police cause crime'?",
+        "options": [
+          "A causal mechanism explaining how police would increase crime",
+          "A larger sample size",
+          "A better chart"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Without a plausible mechanism, causal claims are weak.",
+          "wrong": [
+            "Sample size is not the main issue here.",
+            "Visualization is not the core problem."
+          ]
+        },
+        "teach": "Policy takeaway: Strong causal claims require a plausible explanation, not just data."
+      },
+      {
+        "question": "How could we better test whether police reduce crime?",
+        "options": [
+          "Use a randomized or quasi-experimental design",
+          "Look at more correlations",
+          "Ask more people for opinions"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Better research design helps isolate causal effects.",
+          "wrong": [
+            "More correlations do not solve causation problems.",
+            "Opinions are not evidence of causal effects."
+          ]
+        },
+        "teach": "Policy takeaway: Causal questions require strong research design, not just more data."
+      },
+      {
+        "question": "Final conclusion: What should policymakers take from this analysis?",
+        "options": [
+          "Police increase crime and should be reduced",
+          "The relationship is complex and requires deeper causal analysis before making policy decisions",
+          "Correlation alone is enough to guide policy"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Policy decisions should not rely on raw correlations without understanding causation.",
+          "wrong": [
+            "This is an unsupported causal claim.",
+            "This reflects a common but serious misunderstanding."
+          ]
+        },
+        "teach": "Policy takeaway: Misinterpreting correlation as causation can lead to dangerous policy decisions."
+      }
+    ]
+  }
+]

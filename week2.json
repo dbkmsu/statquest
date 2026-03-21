@@ -1,0 +1,125 @@
+[
+  {
+    "title": "Case 2: Measuring Community Well-Being",
+    "policyArea": "Urban policy",
+    "brief": "A city government wants to improve 'community well-being' and has hired a consulting firm. The firm proposes measuring well-being using a single survey question: 'Are you happy? (Yes/No)'. You are asked to evaluate this approach.",
+    "chartTitle": "Survey results: reported happiness",
+    "chartType": "bar",
+    "chartData": {
+      "labels": [
+        "Yes",
+        "No"
+      ],
+      "values": [
+        72,
+        28
+      ],
+      "yMax": 100,
+      "yLabel": "Percent of respondents"
+    },
+    "steps": [
+      {
+        "question": "What is the main problem with using 'happiness' as defined here?",
+        "options": [
+          "It is too expensive to measure",
+          "It is not clearly conceptually defined",
+          "It is already an interval variable"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. 'Happiness' is vague and could mean many different things without a clear definition.",
+          "wrong": [
+            "Cost is not the main issue here.",
+            "This does not address the problem of unclear definition."
+          ]
+        },
+        "teach": "Policy takeaway: Concepts must be clearly defined before they can be measured."
+      },
+      {
+        "question": "What is wrong with the operational definition (Yes/No happiness question)?",
+        "options": [
+          "It may not capture the full concept of well-being",
+          "It is too detailed",
+          "It uses too many variables"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. A single yes/no question oversimplifies a complex concept like well-being.",
+          "wrong": [
+            "It is actually too simplistic, not too detailed.",
+            "The issue is not too many variables—it is too little information."
+          ]
+        },
+        "teach": "Policy takeaway: Poor operationalization leads to misleading data."
+      },
+      {
+        "question": "Which would be a better operational measure of well-being?",
+        "options": [
+          "A multi-question index including health, income, and life satisfaction",
+          "A single yes/no question",
+          "Asking only about income"
+        ],
+        "correct": 0,
+        "feedback": {
+          "correct": "Correct. Complex concepts require multiple indicators to measure accurately.",
+          "wrong": [
+            "This is too simplistic and unreliable.",
+            "Income alone does not capture overall well-being."
+          ]
+        },
+        "teach": "Policy takeaway: Good measurement often requires combining multiple indicators."
+      },
+      {
+        "question": "If the survey gives inconsistent results when repeated, what is the issue?",
+        "options": [
+          "Lack of validity",
+          "Lack of reliability",
+          "Too many variables"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. Inconsistent results indicate low reliability.",
+          "wrong": [
+            "Validity refers to accuracy, not consistency.",
+            "This is not the issue described."
+          ]
+        },
+        "teach": "Policy takeaway: Reliable measures produce consistent results over time."
+      },
+      {
+        "question": "If the measure consistently misses true well-being, what is the issue?",
+        "options": [
+          "Random error",
+          "Validity problem",
+          "Sample size issue"
+        ],
+        "correct": 1,
+        "feedback": {
+          "correct": "Correct. If the measure does not reflect reality, it lacks validity.",
+          "wrong": [
+            "Random error relates to inconsistency, not systematic inaccuracy.",
+            "Sample size is not the core issue here."
+          ]
+        },
+        "teach": "Policy takeaway: A measure can be reliable but still invalid—and therefore misleading."
+      },
+      {
+        "question": "Final recommendation: What should the city do?",
+        "options": [
+          "Use the current measure as-is",
+          "Abandon measurement entirely",
+          "Develop a more robust, multi-dimensional measure of well-being"
+        ],
+        "correct": 2,
+        "feedback": {
+          "correct": "Correct. Better measurement leads to better policy decisions.",
+          "wrong": [
+            "This risks basing policy on flawed data.",
+            "Measurement is essential—just needs to be improved."
+          ]
+        },
+        "teach": "Policy takeaway: Policy is only as good as the data it relies on."
+      }
+    ]
+  }
+]
