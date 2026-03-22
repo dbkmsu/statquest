@@ -3,141 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StatQuest: Policy Lab</title>
+  <title>StatQuest: Weekly Modules</title>
   <style>
-    :root { --bg:#f3f6fb; --panel:#fff; --text:#1f2937; --muted:#6b7280; --border:#dbe3ee; --accent:#1d4ed8; --accent-soft:#dbeafe; --good-bg:#ecfdf5; --good-border:#10b981; --warn-bg:#fff7ed; --warn-border:#f59e0b; --bad-bg:#fef2f2; --bad-border:#ef4444; }
+    :root {
+      --bg:#f3f6fb; --panel:#fff; --text:#1f2937; --muted:#6b7280; --border:#dbe3ee;
+      --accent:#1d4ed8; --accent-soft:#dbeafe; --good:#10b981; --good-bg:#ecfdf5;
+      --warn:#f59e0b; --warn-bg:#fff7ed; --bad:#ef4444; --bad-bg:#fef2f2;
+      --shadow:0 10px 28px rgba(15,23,42,.07);
+    }
     * { box-sizing:border-box; }
     body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
-    .wrap { max-width:1100px; margin:0 auto; padding:24px; }
-    .header, .card { background:var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
-    .header { padding:20px 24px; margin-bottom:18px; }
+    .wrap { max-width:1200px; margin:0 auto; padding:24px; }
+    .panel { background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); }
+    .header { padding:22px 24px; margin-bottom:18px; }
     h1,h2,h3 { margin:0 0 8px 0; }
-    .sub { color:var(--muted); margin-top:6px; }
-    .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-    .pill { background:#f8fafc; border:1px solid var(--border); border-radius:999px; padding:8px 12px; font-size:14px; }
-    .grid { display:grid; grid-template-columns:1.25fr .75fr; gap:18px; }
-    .card { padding:22px; }
+    .sub, .small { color:var(--muted); }
+    .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .pill { background:#f8fafc; border:1px solid var(--border); border-radius:999px; padding:7px 12px; font-size:14px; }
+    .layout { display:grid; grid-template-columns: 340px 1fr; gap:18px; }
+    .sidebar, .main { min-width:0; }
+    .sidebar .panel, .main .panel { padding:20px; }
+    .sidebar .panel + .panel, .main .panel + .panel { margin-top:18px; }
+    .week-list { display:grid; gap:10px; }
+    .week-btn { width:100%; text-align:left; border:1px solid var(--border); background:#fff; border-radius:14px; padding:14px; cursor:pointer; transition:.15s ease; }
+    .week-btn:hover { border-color:var(--accent); transform:translateY(-1px); }
+    .week-btn.active { border-color:var(--accent); background:var(--accent-soft); }
+    .status-line { margin-top:6px; font-size:13px; color:var(--muted); }
+    .identity-grid { display:grid; gap:10px; }
+    input[type="text"], input[type="email"] { width:100%; padding:11px 12px; border:1px solid var(--border); border-radius:10px; font-size:15px; }
+    .btn-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .btn, .btn-secondary, .btn-light, .confidence-btn, .option, .nav-btn, .restart-btn {
+      border-radius:11px; border:1px solid var(--border); padding:10px 14px; cursor:pointer; font-size:14px; text-decoration:none;
+    }
+    .btn { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn-secondary { background:#fff; color:var(--text); }
+    .btn-light { background:#f8fafc; color:var(--text); }
+    .btn:disabled, .nav-btn:disabled { opacity:.55; cursor:not-allowed; }
+    .notice { border-radius:12px; padding:12px 14px; border:1px solid var(--border); background:#f8fbff; }
+    .notice.good { background:var(--good-bg); border-color:#9ae6b4; }
+    .notice.warn { background:var(--warn-bg); border-color:#fbd38d; }
+    .week-hero { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+    .cards { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:16px; margin-top:18px; }
+    .module-card { border:1px solid var(--border); border-radius:16px; padding:18px; background:#fff; }
+    .module-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+    .badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:5px 10px; font-size:12px; border:1px solid var(--border); background:#f8fafc; white-space:nowrap; }
+    .badge.not-started { color:var(--muted); }
+    .badge.in-progress { color:#92400e; background:var(--warn-bg); border-color:#fbd38d; }
+    .badge.complete { color:#065f46; background:var(--good-bg); border-color:#86efac; }
+    .metric { color:var(--muted); font-size:13px; margin-top:8px; }
+    .suggested { margin-top:14px; }
+    .summary-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; margin-top:14px; }
+    .mini-stat { border:1px solid var(--border); border-radius:14px; padding:12px; background:#fcfdff; }
+    .case-list { display:grid; gap:10px; }
+    .case-item { padding:12px; border:1px solid var(--border); border-radius:12px; background:#fcfdff; }
+    .case-item.active { border-color:var(--accent); background:var(--accent-soft); }
+    .grid-case { display:grid; grid-template-columns:1.25fr .75fr; gap:18px; }
     .case-brief { background:#f8fbff; border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:16px; }
     .chart-box { margin:16px 0; border:1px solid var(--border); border-radius:12px; padding:14px; background:#fcfdff; }
     canvas { width:100%; height:260px; display:block; margin-top:8px; border-radius:8px; background:#fff; }
     .question { font-size:20px; font-weight:bold; margin:16px 0 12px; }
-    .option { display:block; width:100%; text-align:left; margin:10px 0; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--text); cursor:pointer; font-size:15px; transition:.15s ease; }
+    .option { display:block; width:100%; text-align:left; margin:10px 0; background:#fff; color:var(--text); transition:.15s ease; }
     .option:hover:not(:disabled) { border-color:var(--accent); transform:translateY(-1px); }
     .option:disabled { cursor:default; opacity:.92; }
     .confidence { margin:18px 0; padding:14px; background:#f8fafc; border:1px solid var(--border); border-radius:12px; }
     .confidence-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .confidence-btn, .nav-btn, .restart-btn { border-radius:10px; border:1px solid var(--border); background:#fff; padding:10px 14px; cursor:pointer; font-size:14px; }
     .confidence-btn.selected { border-color:var(--accent); background:var(--accent-soft); font-weight:bold; }
     .nav-btn { background:var(--accent); color:#fff; border-color:var(--accent); margin-top:16px; }
-    .nav-btn:disabled { opacity:.55; cursor:not-allowed; }
     .feedback { margin-top:16px; padding:14px; border-left:5px solid var(--border); border-radius:10px; }
-    .feedback.good { background:var(--good-bg); border-left-color:var(--good-border); }
-    .feedback.warn { background:var(--warn-bg); border-left-color:var(--warn-border); }
-    .feedback.bad { background:var(--bad-bg); border-left-color:var(--bad-border); }
-    .side-section + .side-section { margin-top:14px; }
+    .feedback.good { background:var(--good-bg); border-left-color:var(--good); }
+    .feedback.warn { background:var(--warn-bg); border-left-color:var(--warn); }
+    .feedback.bad { background:var(--bad-bg); border-left-color:var(--bad); }
+    .summary-box, .require-note { margin-top:12px; padding:12px; border-radius:10px; }
+    .summary-box { background:#f8fafc; border:1px solid var(--border); }
+    .require-note { background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; }
     .side-title { font-size:16px; margin-bottom:8px; }
     ul { margin:8px 0 0 18px; padding:0; }
-    .case-list { display:grid; gap:10px; }
-    .case-item { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#f8fafc; font-size:14px; }
-    .case-item.active { border-color:var(--accent); background:var(--accent-soft); }
-    .small { color:var(--muted); font-size:13px; }
-    .summary-box { margin-top:18px; padding:16px; border:1px solid var(--border); border-radius:12px; background:#fbfdff; }
-    .restart-btn { margin-top:12px; }
-    input[type=text] { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:14px; }
-    .banner { border:1px solid #bfdbfe; background:#eff6ff; border-radius:12px; padding:12px 14px; margin-bottom:14px; display:none; }
-    .require-note { margin-top:10px; padding:10px 12px; border:1px solid #fde68a; background:#fffbeb; border-radius:10px; color:#92400e; }
-    @media (max-width:860px) { .grid { grid-template-columns:1fr; } }
+    .hidden { display:none !important; }
+    @media (max-width: 980px) {
+      .layout, .grid-case, .cards, .summary-grid { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="header">
-      <h1>StatQuest: Policy Lab</h1>
-      <div class="sub">Interactive policy cases for research design, statistical reasoning, and evidence-based decision-making.</div>
+    <div class="header panel">
+      <h1>StatQuest: Weekly Modules</h1>
+      <div class="sub">A single landing page for each week with lecture, R tutorial, and policy case progress.</div>
       <div class="meta">
-        <div class="pill">Cases completed: <span id="casesCompleted">0</span></div>
-        <div class="pill">Correct answers: <span id="score">0</span></div>
-        <div class="pill">Confidence calibration: <span id="calibration">0%</span></div>
+        <div class="pill">Suggested order: Lecture → Tutorial → Policy case</div>
+        <div class="pill">Students can open any available component at any time</div>
+        <div class="pill">Progress is saved on this device</div>
       </div>
     </div>
 
-    <div id="returnBanner" class="banner"></div>
+    <div id="returnBanner" class="panel hidden" style="padding:14px 18px; margin-bottom:18px;"></div>
 
-    <div id="landingPage" class="card" style="margin-bottom:18px;">
-      <div class="summary-box" style="margin-bottom:16px; background:#f8fbff;">
-        <strong style="display:block; margin-bottom:10px;">Student information</strong>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div>
-            <label for="studentNameInput" class="small" style="display:block; margin-bottom:6px;">Last name</label>
-            <input id="studentNameInput" type="text" placeholder="Enter your last name" />
+    <div class="layout">
+      <div class="sidebar">
+        <div class="panel">
+          <h3>Student identity</h3>
+          <div class="small">Saved locally so students do not need to re-enter it each week on the same device.</div>
+          <div class="identity-grid" style="margin-top:12px;">
+            <label>
+              <div class="small" style="margin-bottom:4px;">Last name</div>
+              <input id="studentNameInput" type="text" placeholder="Enter last name" />
+            </label>
+            <label>
+              <div class="small" style="margin-bottom:4px;">MSU email</div>
+              <input id="studentIdInput" type="email" placeholder="name@msu.edu" />
+            </label>
           </div>
-          <div>
-            <label for="studentIdInput" class="small" style="display:block; margin-bottom:6px;">MSU email address</label>
-            <input id="studentIdInput" type="text" placeholder="Enter your @msu.edu email" />
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn-secondary" onclick="saveStudentInfo(true)">Save information</button>
+            <button class="btn-light" onclick="resetStudentInfo()">Reset</button>
           </div>
+          <div id="studentSavedMessage" class="notice good hidden" style="margin-top:12px;"></div>
+          <div id="studentIdentityBox" class="notice hidden" style="margin-top:12px;"><span id="studentIdentityText"></span></div>
         </div>
-        <div class="small" style="margin-top:8px;">This information is required, stored only in this browser, and added to exported result files.</div>
-        <div id="studentSavedMessage" class="require-note" style="display:none; margin-top:10px;"></div>
-        <div id="studentIdentityBox" class="summary-box" style="display:none; margin-top:12px; background:#ffffff;">
-          <strong style="display:block; margin-bottom:6px;">Saved identity</strong>
-          <div id="studentIdentityText" class="small" style="margin-bottom:10px;"></div>
-          <button class="confidence-btn" type="button" onclick="resetStudentInfo()">Edit / reset identity</button>
-        </div>
-      </div>
 
-      <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px; align-items:start;">
-        <div>
-          <div class="pill" style="display:inline-block; margin-bottom:10px;">State Policy Analysis Unit</div>
-          <h2 style="font-size:32px; line-height:1.2; margin-bottom:10px;">Train students to think like policy analysts, not just memorize statistics.</h2>
-          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, complete the lecture, launch the matching R tutorial when available, and then move into the policy case.</p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
-            <button class="nav-btn" onclick="startSelectedWeek()">Start selected week</button>
-            <button class="confidence-btn" onclick="scrollToSelector()">Choose a week</button>
-            <button class="confidence-btn" onclick="openSelectedTutorial()">Open tutorial</button>
-            <button class="confidence-btn" onclick="showInstructorNotes()">Instructor notes</button>
-          </div>
-          <div class="summary-box">
-            <strong>How students use this</strong>
-            <ul>
-              <li>Select a week below.</li>
-              <li>Start the week. If a lecture module exists, it opens first.</li>
-              <li>When a week includes an R tutorial, launch it from the shell before beginning the case.</li>
-              <li>Complete every required choice before advancing.</li>
-              <li>Finish the case and export or submit results at the end.</li>
-            </ul>
-          </div>
+        <div class="panel">
+          <h3>Weeks</h3>
+          <div class="week-list" id="weekButtons" style="margin-top:12px;"></div>
         </div>
-        <div>
-          <div class="summary-box" id="weekSelectorBox" style="margin-top:0;">
-            <strong style="display:block; margin-bottom:10px;">Weekly case menu</strong>
-            <div id="weekButtons" style="display:grid; gap:8px;"></div>
-          </div>
-        </div>
-      </div>
 
-      <div id="instructorNotes" class="summary-box" style="display:none; margin-top:16px;">
-        <strong>Instructor notes</strong>
-        <ul>
-          <li>The shell can now support a three-part sequence: lecture, optional R tutorial, then policy case.</li>
-          <li>Case steps already require a confidence choice and an answer before continuing.</li>
-          <li>To make a tutorial fully required, add a return button inside the Shiny app or keep the shell open in another tab.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card"><div id="app"></div></div>
-      <div class="card">
-        <div class="side-section"><div class="side-title">Policy cases</div><div id="caseList" class="case-list"></div></div>
-        <div class="side-section"><div class="side-title">Current week</div><div id="currentWeekLabel" class="case-item">No week loaded yet</div></div>
-        <div class="side-section">
+        <div class="panel">
           <div class="side-title">Latest saved result</div>
           <div id="savedResultBox" class="case-item small">No saved result yet.</div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-            <button class="confidence-btn" onclick="downloadLatestResult()">Export latest result</button>
-            <button class="confidence-btn" onclick="clearSavedResult()">Clear saved result</button>
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn-secondary" onclick="downloadLatestResult()">Export latest result</button>
+            <button class="btn-light" onclick="clearSavedResult()">Clear saved result</button>
           </div>
         </div>
+      </div>
+
+      <div class="main">
+        <div id="dashboardPanel" class="panel"></div>
+        <div id="casePanel" class="panel hidden"></div>
       </div>
     </div>
   </div>
@@ -145,86 +146,98 @@
   <script>
     let currentWeekFile = null, currentWeekName = null;
     let studentInfo = { name:'', id:'' };
+    let currentView = 'dashboard';
 
     const weekCatalog = [
-      { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html', tutorialUrl:'https://dbkmsu.shinyapps.io/Rtut1web/', tutorialLabel:'Week 1 R tutorial', tutorialRequired:true },
-      { file:'week2.json', label:'Week 2: Measurement', lecture:'week2_lecture1.html' },
-      { file:'week3.json', label:'Week 3: Sampling and bias', lecture:'week3_lecture1.html' },
-      { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html' },
-      { file:'week5.json', label:'Week 5: Significance and errors', lecture:'week5_lecture1.html' },
-      { file:'week6.json', label:'Week 6: Correlation vs causation', lecture:'week6_lecture1.html' },
-      { file:'week7.json', label:'Week 7: Regression and prediction', lecture:'week7_lecture1.html' }
+      { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html', tutorialUrl:'https://dbkmsu.shinyapps.io/Rtut1web/', tutorialLabel:'Week 1 R tutorial', estimated:{ lecture:'20-25 min', tutorial:'20-30 min', case:'15-20 min' } },
+      { file:'week2.json', label:'Week 2: Measurement', lecture:'week2_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } },
+      { file:'week3.json', label:'Week 3: Sampling and bias', lecture:'week3_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } },
+      { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } },
+      { file:'week5.json', label:'Week 5: Significance and errors', lecture:'week5_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } },
+      { file:'week6.json', label:'Week 6: Correlation vs causation', lecture:'week6_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } },
+      { file:'week7.json', label:'Week 7: Regression and prediction', lecture:'week7_lecture1.html', estimated:{ lecture:'20-25 min', case:'15-20 min' } }
     ];
 
-    function getWeekMeta(file) { return weekCatalog.find(w => w.file === file) || null; }
-    function hasTutorial(meta) { return !!(meta && meta.tutorialUrl); }
-    function weekSequenceText(meta) { return hasTutorial(meta) ? 'Lecture + R tutorial + case' : 'Lecture + case'; }
+    const cases = [];
+    let currentCase = 0, currentStep = 0, score = 0, answered = false, selectedConfidence = null, confidenceRecords = [];
 
+    function getWeekMeta(file) { return weekCatalog.find(w => w.file === file) || null; }
+    function getWeekProgressKey(file) { return `statquest_progress_${file}`; }
+    function defaultProgress(file) {
+      return {
+        weekFile:file,
+        lectureStarted:false, lectureCompleted:false,
+        tutorialStarted:false, tutorialCompleted:false,
+        caseStarted:false, caseCompleted:false,
+        caseState:null,
+        result:null,
+        lastUpdated:null
+      };
+    }
+    function getWeekProgress(file) {
+      const meta = getWeekMeta(file); if (!meta) return defaultProgress(file);
+      const raw = localStorage.getItem(getWeekProgressKey(file));
+      if (!raw) return defaultProgress(file);
+      try { return { ...defaultProgress(file), ...JSON.parse(raw) }; }
+      catch(e) { return defaultProgress(file); }
+    }
+    function saveWeekProgress(file, patch) {
+      const next = { ...getWeekProgress(file), ...patch, lastUpdated:new Date().toLocaleString() };
+      localStorage.setItem(getWeekProgressKey(file), JSON.stringify(next));
+      buildWeekButtons();
+      if (currentWeekFile === file && currentView === 'dashboard') renderDashboard();
+      return next;
+    }
+    function saveCaseSnapshot() {
+      if (!currentWeekFile) return;
+      const progress = getWeekProgress(currentWeekFile);
+      const snapshot = {
+        currentCase, currentStep, score, selectedConfidence:null, answered:false,
+        confidenceRecords, casesLoaded: cases.length
+      };
+      saveWeekProgress(currentWeekFile, { caseStarted:true, caseCompleted:false, caseState:snapshot, result:progress.result || null });
+    }
+    function clearCaseSnapshot(file) {
+      saveWeekProgress(file, { caseState:null, caseCompleted:true });
+    }
+    function componentStatus(file, component) {
+      const progress = getWeekProgress(file);
+      if (component === 'lecture') {
+        if (progress.lectureCompleted) return 'complete';
+        if (progress.lectureStarted) return 'in-progress';
+        return 'not-started';
+      }
+      if (component === 'tutorial') {
+        if (progress.tutorialCompleted) return 'complete';
+        if (progress.tutorialStarted) return 'in-progress';
+        return 'not-started';
+      }
+      if (progress.caseCompleted) return 'complete';
+      if (progress.caseStarted) return 'in-progress';
+      return 'not-started';
+    }
+    function componentLabel(status) {
+      if (status === 'complete') return 'Complete';
+      if (status === 'in-progress') return 'In progress';
+      return 'Not started';
+    }
     function buildWeekButtons() {
-      document.getElementById('weekButtons').innerHTML = weekCatalog.map(week => {
-        const summary = weekSequenceText(week);
-        return `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')"><strong>${week.label}</strong><br><span class="small">${summary}</span></button>`;
+      const host = document.getElementById('weekButtons');
+      host.innerHTML = weekCatalog.map(week => {
+        const progress = getWeekProgress(week.file);
+        const parts = [componentLabel(componentStatus(week.file, 'lecture')), week.tutorialUrl ? componentLabel(componentStatus(week.file, 'tutorial')) : null, componentLabel(componentStatus(week.file, 'case'))].filter(Boolean);
+        const active = week.file === currentWeekFile ? 'active' : '';
+        return `<button class="week-btn ${active}" onclick="selectWeek('${week.file}')"><strong>${week.label}</strong><div class="status-line">Lecture: ${componentLabel(componentStatus(week.file, 'lecture'))}${week.tutorialUrl ? ` · Tutorial: ${componentLabel(componentStatus(week.file, 'tutorial'))}` : ''} · Case: ${componentLabel(componentStatus(week.file, 'case'))}</div>${progress.lastUpdated ? `<div class="status-line">Updated: ${progress.lastUpdated}</div>` : ''}</button>`;
       }).join('');
     }
-
-    function selectWeek(file, label) {
-      currentWeekFile = file; currentWeekName = label;
-      const meta = getWeekMeta(file);
-      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">${weekSequenceText(meta)}</span>`;
-      document.querySelectorAll('#weekButtons .option').forEach(btn => {
-        btn.style.borderColor = '#dbe3ee'; btn.style.background = 'white';
-        if (btn.textContent.includes(label)) { btn.style.borderColor = '#1d4ed8'; btn.style.background = '#dbeafe'; }
-      });
-    }
-
-    function openSelectedTutorial() {
-      if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
-      const meta = getWeekMeta(currentWeekFile);
-      if (!hasTutorial(meta)) {
-        alert('No tutorial is configured for this week yet.');
-        return;
-      }
-      localStorage.setItem('statquest_tutorial_opened', JSON.stringify({ weekFile: currentWeekFile, openedAt: new Date().toISOString() }));
-      window.open(meta.tutorialUrl, '_blank', 'noopener');
-    }
-
-    function renderTutorialGateway(meta, autocase) {
-      const app = document.getElementById('app');
-      const label = meta.tutorialLabel || 'R tutorial';
-      app.innerHTML = `<h2>${meta.label}</h2>
-        <div class="summary-box">
-          <strong>Next step: ${label}</strong>
-          <p style="margin-top:8px;">Your lecture is complete. This week also includes a Shiny tutorial. Open it in a new tab, complete it, then return here and start the policy case.</p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-            <button class="nav-btn" onclick="launchTutorialAndEnableCase('${meta.file}','${autocase}','${meta.tutorialUrl}')">Open tutorial in a new tab</button>
-            <button id="startCaseAfterTutorialBtn" class="confidence-btn" onclick="startCaseAfterTutorial('${autocase}')">Start policy case</button>
-            <button class="confidence-btn" onclick="returnToLanding()">Back to landing page</button>
-          </div>
-          <div class="require-note" style="margin-top:14px;">The shell cannot verify tutorial completion automatically. The cleanest workflow is to keep this page open, finish the tutorial in the new tab, then return here and start the case.</div>
-        </div>`;
-      const startBtn = document.getElementById('startCaseAfterTutorialBtn');
-      if (meta.tutorialRequired) {
-        const openedRaw = localStorage.getItem('statquest_tutorial_opened');
-        let alreadyOpened = false;
-        try {
-          const opened = openedRaw ? JSON.parse(openedRaw) : null;
-          alreadyOpened = !!(opened && opened.weekFile === meta.file);
-        } catch(e) {}
-        startBtn.disabled = !alreadyOpened;
-      }
-      document.getElementById('currentWeekLabel').innerHTML = `<strong>${meta.label}</strong><br><span class="small">Lecture complete • tutorial step ready</span>`;
-    }
-
-    function launchTutorialAndEnableCase(weekFile, autocase, tutorialUrl) {
-      localStorage.setItem('statquest_tutorial_opened', JSON.stringify({ weekFile, openedAt: new Date().toISOString() }));
-      const btn = document.getElementById('startCaseAfterTutorialBtn');
-      if (btn) btn.disabled = false;
-      window.open(tutorialUrl, '_blank', 'noopener');
-    }
-
-    function startCaseAfterTutorial(autocase) {
-      if (!autocase) return;
-      loadWeek(autocase);
+    function selectWeek(file) {
+      const meta = getWeekMeta(file); if (!meta) return;
+      currentWeekFile = file; currentWeekName = meta.label;
+      currentView = 'dashboard';
+      buildWeekButtons();
+      renderDashboard();
+      document.getElementById('casePanel').classList.add('hidden');
+      document.getElementById('dashboardPanel').classList.remove('hidden');
     }
 
     function updateStudentIdentityUI(showSavedNotice=false) {
@@ -232,23 +245,18 @@
       const savedText = document.getElementById('studentIdentityText');
       const savedMsg = document.getElementById('studentSavedMessage');
       const hasIdentity = !!(studentInfo.name && studentInfo.id);
-      if (hasIdentity) {
-        savedBox.style.display = 'block';
-        savedText.textContent = `Logged in as: ${studentInfo.name} (${studentInfo.id})`;
-      } else {
-        savedBox.style.display = 'none';
-        savedText.textContent = '';
-      }
+      savedBox.classList.toggle('hidden', !hasIdentity);
+      savedText.textContent = hasIdentity ? `Logged in as: ${studentInfo.name} (${studentInfo.id})` : '';
       if (showSavedNotice && hasIdentity) {
-        savedMsg.style.display = 'block';
-        savedMsg.textContent = 'Information saved — you will not need to re-enter it on this device unless you reset it or clear your browser data.';
-      } else if (!hasIdentity) {
-        savedMsg.style.display = 'none';
+        savedMsg.classList.remove('hidden');
+        savedMsg.textContent = 'Information saved on this device.';
+      } else {
+        savedMsg.classList.add('hidden');
         savedMsg.textContent = '';
       }
     }
     function saveStudentInfo(showSavedNotice=false) {
-      studentInfo = { name: document.getElementById('studentNameInput').value.trim(), id: document.getElementById('studentIdInput').value.trim() };
+      studentInfo = { name: document.getElementById('studentNameInput').value.trim(), id: document.getElementById('studentIdInput').value.trim().toLowerCase() };
       localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
       updateStudentIdentityUI(showSavedNotice);
     }
@@ -265,77 +273,166 @@
       localStorage.removeItem('statquest_student_info');
       document.getElementById('studentNameInput').value = '';
       document.getElementById('studentIdInput').value = '';
-      document.getElementById('studentNameInput').focus();
       updateStudentIdentityUI(false);
     }
-
-    function startSelectedWeek() {
+    function ensureIdentity() {
       saveStudentInfo(false);
       if (!studentInfo.name.trim()) {
-        alert('Please enter your last name before starting.');
+        alert('Please enter your last name before opening a course activity.');
         document.getElementById('studentNameInput').focus();
-        return;
+        return false;
       }
       const email = studentInfo.id.trim().toLowerCase();
-      if (!email) {
-        alert('Please enter your MSU email address before starting.');
-        document.getElementById('studentIdInput').focus();
-        return;
-      }
-      if (!/^[^\s@]+@msu\.edu$/.test(email)) {
+      if (!email || !/^[^\s@]+@msu\.edu$/.test(email)) {
         alert('Please enter a valid MSU email address ending in @msu.edu.');
         document.getElementById('studentIdInput').focus();
-        return;
+        return false;
       }
       studentInfo.id = email;
       document.getElementById('studentIdInput').value = email;
       localStorage.setItem('statquest_student_info', JSON.stringify(studentInfo));
       updateStudentIdentityUI(true);
-      if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
-      const weekMeta = getWeekMeta(currentWeekFile);
-      localStorage.setItem('statquest_pending_case', JSON.stringify({
-        weekFile: currentWeekFile, weekName: currentWeekName, studentName: studentInfo.name, studentId: studentInfo.id
-      }));
-      if (weekMeta && weekMeta.lecture) {
-        window.location.href = `${weekMeta.lecture}?return_case=${encodeURIComponent(currentWeekFile)}`;
-      } else {
-        loadWeek(currentWeekFile);
+      return true;
+    }
+
+    function renderDashboard() {
+      const host = document.getElementById('dashboardPanel');
+      const meta = getWeekMeta(currentWeekFile) || weekCatalog[0];
+      if (!currentWeekFile) { currentWeekFile = meta.file; currentWeekName = meta.label; }
+      const progress = getWeekProgress(meta.file);
+      const result = progress.result || getLatestResult();
+      const lectureStatus = componentStatus(meta.file, 'lecture');
+      const tutorialStatus = meta.tutorialUrl ? componentStatus(meta.file, 'tutorial') : null;
+      const caseStatus = componentStatus(meta.file, 'case');
+      const completedCount = [lectureStatus === 'complete', tutorialStatus === 'complete', caseStatus === 'complete'].filter(Boolean).length;
+      const totalCount = meta.tutorialUrl ? 3 : 2;
+      host.innerHTML = `
+        <div class="week-hero">
+          <div>
+            <h2>${meta.label}</h2>
+            <div class="sub">Choose any available component. The recommended order is lecture, then tutorial, then policy case.</div>
+          </div>
+          <div class="notice" style="min-width:260px;">
+            <strong>Week progress</strong><br>
+            <span class="small">${completedCount} of ${totalCount} sections complete${progress.lastUpdated ? ` · Updated ${progress.lastUpdated}` : ''}</span>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="mini-stat"><strong>Lecture</strong><div class="small">${componentLabel(lectureStatus)}</div></div>
+          ${meta.tutorialUrl ? `<div class="mini-stat"><strong>Tutorial</strong><div class="small">${componentLabel(tutorialStatus)}</div></div>` : ''}
+          <div class="mini-stat"><strong>Policy case</strong><div class="small">${componentLabel(caseStatus)}</div></div>
+        </div>
+
+        <div class="cards">
+          ${renderModuleCard(meta, 'lecture', lectureStatus)}
+          ${meta.tutorialUrl ? renderModuleCard(meta, 'tutorial', tutorialStatus) : ''}
+          ${renderModuleCard(meta, 'case', caseStatus)}
+        </div>
+
+        <div class="notice suggested">
+          <strong>Suggested sequence</strong>
+          <div class="small">Students can open any component at any time, but the recommended flow is Lecture → Tutorial → Policy case.</div>
+        </div>
+
+        ${result && result.weekFile === meta.file ? `<div class="notice good" style="margin-top:14px;"><strong>Latest result for this week</strong><br><span class="small">Score: ${result.score}/${result.totalQuestions} · Calibration: ${result.calibration}% · Completed: ${result.completedAt}</span></div>` : ''}
+      `;
+    }
+    function renderModuleCard(meta, type, status) {
+      const statusBadge = `<span class="badge ${status}">${componentLabel(status)}</span>`;
+      if (type === 'lecture') {
+        return `<div class="module-card">
+          <div class="module-top"><div><h3>Lecture</h3><div class="small">Introduces the main concepts for the week.</div></div>${statusBadge}</div>
+          <div class="metric">Estimated time: ${meta.estimated.lecture || '20-25 min'}</div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="openLecture()">${status === 'complete' ? 'Reopen lecture' : status === 'in-progress' ? 'Resume lecture' : 'Open lecture'}</button>
+            ${status === 'complete' ? `<button class="btn-light" onclick="markComponent('${meta.file}','lecture',false)">Mark incomplete</button>` : ''}
+          </div>
+        </div>`;
       }
+      if (type === 'tutorial') {
+        return `<div class="module-card">
+          <div class="module-top"><div><h3>R tutorial</h3><div class="small">Practice the coding skills used in this week.</div></div>${statusBadge}</div>
+          <div class="metric">Estimated time: ${meta.estimated.tutorial || '20-30 min'}</div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="openTutorial()">${status === 'not-started' ? 'Open tutorial' : 'Reopen tutorial'}</button>
+            <button class="btn-secondary" onclick="markTutorialComplete()">${status === 'complete' ? 'Marked complete' : 'Mark tutorial complete'}</button>
+            ${status !== 'not-started' ? `<button class="btn-light" onclick="markComponent('${meta.file}','tutorial',false)">Mark incomplete</button>` : ''}
+          </div>
+          <div class="small" style="margin-top:10px;">Tutorial completion is tracked manually unless the Shiny app sends students back with a completion link.</div>
+        </div>`;
+      }
+      return `<div class="module-card">
+        <div class="module-top"><div><h3>Policy case</h3><div class="small">Apply the week’s ideas to a policy scenario.</div></div>${statusBadge}</div>
+        <div class="metric">Estimated time: ${meta.estimated.case || '15-20 min'}</div>
+        <div class="btn-row" style="margin-top:14px;">
+          <button class="btn" onclick="startOrResumeCase()">${status === 'complete' ? 'Review case' : status === 'in-progress' ? 'Resume case' : 'Start case'}</button>
+          ${status !== 'not-started' ? `<button class="btn-light" onclick="resetCaseProgress()">Reset case progress</button>` : ''}
+        </div>
+      </div>`;
+    }
+
+    function markComponent(file, component, isComplete) {
+      if (component === 'lecture') saveWeekProgress(file, { lectureStarted:isComplete, lectureCompleted:isComplete });
+      if (component === 'tutorial') saveWeekProgress(file, { tutorialStarted:isComplete, tutorialCompleted:isComplete });
+      renderDashboard();
+    }
+    function openLecture() {
+      if (!ensureIdentity()) return;
+      const meta = getWeekMeta(currentWeekFile);
+      saveWeekProgress(meta.file, { lectureStarted:true, lectureCompleted:false });
+      localStorage.setItem('statquest_pending_week', JSON.stringify({ weekFile: meta.file, weekName: meta.label, returnType:'lecture' }));
+      window.location.href = `${meta.lecture}?return_case=${encodeURIComponent(meta.file)}`;
+    }
+    function openTutorial() {
+      if (!ensureIdentity()) return;
+      const meta = getWeekMeta(currentWeekFile);
+      if (!meta.tutorialUrl) return;
+      saveWeekProgress(meta.file, { tutorialStarted:true });
+      window.open(meta.tutorialUrl, '_blank', 'noopener');
+      const banner = document.getElementById('returnBanner');
+      banner.className = 'panel';
+      banner.innerHTML = `<strong>Tutorial opened.</strong> Students can return to this page at any time and mark the tutorial complete when finished.`;
+      banner.classList.remove('hidden');
+      renderDashboard();
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+    function markTutorialComplete() {
+      if (!ensureIdentity()) return;
+      saveWeekProgress(currentWeekFile, { tutorialStarted:true, tutorialCompleted:true });
+      const banner = document.getElementById('returnBanner');
+      banner.className = 'panel';
+      banner.innerHTML = '<strong>Tutorial marked complete.</strong> The week dashboard has been updated.';
+      banner.classList.remove('hidden');
+      renderDashboard();
+    }
+    function startOrResumeCase() {
+      if (!ensureIdentity()) return;
+      loadWeek(currentWeekFile);
+    }
+    function resetCaseProgress() {
+      if (!currentWeekFile) return;
+      saveWeekProgress(currentWeekFile, { caseStarted:false, caseCompleted:false, caseState:null, result:null });
+      renderDashboard();
     }
 
     function checkForLectureReturn() {
       const params = new URLSearchParams(window.location.search);
-      const autocase = params.get('autocase');
+      const autocase = params.get('autocase') || params.get('return_case');
       if (!autocase) return;
-      const pendingRaw = localStorage.getItem('statquest_pending_case');
-      if (!pendingRaw) return;
-      try {
-        const pending = JSON.parse(pendingRaw);
-        currentWeekFile = pending.weekFile;
-        currentWeekName = pending.weekName;
-        studentInfo = { name: pending.studentName || '', id: pending.studentId || '' };
-        document.getElementById('studentNameInput').value = studentInfo.name || '';
-        document.getElementById('studentIdInput').value = studentInfo.id || '';
+      const pendingRaw = localStorage.getItem('statquest_pending_week');
+      const meta = getWeekMeta(autocase);
+      if (meta) {
+        currentWeekFile = meta.file; currentWeekName = meta.label;
+        saveWeekProgress(meta.file, { lectureStarted:true, lectureCompleted:true });
+        selectWeek(meta.file);
         const banner = document.getElementById('returnBanner');
-        const meta = getWeekMeta(currentWeekFile);
-        banner.style.display = 'block';
-        if (hasTutorial(meta)) {
-          banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Open the tutorial next, then begin the matching policy case.`;
-          document.getElementById('landingPage').style.display = 'none';
-          renderTutorialGateway(meta, autocase);
-        } else {
-          banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Your matching policy case is loading now.`;
-          loadWeek(autocase);
-        }
-        history.replaceState({}, '', window.location.pathname);
-        localStorage.removeItem('statquest_pending_case');
-      } catch(e) {}
-    }
-
-    function scrollToSelector() { document.getElementById('weekSelectorBox').scrollIntoView({ behavior:'smooth', block:'center' }); }
-    function showInstructorNotes() {
-      const notes = document.getElementById('instructorNotes');
-      notes.style.display = notes.style.display === 'none' ? 'block' : 'none';
+        banner.className = 'panel';
+        banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back. Choose the tutorial, the case, or any other section from the week dashboard.`;
+        banner.classList.remove('hidden');
+      }
+      history.replaceState({}, '', window.location.pathname);
+      localStorage.removeItem('statquest_pending_week');
     }
 
     function saveLatestResult(result) {
@@ -362,24 +459,37 @@
     }
     function clearSavedResult() { localStorage.removeItem('statquest_latest_result'); renderSavedResult(); }
 
-    const cases = [];
-    let currentCase = 0, currentStep = 0, score = 0, answered = false, selectedConfidence = null, confidenceRecords = [];
-
     function loadWeek(weekFile) {
+      const meta = getWeekMeta(weekFile); if (!meta) return;
+      currentWeekFile = weekFile; currentWeekName = meta.label;
+      const progress = getWeekProgress(weekFile);
       fetch(weekFile).then(res => res.json()).then(data => {
         cases.length = 0; data.forEach(item => cases.push(item));
-        currentCase = 0; currentStep = 0; score = 0; answered = false; selectedConfidence = null; confidenceRecords = [];
-        document.getElementById('landingPage').style.display = 'none';
-        document.getElementById('currentWeekLabel').innerHTML = `<strong>${currentWeekName}</strong><br><span class="small">Loaded and in progress</span>`;
+        if (progress.caseState && !progress.caseCompleted) {
+          currentCase = progress.caseState.currentCase || 0;
+          currentStep = progress.caseState.currentStep || 0;
+          score = progress.caseState.score || 0;
+          confidenceRecords = Array.isArray(progress.caseState.confidenceRecords) ? progress.caseState.confidenceRecords : [];
+        } else {
+          currentCase = 0; currentStep = 0; score = 0; confidenceRecords = [];
+        }
+        answered = false; selectedConfidence = null;
+        saveWeekProgress(weekFile, { caseStarted:true, caseCompleted:false });
+        currentView = 'case';
+        document.getElementById('dashboardPanel').classList.add('hidden');
+        document.getElementById('casePanel').classList.remove('hidden');
         renderStep();
       }).catch(() => {
-        document.getElementById('app').innerHTML = '<h2>Could not load this week.</h2><p>Check that the JSON file exists and is formatted correctly.</p>';
+        document.getElementById('casePanel').innerHTML = '<h2>Could not load this week.</h2><p>Check that the JSON file exists and is formatted correctly.</p>';
+        currentView = 'case';
+        document.getElementById('dashboardPanel').classList.add('hidden');
+        document.getElementById('casePanel').classList.remove('hidden');
       });
     }
 
     function confidenceToProbability(label) { if (label === 'Low') return 0.4; if (label === 'Medium') return 0.7; return 0.9; }
     function renderCaseList() {
-      document.getElementById('caseList').innerHTML = cases.map((item, index) => {
+      return cases.map((item, index) => {
         const active = index === currentCase ? 'active' : '';
         return `<div class="case-item ${active}"><strong>${item.title}</strong><br><span class="small">${item.policyArea}</span></div>`;
       }).join('');
@@ -414,19 +524,40 @@
       let totalError = 0; confidenceRecords.forEach(record => { totalError += Math.abs(record.predicted - record.actual); });
       return Math.max(0, Math.round((1 - totalError / confidenceRecords.length) * 100));
     }
-    function updateHeader() {
-      document.getElementById('score').textContent = score;
-      document.getElementById('casesCompleted').textContent = currentCase;
-      document.getElementById('calibration').textContent = calibrationPercent() + '%';
+    function caseHeaderHtml() {
+      return `<div class="grid-case">
+        <div><div id="app"></div></div>
+        <div>
+          <div class="side-title">Policy cases</div>
+          <div id="caseList" class="case-list">${renderCaseList()}</div>
+          <div class="panel" style="padding:16px; margin-top:16px; box-shadow:none;">
+            <div class="side-title">Current week</div>
+            <div class="case-item"><strong>${currentWeekName}</strong><br><span class="small">Score: <span id="score">${score}</span> · Cases completed: <span id="casesCompleted">${currentCase}</span> · Calibration: <span id="calibration">${calibrationPercent()}%</span></span></div>
+            <div class="btn-row" style="margin-top:10px;">
+              <button class="btn-secondary" onclick="returnToDashboard()">Back to week page</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
     }
-
+    function updateCaseStats() {
+      const scoreEl = document.getElementById('score');
+      const completedEl = document.getElementById('casesCompleted');
+      const calibEl = document.getElementById('calibration');
+      if (scoreEl) scoreEl.textContent = score;
+      if (completedEl) completedEl.textContent = currentCase;
+      if (calibEl) calibEl.textContent = calibrationPercent() + '%';
+      const list = document.getElementById('caseList');
+      if (list) list.innerHTML = renderCaseList();
+    }
     function renderStep() {
-      updateHeader(); renderCaseList();
+      const casePanel = document.getElementById('casePanel');
+      casePanel.innerHTML = caseHeaderHtml();
       if (currentCase >= cases.length) { renderCompletion(); return; }
       const current = cases[currentCase], step = current.steps[currentStep], app = document.getElementById('app');
       app.innerHTML = `<h2>${current.title}</h2>
         <div class="case-brief"><strong>Policy brief:</strong> ${current.brief.replace(/\n/g, '<br><br>')}</div>
-        <div class="chart-box"><strong>${current.chartTitle}</strong><div class="small">Students should read the visual before making a decision.</div><canvas id="caseChart" width="640" height="260"></canvas></div>
+        <div class="chart-box"><strong>${current.chartTitle}</strong><div class="small">Read the visual before making a decision.</div><canvas id="caseChart" width="640" height="260"></canvas></div>
         ${step.context ? `<div class="summary-box" style="margin-bottom:12px;"><strong>Case note:</strong> ${step.context}</div>` : ''}
         <div class="small">Question ${currentStep + 1} of ${current.steps.length}</div>
         <div class="question">${step.question}</div>
@@ -434,13 +565,13 @@
         ${!selectedConfidence ? '<div class="require-note">You must choose a confidence level before answering.</div>' : ''}
         <div id="options">${step.options.map((option, index) => `<button class="option" ${!selectedConfidence ? 'disabled' : ''} onclick="selectOption(${index})">${option}</button>`).join('')}</div>
         <div id="feedbackArea"></div>
-        <button id="nextBtn" class="nav-btn" style="display:none;" onclick="nextStep()">Next</button>`;
+        <button id="nextBtn" class="nav-btn hidden" onclick="nextStep()">Next</button>`;
       drawBarChart('caseChart', current.chartData);
+      updateCaseStats();
+      saveCaseSnapshot();
     }
-
     function setConfidence(level) { if (answered) return; selectedConfidence = level; renderStep(); }
     function feedbackClass(isCorrect, confidence) { if (isCorrect && confidence === 'High') return 'good'; if (!isCorrect && confidence === 'High') return 'bad'; return 'warn'; }
-
     function selectOption(index) {
       if (answered || !selectedConfidence) return;
       answered = true;
@@ -457,45 +588,61 @@
       const confidenceNote = isCorrect ? `You answered correctly with <strong>${selectedConfidence.toLowerCase()}</strong> confidence.` : `You answered incorrectly with <strong>${selectedConfidence.toLowerCase()}</strong> confidence.`;
       const consequenceHtml = step.consequence ? `<br><br><strong>Likely consequence:</strong> ${isCorrect ? step.consequence.correct : step.consequence.wrong}` : '';
       feedbackArea.innerHTML = `<div class="feedback ${feedbackClass(isCorrect, selectedConfidence)}"><strong>${isCorrect ? 'Good reasoning.' : 'Reconsider the evidence.'}</strong><br><br>${branchFeedback}<br><br><strong>Confidence check:</strong> ${confidenceNote}<br><br><strong>Debrief:</strong> ${step.teach}${consequenceHtml}</div>`;
-      document.getElementById('nextBtn').style.display = 'inline-block'; updateHeader();
+      document.getElementById('nextBtn').classList.remove('hidden');
+      updateCaseStats();
+      saveCaseSnapshot();
     }
-
     function nextStep() {
       if (!answered) return;
       currentStep += 1; selectedConfidence = null; answered = false;
       if (currentStep >= cases[currentCase].steps.length) { currentCase += 1; currentStep = 0; }
       renderStep();
     }
-
     function renderCompletion() {
-      updateHeader(); renderCaseList();
       const totalQuestions = cases.reduce((sum, item) => sum + item.steps.length, 0), completedAt = new Date().toLocaleString();
       const result = { weekFile: currentWeekFile, weekName: currentWeekName, studentName: studentInfo.name, studentId: studentInfo.id, score, totalQuestions, calibration: calibrationPercent(), completedAt };
       saveLatestResult(result);
-      document.getElementById('app').innerHTML = `<h2>Case complete</h2><p>You finished ${currentWeekName || 'this week'}.</p><div class="summary-box"><strong>Results</strong><ul><li>Student: ${studentInfo.name || 'Not provided'}</li>${studentInfo.id ? `<li>ID: ${studentInfo.id}</li>` : ''}<li>Correct answers: ${score} out of ${totalQuestions}</li><li>Confidence calibration: ${calibrationPercent()}%</li></ul><div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;"><button class="restart-btn" onclick="restartWeek()">Restart week</button><button class="restart-btn" onclick="downloadLatestResult()">Export result</button><button class="restart-btn" onclick="returnToLanding()">Back to landing page</button></div></div>`;
+      saveWeekProgress(currentWeekFile, { caseStarted:true, caseCompleted:true, caseState:null, result });
+      const app = document.getElementById('app');
+      app.innerHTML = `<h2>Case complete</h2><p>You finished ${currentWeekName || 'this week'}.</p><div class="summary-box"><strong>Results</strong><ul><li>Student: ${studentInfo.name || 'Not provided'}</li>${studentInfo.id ? `<li>ID: ${studentInfo.id}</li>` : ''}<li>Correct answers: ${score} out of ${totalQuestions}</li><li>Confidence calibration: ${calibrationPercent()}%</li></ul><div class="btn-row" style="margin-top:10px;"><button class="btn-secondary" onclick="restartWeek()">Restart case</button><button class="btn-secondary" onclick="downloadLatestResult()">Export result</button><button class="btn" onclick="returnToDashboard()">Back to week page</button></div></div>`;
+      updateCaseStats();
     }
-
-    function restartWeek() { if (currentWeekFile) loadWeek(currentWeekFile); }
-    function returnToLanding() {
-      document.getElementById('landingPage').style.display = 'block';
-      document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
-      document.getElementById('returnBanner').style.display = 'none';
+    function restartWeek() {
+      if (!currentWeekFile) return;
+      saveWeekProgress(currentWeekFile, { caseStarted:false, caseCompleted:false, caseState:null, result:null });
+      loadWeek(currentWeekFile);
+    }
+    function returnToDashboard() {
+      currentView = 'dashboard';
+      document.getElementById('casePanel').classList.add('hidden');
+      document.getElementById('dashboardPanel').classList.remove('hidden');
+      renderDashboard();
       window.scrollTo({ top:0, behavior:'smooth' });
     }
 
-    window.setConfidence = setConfidence; window.selectOption = selectOption; window.nextStep = nextStep; window.restartWeek = restartWeek;
-    window.returnToLanding = returnToLanding; window.selectWeek = selectWeek; window.startSelectedWeek = startSelectedWeek;
-    window.openSelectedTutorial = openSelectedTutorial; window.launchTutorialAndEnableCase = launchTutorialAndEnableCase; window.startCaseAfterTutorial = startCaseAfterTutorial;
-    window.scrollToSelector = scrollToSelector; window.showInstructorNotes = showInstructorNotes;
-    window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult; window.resetStudentInfo = resetStudentInfo;
+    window.selectWeek = selectWeek;
+    window.saveStudentInfo = saveStudentInfo;
+    window.resetStudentInfo = resetStudentInfo;
+    window.openLecture = openLecture;
+    window.openTutorial = openTutorial;
+    window.markTutorialComplete = markTutorialComplete;
+    window.startOrResumeCase = startOrResumeCase;
+    window.resetCaseProgress = resetCaseProgress;
+    window.markComponent = markComponent;
+    window.setConfidence = setConfidence;
+    window.selectOption = selectOption;
+    window.nextStep = nextStep;
+    window.restartWeek = restartWeek;
+    window.returnToDashboard = returnToDashboard;
+    window.downloadLatestResult = downloadLatestResult;
+    window.clearSavedResult = clearSavedResult;
 
-    buildWeekButtons();
-    selectWeek(weekCatalog[0].file, weekCatalog[0].label);
     loadStudentInfo();
-    document.getElementById('studentNameInput').addEventListener('change', saveStudentInfo);
-    document.getElementById('studentIdInput').addEventListener('change', saveStudentInfo);
     renderSavedResult();
-    document.getElementById('app').innerHTML = '<h2>Welcome to StatQuest</h2><p>Select a week from the landing page, then start the week.</p>';
+    buildWeekButtons();
+    selectWeek(weekCatalog[0].file);
+    document.getElementById('studentNameInput').addEventListener('change', () => saveStudentInfo(false));
+    document.getElementById('studentIdInput').addEventListener('change', () => saveStudentInfo(false));
     checkForLectureReturn();
   </script>
 </body>
