@@ -89,10 +89,11 @@
         <div>
           <div class="pill" style="display:inline-block; margin-bottom:10px;">State Policy Analysis Unit</div>
           <h2 style="font-size:32px; line-height:1.2; margin-bottom:10px;">Train students to think like policy analysts, not just memorize statistics.</h2>
-          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, complete an interactive lecture when available, then move directly into the matching policy case.</p>
+          <p class="sub" style="max-width:700px; margin-bottom:16px;">Students enter a story-driven policy lab, complete the lecture, launch the matching R tutorial when available, and then move into the policy case.</p>
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
             <button class="nav-btn" onclick="startSelectedWeek()">Start selected week</button>
             <button class="confidence-btn" onclick="scrollToSelector()">Choose a week</button>
+            <button class="confidence-btn" onclick="openSelectedTutorial()">Open tutorial</button>
             <button class="confidence-btn" onclick="showInstructorNotes()">Instructor notes</button>
           </div>
           <div class="summary-box">
@@ -100,6 +101,7 @@
             <ul>
               <li>Select a week below.</li>
               <li>Start the week. If a lecture module exists, it opens first.</li>
+              <li>When a week includes an R tutorial, launch it from the shell before beginning the case.</li>
               <li>Complete every required choice before advancing.</li>
               <li>Finish the case and export or submit results at the end.</li>
             </ul>
@@ -116,9 +118,9 @@
       <div id="instructorNotes" class="summary-box" style="display:none; margin-top:16px;">
         <strong>Instructor notes</strong>
         <ul>
-          <li>All current weeks are configured to launch a lecture first and then return to the matching case.</li>
+          <li>The shell can now support a three-part sequence: lecture, optional R tutorial, then policy case.</li>
           <li>Case steps already require a confidence choice and an answer before continuing.</li>
-          <li>Lecture files should use the same “required response” logic when they contain interactive prompts.</li>
+          <li>To make a tutorial fully required, add a return button inside the Shiny app or keep the shell open in another tab.</li>
         </ul>
       </div>
     </div>
@@ -145,7 +147,7 @@
     let studentInfo = { name:'', id:'' };
 
     const weekCatalog = [
-      { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html' },
+      { file:'week1.json', label:'Week 1: Research questions', lecture:'week1_lecture1.html', tutorialUrl:'https://dbkmsu.shinyapps.io/Rtut1web/', tutorialLabel:'Week 1 R tutorial', tutorialRequired:true },
       { file:'week2.json', label:'Week 2: Measurement', lecture:'week2_lecture1.html' },
       { file:'week3.json', label:'Week 3: Sampling and bias', lecture:'week3_lecture1.html' },
       { file:'week4.json', label:'Week 4: Research design and causality', lecture:'week4_lecture1.html' },
@@ -154,21 +156,75 @@
       { file:'week7.json', label:'Week 7: Regression and prediction', lecture:'week7_lecture1.html' }
     ];
 
+    function getWeekMeta(file) { return weekCatalog.find(w => w.file === file) || null; }
+    function hasTutorial(meta) { return !!(meta && meta.tutorialUrl); }
+    function weekSequenceText(meta) { return hasTutorial(meta) ? 'Lecture + R tutorial + case' : 'Lecture + case'; }
+
     function buildWeekButtons() {
       document.getElementById('weekButtons').innerHTML = weekCatalog.map(week => {
-        return `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')"><strong>${week.label}</strong><br><span class="small">Lecture + case</span></button>`;
+        const summary = weekSequenceText(week);
+        return `<button class="option" style="margin:0;" onclick="selectWeek('${week.file}', '${week.label.replace(/'/g, '&#39;')}')"><strong>${week.label}</strong><br><span class="small">${summary}</span></button>`;
       }).join('');
     }
 
-    function getWeekMeta(file) { return weekCatalog.find(w => w.file === file) || null; }
-
     function selectWeek(file, label) {
       currentWeekFile = file; currentWeekName = label;
-      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">Lecture will launch first</span>`;
+      const meta = getWeekMeta(file);
+      document.getElementById('currentWeekLabel').innerHTML = `<strong>${label}</strong><br><span class="small">${weekSequenceText(meta)}</span>`;
       document.querySelectorAll('#weekButtons .option').forEach(btn => {
         btn.style.borderColor = '#dbe3ee'; btn.style.background = 'white';
         if (btn.textContent.includes(label)) { btn.style.borderColor = '#1d4ed8'; btn.style.background = '#dbeafe'; }
       });
+    }
+
+    function openSelectedTutorial() {
+      if (!currentWeekFile) selectWeek(weekCatalog[0].file, weekCatalog[0].label);
+      const meta = getWeekMeta(currentWeekFile);
+      if (!hasTutorial(meta)) {
+        alert('No tutorial is configured for this week yet.');
+        return;
+      }
+      localStorage.setItem('statquest_tutorial_opened', JSON.stringify({ weekFile: currentWeekFile, openedAt: new Date().toISOString() }));
+      window.open(meta.tutorialUrl, '_blank', 'noopener');
+    }
+
+    function renderTutorialGateway(meta, autocase) {
+      const app = document.getElementById('app');
+      const label = meta.tutorialLabel || 'R tutorial';
+      app.innerHTML = `<h2>${meta.label}</h2>
+        <div class="summary-box">
+          <strong>Next step: ${label}</strong>
+          <p style="margin-top:8px;">Your lecture is complete. This week also includes a Shiny tutorial. Open it in a new tab, complete it, then return here and start the policy case.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <button class="nav-btn" onclick="launchTutorialAndEnableCase('${meta.file}','${autocase}','${meta.tutorialUrl}')">Open tutorial in a new tab</button>
+            <button id="startCaseAfterTutorialBtn" class="confidence-btn" onclick="startCaseAfterTutorial('${autocase}')">Start policy case</button>
+            <button class="confidence-btn" onclick="returnToLanding()">Back to landing page</button>
+          </div>
+          <div class="require-note" style="margin-top:14px;">The shell cannot verify tutorial completion automatically. The cleanest workflow is to keep this page open, finish the tutorial in the new tab, then return here and start the case.</div>
+        </div>`;
+      const startBtn = document.getElementById('startCaseAfterTutorialBtn');
+      if (meta.tutorialRequired) {
+        const openedRaw = localStorage.getItem('statquest_tutorial_opened');
+        let alreadyOpened = false;
+        try {
+          const opened = openedRaw ? JSON.parse(openedRaw) : null;
+          alreadyOpened = !!(opened && opened.weekFile === meta.file);
+        } catch(e) {}
+        startBtn.disabled = !alreadyOpened;
+      }
+      document.getElementById('currentWeekLabel').innerHTML = `<strong>${meta.label}</strong><br><span class="small">Lecture complete • tutorial step ready</span>`;
+    }
+
+    function launchTutorialAndEnableCase(weekFile, autocase, tutorialUrl) {
+      localStorage.setItem('statquest_tutorial_opened', JSON.stringify({ weekFile, openedAt: new Date().toISOString() }));
+      const btn = document.getElementById('startCaseAfterTutorialBtn');
+      if (btn) btn.disabled = false;
+      window.open(tutorialUrl, '_blank', 'noopener');
+    }
+
+    function startCaseAfterTutorial(autocase) {
+      if (!autocase) return;
+      loadWeek(autocase);
     }
 
     function updateStudentIdentityUI(showSavedNotice=false) {
@@ -240,7 +296,11 @@
       localStorage.setItem('statquest_pending_case', JSON.stringify({
         weekFile: currentWeekFile, weekName: currentWeekName, studentName: studentInfo.name, studentId: studentInfo.id
       }));
-      window.location.href = `${weekMeta.lecture}?return_case=${encodeURIComponent(currentWeekFile)}`;
+      if (weekMeta && weekMeta.lecture) {
+        window.location.href = `${weekMeta.lecture}?return_case=${encodeURIComponent(currentWeekFile)}`;
+      } else {
+        loadWeek(currentWeekFile);
+      }
     }
 
     function checkForLectureReturn() {
@@ -257,9 +317,16 @@
         document.getElementById('studentNameInput').value = studentInfo.name || '';
         document.getElementById('studentIdInput').value = studentInfo.id || '';
         const banner = document.getElementById('returnBanner');
+        const meta = getWeekMeta(currentWeekFile);
         banner.style.display = 'block';
-        banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Your matching policy case is loading now.`;
-        loadWeek(autocase);
+        if (hasTutorial(meta)) {
+          banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Open the tutorial next, then begin the matching policy case.`;
+          document.getElementById('landingPage').style.display = 'none';
+          renderTutorialGateway(meta, autocase);
+        } else {
+          banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back, ${studentInfo.name || 'student'}. Your matching policy case is loading now.`;
+          loadWeek(autocase);
+        }
         history.replaceState({}, '', window.location.pathname);
         localStorage.removeItem('statquest_pending_case');
       } catch(e) {}
@@ -418,6 +485,7 @@
 
     window.setConfidence = setConfidence; window.selectOption = selectOption; window.nextStep = nextStep; window.restartWeek = restartWeek;
     window.returnToLanding = returnToLanding; window.selectWeek = selectWeek; window.startSelectedWeek = startSelectedWeek;
+    window.openSelectedTutorial = openSelectedTutorial; window.launchTutorialAndEnableCase = launchTutorialAndEnableCase; window.startCaseAfterTutorial = startCaseAfterTutorial;
     window.scrollToSelector = scrollToSelector; window.showInstructorNotes = showInstructorNotes;
     window.downloadLatestResult = downloadLatestResult; window.clearSavedResult = clearSavedResult; window.resetStudentInfo = resetStudentInfo;
 
