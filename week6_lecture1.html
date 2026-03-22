@@ -3,54 +3,49 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Week 6 Lecture 1 - Correlation and Causation</title>
+<title>Week 6: Correlation, Spuriousness, and Causal Interpretation</title>
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--text:#1f2937;--muted:#6b7280;--border:#dbe3ee;--accent:#1d4ed8;--accent-soft:#dbeafe;--good-bg:#ecfdf5;--good-border:#10b981;--warn-bg:#fff7ed;--warn-border:#f59e0b;--shadow:0 10px 30px rgba(15,23,42,.08);}
-*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,#eef4ff 0%,#f7f9fc 100%);line-height:1.5}
-.wrap{max-width:1100px;margin:0 auto;padding:24px} .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
-.hero{padding:24px;margin-bottom:18px} .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px}
-h1,h2,h3{margin:0 0 10px 0} .sub{color:var(--muted);max-width:860px} .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px} .panel{padding:22px}
-.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px} .pill{background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px}
-.screen-title{font-size:28px;line-height:1.2;margin-bottom:8px} .screen-subtitle{color:var(--muted);margin-bottom:14px} .scenario{background:#f8fbff;border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 0 16px}
-.quote{font-style:italic;color:#374151} .checklist,.choices{display:grid;gap:10px;margin:12px 0 0} .choice-btn{width:100%;text-align:left;border-radius:12px;border:1px solid var(--border);background:#fff;padding:13px 14px;font-size:15px;cursor:pointer}
-.choice-btn:hover{border-color:var(--accent);transform:translateY(-1px)} .feedback{margin-top:14px;border-radius:12px;padding:14px;background:var(--warn-bg);border-left:5px solid var(--warn-border)} .feedback.good{background:var(--good-bg);border-left-color:var(--good-border)}
-.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} button.nav{border-radius:12px;border:1px solid var(--border);background:white;padding:12px 16px;cursor:pointer;font-size:14px} button.primary{background:var(--accent);color:white;border-color:var(--accent)} button:disabled{opacity:.55;cursor:not-allowed}
-.progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px} .progress-fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);width:0%;transition:width .2s ease}
-.side-section + .side-section{margin-top:14px} .side-title{font-size:16px;margin-bottom:8px} .mini-card{border:1px solid var(--border);border-radius:12px;background:#fbfdff;padding:14px} .check{border:1px solid var(--border);border-radius:12px;padding:12px;background:white} .success-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px;padding:16px;margin-top:12px}
-a.cta-link{display:inline-block;margin-top:10px;color:white;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)} @media (max-width:900px){.layout{grid-template-columns:1fr}}
+:root{--bg:#eef3fb;--panel:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#dbe3ee;--accent:#1d4ed8;--accent2:#60a5fa;--goodbg:#ecfdf5;--warnbg:#fff7ed;--badbg:#fef2f2;--shadow:0 10px 30px rgba(15,23,42,.08);}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eaf2ff 0%,#f7f9fc 100%);color:var(--text);line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:24px} .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)} .hero{padding:24px;margin-bottom:18px} .panel{padding:22px}
+.kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px} h1,h2,h3{margin:0 0 10px 0} .sub{color:var(--muted);max-width:920px}
+.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px} .progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px} .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .2s ease}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px} .pill{display:inline-block;background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px}
+.card,.feedback{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fbfdff} .card{background:#f8fbff}
+.feedback{display:none;margin-top:10px} .feedback.good{display:block;background:var(--goodbg);border-left:5px solid #10b981} .feedback.bad{display:block;background:var(--badbg);border-left:5px solid #ef4444} .feedback.warn{display:block;background:var(--warnbg);border-left:5px solid #f59e0b}
+.choices,.checklist,.bar-wrap{display:grid;gap:10px;margin-top:12px} .choice-btn,.nav-btn,.ghost-btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;text-align:left} .choice-btn:hover,.ghost-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} .nav-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)} .nav-btn:disabled{opacity:.55;cursor:not-allowed}
+.check{padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff} .small{font-size:13px;color:var(--muted)} .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.require-note{margin-top:10px;padding:10px 12px;border:1px solid #fde68a;background:#fffbeb;border-radius:10px;color:#92400e;} a.cta{display:inline-block;margin-top:12px;color:#fff;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)}
+@media (max-width:900px){.layout,.twocol{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="hero"><div class="kicker">MC295 • Week 6 • Lecture 1</div><h1>Correlation, Causation, and Misleading Relationships</h1><div class="sub">A rough interactive draft based on the Week 6 emphasis on correlation, functional form, and causal interpretation.</div></div>
+<div class="hero"><div class="kicker">MC295 • Week 6 • Lecture 1</div><h1>Week 6: Correlation, Spuriousness, and Causal Interpretation</h1><div class="sub">This lecture focuses on association, functional form, spurious relationships, reverse causality, and why mechanism matters.</div></div>
 <div class="layout">
 <div class="panel">
 <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
-<div class="meta-row"><div class="pill">Screen <span id="screenCount">1</span> of <span id="screenTotal"></span></div><div class="pill">Topic: <span id="topicLabel"></span></div></div>
+<div class="meta"><div class="pill">Screen <span id="screenNum">1</span> of <span id="screenTotal"></span></div><div class="pill">Topic: <span id="screenTopic"></span></div></div>
 <div id="screenArea"></div>
-<div class="button-row"><button id="backBtn" class="nav" onclick="prevScreen()">Back</button><button id="nextBtn" class="nav primary" onclick="nextScreen()">Next</button></div>
+<div id="requiredNote" class="require-note" style="display:none;">You must complete the required interaction on this screen before continuing.</div>
+<div class="navrow"><button id="backBtn" class="ghost-btn" onclick="prevScreen()">Back</button><button id="nextBtn" class="nav-btn primary" onclick="nextScreen()">Next</button></div>
 </div>
-<div class="panel">
-<div class="side-section"><div class="side-title">Lecture roadmap</div><div class="mini-card">Move from the meaning of correlation to spuriousness, reverse causality, and mechanism.</div></div>
-<div class="side-section"><div class="side-title">Study note</div><div class="mini-card">This week will benefit later from interactive scatterplots and pattern-matching figures.</div></div>
-<div class="side-section"><div class="side-title">Transition</div><div class="mini-card">This lecture is meant to come immediately before the matching weekly policy case.</div></div>
-</div>
-</div>
-</div>
+<div class="panel"><h3>Lecture roadmap</h3><div id="roadmapBox" class="card"></div><div class="card" style="margin-top:14px;">Move slowly. The goal is to practice the habits of interpretation you will need in the policy case.</div></div>
+</div></div>
 <script>
-const screens=[
-{topic:'Correlation trap', html:`<div class="screen-title">A strong relationship can still mislead you</div><div class="scenario">Two variables move together. Does that mean one causes the other?</div>`},
-{topic:'What correlation is', html:`<div class="screen-title">Correlation measures association</div><div class="checklist"><div class="check"><strong>X and Y move together</strong></div><div class="check"><strong>Strength matters</strong></div><div class="check"><strong>Direction matters</strong></div><div class="check"><strong>Causation is not established by correlation alone</strong></div></div>`},
-{topic:'Relationship shapes', html:`<div class="screen-title">Not all relationships are linear</div><div class="checklist"><div class="check">Positive</div><div class="check">Negative</div><div class="check">None</div><div class="check">Curvilinear or non-linear</div></div>`},
-{topic:'Spuriousness', html:`<div class="screen-title">Why correlation can be spurious</div><div class="scenario">A third variable may influence both X and Y, making the relationship look causal when it is not.</div>`},
-{topic:'Need a mechanism', html:`<div class="screen-title">A plausible causal mechanism matters</div><div class="checklist"><div class="check">What process would connect X to Y?</div><div class="check">What alternative explanations remain?</div></div>`},
-{topic:'Wrap-up', html:`<div class="screen-title">Before moving to the case</div><div class="success-box">When you see a striking relationship, ask whether it reflects causation, reverse causation, a confounder, or no meaningful explanatory story at all.</div><a class="cta-link" href="index.html">Return to the main app</a>`}
-];
-const state={index:0};
-function renderScreen(){const s=screens[state.index];document.getElementById('screenArea').innerHTML=s.html;document.getElementById('screenCount').textContent=state.index+1;document.getElementById('screenTotal').textContent=screens.length;document.getElementById('topicLabel').textContent=s.topic;document.getElementById('progressFill').style.width=((state.index+1)/screens.length*100)+'%';document.getElementById('backBtn').disabled=state.index===0;document.getElementById('nextBtn').disabled=state.index===screens.length-1;}
-function nextScreen(){if(state.index<screens.length-1){state.index++;renderScreen();}}
-function prevScreen(){if(state.index>0){state.index--;renderScreen();}}
-function choose(id,html){const el=document.getElementById(id); if(el) el.innerHTML=html;}
-renderScreen();
+const screens = [{"topic": "Association versus causation", "required": false, "html": "<h2>A strong relationship can still mislead you</h2><div class='card'>Two variables move together. That can be interesting, but it does not automatically tell you why they move together.</div>"}, {"topic": "What correlation measures", "required": false, "html": "<h2>Correlation measures association</h2><div class='checklist'><div class='check'>It tells you whether two variables move together.</div><div class='check'>It tells you the direction of the relationship.</div><div class='check'>It says something about strength.</div><div class='check'>It does not by itself establish causation.</div></div>"}, {"topic": "Relationship shapes", "required": false, "html": "<h2>Relationships can take different forms</h2><div class='checklist'><div class='check'>Positive</div><div class='check'>Negative</div><div class='check'>No relationship</div><div class='check'>Curvilinear or non-linear</div></div>"}, {"topic": "Time trend trap", "required": true, "html": "<h2>Choose the better warning</h2><div class='choices'><button class='choice-btn' onclick=\"answer('a', true, 'Correct. Variables can move together over time without one causing the other.', '')\">A shared time trend can make two variables look related even when there is no direct causal relationship.</button><button class='choice-btn' onclick=\"answer('a', false, '', 'Not quite. Time trends can create misleading patterns.')\">If two variables rise together over time, one probably causes the other.</button></div><div id='a' class='feedback'></div>"}, {"topic": "Spuriousness", "required": false, "html": "<h2>Spurious relationships</h2><div class='card'>A third variable may influence both X and Y, creating an association that looks causal even when it is not.</div>"}, {"topic": "Reverse causality", "required": false, "html": "<h2>Direction matters too</h2><div class='card'>Even if two variables are related, it may be Y causing X rather than X causing Y.</div>"}, {"topic": "Mechanism", "required": true, "html": "<h2>Why mechanism matters</h2><div class='choices'><button class='choice-btn' onclick=\"answer('b', true, 'Correct. A plausible mechanism helps move the analysis from association toward interpretation.', '')\">A plausible causal mechanism strengthens interpretation.</button><button class='choice-btn' onclick=\"answer('b', false, '', 'Not quite. Mechanisms matter because they explain how a cause could produce an effect.')\">A mechanism is unnecessary if the correlation is strong enough.</button></div><div id='b' class='feedback'></div>"}, {"topic": "Takeaway", "required": false, "html": "<h2>Before you enter the case</h2><div class='card'><div class='checklist'><div class='check'>Could it be spurious?</div><div class='check'>Could the direction run the other way?</div><div class='check'>What mechanism would connect the variables?</div><div class='check'>Is the association substantively meaningful?</div></div></div><a class='cta' href='index.html?autocase=week6.json'>Begin Week 6 policy case</a>"}];
+let current = 0;
+let completedRequired = {};
+function isScreenComplete(i){return !screens[i].required || completedRequired[i]===true;}
+function markComplete(){completedRequired[current]=true;updateGate();}
+function updateGate(){const req=screens[current].required; const done=isScreenComplete(current); document.getElementById('nextBtn').disabled=req && !done; document.getElementById('requiredNote').style.display=req && !done ? 'block':'none';}
+function renderRoadmap(){document.getElementById('roadmapBox').innerHTML=screens.map((s,i)=>`<div class="check">${i+1}. ${s.topic}</div>`).join('');}
+function renderScreen(){const s=screens[current]; document.getElementById('screenArea').innerHTML=s.html; document.getElementById('screenNum').textContent=current+1; document.getElementById('screenTotal').textContent=screens.length; document.getElementById('screenTopic').textContent=s.topic; document.getElementById('progressFill').style.width=(((current+1)/screens.length)*100)+'%'; document.getElementById('backBtn').disabled=current===0; updateGate();}
+function nextScreen(){if(isScreenComplete(current)&&current<screens.length-1){current++;renderScreen();}}
+function prevScreen(){if(current>0){current--;renderScreen();}}
+function answer(id, ok, yes, no){const el=document.getElementById(id); el.className='feedback '+(ok?'good':'bad'); el.style.display='block'; el.innerHTML='<strong>'+(ok?'Correct.':'Reconsider.')+'</strong> '+(ok?yes:no); markComplete();}
+function reveal(id){const el=document.getElementById(id); el.className='feedback warn'; el.style.display='block'; markComplete();}
+renderRoadmap(); renderScreen();
 </script>
 </body></html>

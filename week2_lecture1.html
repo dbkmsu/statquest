@@ -3,54 +3,49 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Week 2 Lecture 1 - Measurement and Operationalization</title>
+<title>Week 2: Measurement, Validity, and Reliability</title>
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--text:#1f2937;--muted:#6b7280;--border:#dbe3ee;--accent:#1d4ed8;--accent-soft:#dbeafe;--good-bg:#ecfdf5;--good-border:#10b981;--warn-bg:#fff7ed;--warn-border:#f59e0b;--shadow:0 10px 30px rgba(15,23,42,.08);}
-*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(180deg,#eef4ff 0%,#f7f9fc 100%);line-height:1.5}
-.wrap{max-width:1100px;margin:0 auto;padding:24px} .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
-.hero{padding:24px;margin-bottom:18px} .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px}
-h1,h2,h3{margin:0 0 10px 0} .sub{color:var(--muted);max-width:860px} .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px} .panel{padding:22px}
-.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px} .pill{background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px}
-.screen-title{font-size:28px;line-height:1.2;margin-bottom:8px} .screen-subtitle{color:var(--muted);margin-bottom:14px} .scenario{background:#f8fbff;border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 0 16px}
-.quote{font-style:italic;color:#374151} .checklist,.choices{display:grid;gap:10px;margin:12px 0 0} .choice-btn{width:100%;text-align:left;border-radius:12px;border:1px solid var(--border);background:#fff;padding:13px 14px;font-size:15px;cursor:pointer}
-.choice-btn:hover{border-color:var(--accent);transform:translateY(-1px)} .feedback{margin-top:14px;border-radius:12px;padding:14px;background:var(--warn-bg);border-left:5px solid var(--warn-border)} .feedback.good{background:var(--good-bg);border-left-color:var(--good-border)}
-.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} button.nav{border-radius:12px;border:1px solid var(--border);background:white;padding:12px 16px;cursor:pointer;font-size:14px} button.primary{background:var(--accent);color:white;border-color:var(--accent)} button:disabled{opacity:.55;cursor:not-allowed}
-.progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px} .progress-fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);width:0%;transition:width .2s ease}
-.side-section + .side-section{margin-top:14px} .side-title{font-size:16px;margin-bottom:8px} .mini-card{border:1px solid var(--border);border-radius:12px;background:#fbfdff;padding:14px} .check{border:1px solid var(--border);border-radius:12px;padding:12px;background:white} .success-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:14px;padding:16px;margin-top:12px}
-a.cta-link{display:inline-block;margin-top:10px;color:white;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)} @media (max-width:900px){.layout{grid-template-columns:1fr}}
+:root{--bg:#eef3fb;--panel:#ffffff;--text:#1f2937;--muted:#6b7280;--border:#dbe3ee;--accent:#1d4ed8;--accent2:#60a5fa;--goodbg:#ecfdf5;--warnbg:#fff7ed;--badbg:#fef2f2;--shadow:0 10px 30px rgba(15,23,42,.08);}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eaf2ff 0%,#f7f9fc 100%);color:var(--text);line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:24px} .hero,.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)} .hero{padding:24px;margin-bottom:18px} .panel{padding:22px}
+.kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;margin-bottom:8px} h1,h2,h3{margin:0 0 10px 0} .sub{color:var(--muted);max-width:920px}
+.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px} .progress{height:10px;background:#e5edf7;border-radius:999px;overflow:hidden;margin-bottom:14px} .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .2s ease}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px} .pill{display:inline-block;background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-size:13px}
+.card,.feedback{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fbfdff} .card{background:#f8fbff}
+.feedback{display:none;margin-top:10px} .feedback.good{display:block;background:var(--goodbg);border-left:5px solid #10b981} .feedback.bad{display:block;background:var(--badbg);border-left:5px solid #ef4444} .feedback.warn{display:block;background:var(--warnbg);border-left:5px solid #f59e0b}
+.choices,.checklist,.bar-wrap{display:grid;gap:10px;margin-top:12px} .choice-btn,.nav-btn,.ghost-btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;text-align:left} .choice-btn:hover,.ghost-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} .nav-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)} .nav-btn:disabled{opacity:.55;cursor:not-allowed}
+.check{padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff} .small{font-size:13px;color:var(--muted)} .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.require-note{margin-top:10px;padding:10px 12px;border:1px solid #fde68a;background:#fffbeb;border-radius:10px;color:#92400e;} a.cta{display:inline-block;margin-top:12px;color:#fff;background:var(--accent);text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid var(--accent)}
+@media (max-width:900px){.layout,.twocol{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="hero"><div class="kicker">MC295 • Week 2 • Lecture 1</div><h1>Conceptualization, Operationalization, Validity, and Reliability</h1><div class="sub">A rough interactive draft based on the Week 2 flow from concepts to measurement.</div></div>
+<div class="hero"><div class="kicker">MC295 • Week 2 • Lecture 1</div><h1>Week 2: Measurement, Validity, and Reliability</h1><div class="sub">This lecture moves from concepts to measures, then to levels of measurement, validity, and reliability.</div></div>
 <div class="layout">
 <div class="panel">
 <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
-<div class="meta-row"><div class="pill">Screen <span id="screenCount">1</span> of <span id="screenTotal"></span></div><div class="pill">Topic: <span id="topicLabel"></span></div></div>
+<div class="meta"><div class="pill">Screen <span id="screenNum">1</span> of <span id="screenTotal"></span></div><div class="pill">Topic: <span id="screenTopic"></span></div></div>
 <div id="screenArea"></div>
-<div class="button-row"><button id="backBtn" class="nav" onclick="prevScreen()">Back</button><button id="nextBtn" class="nav primary" onclick="nextScreen()">Next</button></div>
+<div id="requiredNote" class="require-note" style="display:none;">You must complete the required interaction on this screen before continuing.</div>
+<div class="navrow"><button id="backBtn" class="ghost-btn" onclick="prevScreen()">Back</button><button id="nextBtn" class="nav-btn primary" onclick="nextScreen()">Next</button></div>
 </div>
-<div class="panel">
-<div class="side-section"><div class="side-title">Lecture roadmap</div><div class="mini-card">Move from abstract concepts to operational measures, then to levels of measurement and measurement quality.</div></div>
-<div class="side-section"><div class="side-title">Study note</div><div class="mini-card">Week 2 gets much stronger once students see that measurement decisions shape what counts as evidence.</div></div>
-<div class="side-section"><div class="side-title">Transition</div><div class="mini-card">This lecture is meant to come immediately before the matching weekly policy case.</div></div>
-</div>
-</div>
-</div>
+<div class="panel"><h3>Lecture roadmap</h3><div id="roadmapBox" class="card"></div><div class="card" style="margin-top:14px;">Move slowly. The goal is to practice the habits of interpretation you will need in the policy case.</div></div>
+</div></div>
 <script>
-const screens=[
-{topic:'Concepts vs measures', html:`<div class="screen-title">A concept is not the same thing as a measure</div><div class="scenario">Policymakers say they want to improve “community well-being.” That sounds clear until you ask: what exactly counts as well-being?</div><p>Week 2 is about moving from abstract concepts to concrete, defensible measures.</p>`},
-{topic:'Conceptual definition', html:`<div class="screen-title">Conceptual definitions</div><div class="checklist"><div class="check"><strong>Subject:</strong> who or what the concept applies to</div><div class="check"><strong>Characteristic:</strong> what attribute is being assessed</div></div>`},
-{topic:'Operational definition', html:`<div class="screen-title">Operational definitions</div><div class="checklist"><div class="check"><strong>Concept:</strong> inequality</div><div class="check"><strong>Operationalization:</strong> GINI Index</div></div><p>Measurement choices are never neutral.</p>`},
-{topic:'Levels of measurement', html:`<div class="screen-title">Levels of measurement</div><div class="checklist"><div class="check"><strong>Nominal:</strong> non-ranked categories</div><div class="check"><strong>Ordinal:</strong> ranked categories</div><div class="check"><strong>Interval:</strong> numerical measurement</div></div>`},
-{topic:'Validity and reliability', html:`<div class="screen-title">Validity and reliability</div><div class="checklist"><div class="check"><strong>Validity:</strong> does the measure capture the true construct?</div><div class="check"><strong>Reliability:</strong> does it produce consistent results?</div></div><div class="success-box">A measure can be reliable but invalid.</div>`},
-{topic:'Wrap-up', html:`<div class="screen-title">Before moving to the case</div><div class="success-box">Whenever a policy report uses a big concept like poverty, tolerance, or well-being, ask how that concept was defined and operationalized.</div><a class="cta-link" href="index.html">Return to the main app</a>`}
-];
-const state={index:0};
-function renderScreen(){const s=screens[state.index];document.getElementById('screenArea').innerHTML=s.html;document.getElementById('screenCount').textContent=state.index+1;document.getElementById('screenTotal').textContent=screens.length;document.getElementById('topicLabel').textContent=s.topic;document.getElementById('progressFill').style.width=((state.index+1)/screens.length*100)+'%';document.getElementById('backBtn').disabled=state.index===0;document.getElementById('nextBtn').disabled=state.index===screens.length-1;}
-function nextScreen(){if(state.index<screens.length-1){state.index++;renderScreen();}}
-function prevScreen(){if(state.index>0){state.index--;renderScreen();}}
-function choose(id,html){const el=document.getElementById(id); if(el) el.innerHTML=html;}
-renderScreen();
+const screens = [{"topic": "Concepts and measures", "required": false, "html": "<h2>A concept is not the same thing as a measure</h2><div class='card'>A report may say it wants to improve \u201ccommunity well-being.\u201d That sounds clear until you ask how well-being will actually be defined and measured.</div>"}, {"topic": "Conceptual definitions", "required": false, "html": "<h2>Conceptual definitions</h2><div class='checklist'><div class='check'>A conceptual definition identifies the <strong>subject</strong>.</div><div class='check'>It also identifies the <strong>characteristic</strong> being assessed.</div></div>"}, {"topic": "Operational definitions", "required": true, "html": "<h2>Operational definitions</h2><div class='card'>Which of the following is an operational measure of inequality?</div><div class='choices'><button class='choice-btn' onclick=\"answer('a', false, '', '\u201cInequality\u201d names the concept itself, not the operational measure.')\">Inequality</button><button class='choice-btn' onclick=\"answer('a', true, 'Correct. A GINI index is an operational measure of inequality.', '')\">GINI Index</button></div><div id='a' class='feedback'></div>"}, {"topic": "Operationalization matters", "required": false, "html": "<h2>Why operationalization matters</h2><div class='card'>Measurement choices shape what counts as evidence and what kinds of analyses become possible later.</div>"}, {"topic": "Levels of measurement", "required": false, "html": "<h2>Levels of measurement</h2><div class='checklist'><div class='check'><strong>Nominal:</strong> categories without order</div><div class='check'><strong>Ordinal:</strong> categories with order</div><div class='check'><strong>Interval:</strong> numerical measurement where differences are meaningful</div></div>"}, {"topic": "Classify a variable", "required": true, "html": "<h2>Classify the variable</h2><div class='card'>Political ideology measured from \u201cmost liberal\u201d to \u201cmost conservative\u201d on a ranked scale.</div><div class='choices'><button class='choice-btn' onclick=\"answer('b', false, '', 'Nominal variables are categories without order.')\">Nominal</button><button class='choice-btn' onclick=\"answer('b', true, 'Correct. This is ordinal because the categories are ranked.', '')\">Ordinal</button><button class='choice-btn' onclick=\"answer('b', false, '', 'This is not interval because equal spacing is not established.')\">Interval</button></div><div id='b' class='feedback'></div>"}, {"topic": "Validity", "required": false, "html": "<h2>Validity</h2><div class='card'>Validity asks whether a measure captures the true value or the intended construct.</div><p>A measure may be consistent and still wrong.</p>"}, {"topic": "Reliability", "required": false, "html": "<h2>Reliability</h2><div class='card'>Reliability asks whether the measure is consistent across repeated uses.</div>"}, {"topic": "Validity versus reliability", "required": true, "html": "<h2>Can a measure be reliable but invalid?</h2><div class='choices'><button class='choice-btn' onclick=\"answer('c', true, 'Correct. A measure can be consistent and still systematically wrong.', '')\">Yes.</button><button class='choice-btn' onclick=\"answer('c', false, '', 'Not quite. Reliability and validity are related, but they are not the same thing.')\">No.</button></div><div id='c' class='feedback'></div>"}, {"topic": "Takeaway", "required": false, "html": "<h2>Before you enter the case</h2><div class='card'><div class='checklist'><div class='check'>How is the concept defined?</div><div class='check'>How is it operationalized?</div><div class='check'>What level of measurement is used?</div><div class='check'>Is the measure valid and reliable?</div></div></div><a class='cta' href='index.html?autocase=week2.json'>Begin Week 2 policy case</a>"}];
+let current = 0;
+let completedRequired = {};
+function isScreenComplete(i){return !screens[i].required || completedRequired[i]===true;}
+function markComplete(){completedRequired[current]=true;updateGate();}
+function updateGate(){const req=screens[current].required; const done=isScreenComplete(current); document.getElementById('nextBtn').disabled=req && !done; document.getElementById('requiredNote').style.display=req && !done ? 'block':'none';}
+function renderRoadmap(){document.getElementById('roadmapBox').innerHTML=screens.map((s,i)=>`<div class="check">${i+1}. ${s.topic}</div>`).join('');}
+function renderScreen(){const s=screens[current]; document.getElementById('screenArea').innerHTML=s.html; document.getElementById('screenNum').textContent=current+1; document.getElementById('screenTotal').textContent=screens.length; document.getElementById('screenTopic').textContent=s.topic; document.getElementById('progressFill').style.width=(((current+1)/screens.length)*100)+'%'; document.getElementById('backBtn').disabled=current===0; updateGate();}
+function nextScreen(){if(isScreenComplete(current)&&current<screens.length-1){current++;renderScreen();}}
+function prevScreen(){if(current>0){current--;renderScreen();}}
+function answer(id, ok, yes, no){const el=document.getElementById(id); el.className='feedback '+(ok?'good':'bad'); el.style.display='block'; el.innerHTML='<strong>'+(ok?'Correct.':'Reconsider.')+'</strong> '+(ok?yes:no); markComplete();}
+function reveal(id){const el=document.getElementById(id); el.className='feedback warn'; el.style.display='block'; markComplete();}
+renderRoadmap(); renderScreen();
 </script>
 </body></html>
