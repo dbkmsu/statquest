@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- RETURN_WEEK_INIT_FIX -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StatQuest: Weekly Modules</title>
@@ -650,11 +651,22 @@
     loadStudentInfo();
     renderSavedResult();
     buildWeekButtons();
-    selectWeek(weekCatalog[0].file);
     document.getElementById('studentNameInput').addEventListener('change', () => saveStudentInfo(false));
     document.getElementById('studentIdInput').addEventListener('change', () => saveStudentInfo(false));
-    checkForLectureReturn();
-    checkForTutorialReturn();
+
+    const params = new URLSearchParams(window.location.search);
+    const returnWeek = params.get('week') || params.get('autocase') || params.get('return_case');
+
+    if (returnWeek && getWeekMeta(returnWeek)) {
+      currentWeekFile = returnWeek;
+      currentWeekName = getWeekMeta(returnWeek).label;
+      buildWeekButtons();
+      renderDashboard();
+      checkForLectureReturn();
+      checkForTutorialReturn();
+    } else {
+      selectWeek(weekCatalog[0].file);
+    }
   </script>
 </body>
 </html>
