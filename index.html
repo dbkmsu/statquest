@@ -1,13 +1,8 @@
-\documentclass[10pt]{article}
-\usepackage[usenames]{color} %used for font color
-\usepackage{amssymb} %maths
-\usepackage{amsmath} %maths
-\usepackage[utf8]{inputenc} %useful to type directly diacritic characters
-\begin{document}
-\begin{align*}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+  <!-- FIXED_BY_CHATGPT: tutorial same-tab + auto-return -->
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StatQuest: Weekly Modules</title>
   <style>
@@ -394,14 +389,8 @@
       if (!ensureIdentity()) return;
       const meta = getWeekMeta(currentWeekFile);
       if (!meta.tutorialUrl) return;
-      saveWeekProgress(meta.file, { tutorialStarted:true });
+      saveWeekProgress(meta.file, { tutorialStarted:true, tutorialCompleted:false });
       window.location.href = meta.tutorialUrl;
-      const banner = document.getElementById('returnBanner');
-      banner.className = 'panel';
-      banner.innerHTML = `<strong>Tutorial opened.</strong> Students can return to this page at any time and mark the tutorial complete when finished.`;
-      banner.classList.remove('hidden');
-      renderDashboard();
-      window.scrollTo({ top:0, behavior:'smooth' });
     }
     function markTutorialComplete() {
       if (!ensureIdentity()) return;
@@ -437,6 +426,25 @@
         banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back. Choose the tutorial, the case, or any other section from the week dashboard.`;
         banner.classList.remove('hidden');
       }
+
+    function checkForTutorialReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const week = params.get('week');
+      const tutorial = params.get('tutorial');
+      if (!week || tutorial !== 'complete') return;
+      const meta = getWeekMeta(week);
+      if (meta) {
+        currentWeekFile = meta.file;
+        currentWeekName = meta.label;
+        saveWeekProgress(meta.file, { tutorialStarted:true, tutorialCompleted:true });
+        selectWeek(meta.file);
+        const banner = document.getElementById('returnBanner');
+        banner.className = 'panel';
+        banner.innerHTML = `<strong>Tutorial complete.</strong> Welcome back. Your tutorial progress has been updated.`;
+        banner.classList.remove('hidden');
+      }
+      history.replaceState({}, '', window.location.pathname);
+    }
       history.replaceState({}, '', window.location.pathname);
       localStorage.removeItem('statquest_pending_week');
     }
@@ -650,8 +658,7 @@
     document.getElementById('studentNameInput').addEventListener('change', () => saveStudentInfo(false));
     document.getElementById('studentIdInput').addEventListener('change', () => saveStudentInfo(false));
     checkForLectureReturn();
+    checkForTutorialReturn();
   </script>
 </body>
 </html>
-\end{align*}
-\end{document}
