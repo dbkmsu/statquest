@@ -5,56 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StatQuest: Weekly Modules</title>
 </head>
-
 <body>
+  <h1>StatQuest: Weekly Modules</h1>
+  <p>Week 1</p>
 
-<h1>StatQuest: Weekly Modules</h1>
+  <button onclick="openTutorial()">Open Tutorial</button>
 
-<p>Week 1</p>
+  <p>
+    Direct link:
+    <a href="https://dbkmsu.shinyapps.io/Rtut1web/" target="_self">Open directly</a>
+  </p>
 
-<button onclick="openTutorial()">Open Tutorial</button>
+  <script>
+    const weekCatalog = [
+      {
+        file: 'week1.json',
+        label: 'Week 1',
+        tutorialUrl: 'https://dbkmsu.shinyapps.io/Rtut1web/'
+      }
+    ];
 
-<p>
-  Direct link:
-  <a href="https://dbkmsu.shinyapps.io/Rtut1web/" target="_self">
-    Open directly
-  </a>
-</p>
+    let currentWeekFile = 'week1.json';
 
-<script>
-const weekCatalog = [
-  {
-    file: 'week1.json',
-    label: 'Week 1',
-    tutorialUrl: 'https://dbkmsu.shinyapps.io/Rtut1web/'
-  }
-];
+    function getWeekMeta(file) {
+      return weekCatalog.find(w => w.file === file);
+    }
 
-let currentWeekFile = 'week1.json';
+    function openTutorial() {
+      const meta = getWeekMeta(currentWeekFile);
+      if (!meta || !meta.tutorialUrl) return;
+      window.location.href = meta.tutorialUrl;
+    }
 
-function getWeekMeta(file) {
-  return weekCatalog.find(w => w.file === file);
-}
+    function checkForTutorialReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const week = params.get('week');
+      const tutorial = params.get('tutorial');
 
-function openTutorial() {
-  const meta = getWeekMeta(currentWeekFile);
-  if (!meta || !meta.tutorialUrl) return;
-  window.location.href = meta.tutorialUrl;
-}
+      if (!week || tutorial !== 'complete') return;
 
-function checkForTutorialReturn() {
-  const params = new URLSearchParams(window.location.search);
-  const week = params.get('week');
-  const tutorial = params.get('tutorial');
+      alert('Tutorial marked complete.');
+      history.replaceState({}, '', window.location.pathname);
+    }
 
-  if (!week || tutorial !== 'complete') return;
-
-  alert("Tutorial marked complete.");
-  history.replaceState({}, '', window.location.pathname);
-}
-
-checkForTutorialReturn();
-</script>
-
+    checkForTutorialReturn();
+  </script>
 </body>
 </html>
