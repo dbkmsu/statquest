@@ -415,10 +415,10 @@
       const params = new URLSearchParams(window.location.search);
       const autocase = params.get('autocase') || params.get('return_case');
       if (!autocase) return;
-      const pendingRaw = localStorage.getItem('statquest_pending_week');
       const meta = getWeekMeta(autocase);
       if (meta) {
-        currentWeekFile = meta.file; currentWeekName = meta.label;
+        currentWeekFile = meta.file;
+        currentWeekName = meta.label;
         saveWeekProgress(meta.file, { lectureStarted:true, lectureCompleted:true });
         selectWeek(meta.file);
         const banner = document.getElementById('returnBanner');
@@ -426,6 +426,9 @@
         banner.innerHTML = `<strong>Lecture complete.</strong> Welcome back. Choose the tutorial, the case, or any other section from the week dashboard.`;
         banner.classList.remove('hidden');
       }
+      history.replaceState({}, '', window.location.pathname);
+      localStorage.removeItem('statquest_pending_week');
+    }
 
     function checkForTutorialReturn() {
       const params = new URLSearchParams(window.location.search);
@@ -444,9 +447,6 @@
         banner.classList.remove('hidden');
       }
       history.replaceState({}, '', window.location.pathname);
-    }
-      history.replaceState({}, '', window.location.pathname);
-      localStorage.removeItem('statquest_pending_week');
     }
 
     function saveLatestResult(result) {
