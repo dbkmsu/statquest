@@ -7,7 +7,6 @@
 \begin{align*}<!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- TEST VERSION 123 -->  
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StatQuest: Weekly Modules</title>
@@ -396,7 +395,7 @@
       const meta = getWeekMeta(currentWeekFile);
       if (!meta.tutorialUrl) return;
       saveWeekProgress(meta.file, { tutorialStarted:true });
-      window.open(meta.tutorialUrl, '_blank', 'noopener');
+      window.location.href = meta.tutorialUrl;
       const banner = document.getElementById('returnBanner');
       banner.className = 'panel';
       banner.innerHTML = `<strong>Tutorial opened.</strong> Students can return to this page at any time and mark the tutorial complete when finished.`;
