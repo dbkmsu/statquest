@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- FINAL_CLEAN_VERSION: direct tutorial link + assign navigation -->
   <!-- FIXED_BY_CHATGPT: tutorial same-tab + auto-return -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -339,7 +340,21 @@
         ${result && result.weekFile === meta.file ? `<div class="notice good" style="margin-top:14px;"><strong>Latest result for this week</strong><br><span class="small">Score: ${result.score}/${result.totalQuestions} · Calibration: ${result.calibration}% · Completed: ${result.completedAt}</span></div>` : ''}
       `;
     }
-    function renderModuleCard(meta, type, status) {
+    
+    function tutorialLaunchMarkup(meta, status) {
+      const label = status === 'not-started' ? 'Open tutorial' : 'Reopen tutorial';
+      return `<a class="btn" href="${meta.tutorialUrl}" onclick="return launchTutorialFromLink(event, '${meta.file}')" target="_self">${label}</a>`;
+    }
+    function launchTutorialFromLink(event, file) {
+      if (!ensureIdentity()) {
+        event.preventDefault();
+        return false;
+      }
+      saveWeekProgress(file, { tutorialStarted:true, tutorialCompleted:false });
+      return true;
+    }
+
+function renderModuleCard(meta, type, status) {
       const statusBadge = `<span class="badge ${status}">${componentLabel(status)}</span>`;
       if (type === 'lecture') {
         return `<div class="module-card">
@@ -356,7 +371,7 @@
           <div class="module-top"><div><h3>R tutorial</h3><div class="small">Practice the coding skills used in this week.</div></div>${statusBadge}</div>
           <div class="metric">Estimated time: ${meta.estimated.tutorial || '20-30 min'}</div>
           <div class="btn-row" style="margin-top:14px;">
-            <button class="btn" onclick="openTutorial()">${status === 'not-started' ? 'Open tutorial' : 'Reopen tutorial'}</button>
+            ${tutorialLaunchMarkup(meta, status)}
             <button class="btn-secondary" onclick="markTutorialComplete()">${status === 'complete' ? 'Marked complete' : 'Mark tutorial complete'}</button>
             ${status !== 'not-started' ? `<button class="btn-light" onclick="markComponent('${meta.file}','tutorial',false)">Mark incomplete</button>` : ''}
           </div>
@@ -390,7 +405,7 @@
       const meta = getWeekMeta(currentWeekFile);
       if (!meta.tutorialUrl) return;
       saveWeekProgress(meta.file, { tutorialStarted:true, tutorialCompleted:false });
-      window.location.href = meta.tutorialUrl;
+      window.location.assign(meta.tutorialUrl);
     }
     function markTutorialComplete() {
       if (!ensureIdentity()) return;
