@@ -92,6 +92,9 @@
       <div class="sub">A single landing page for each week with lecture, R tutorial, and policy case progress.</div>
       <div class="meta">
         <div class="pill">Suggested order: Lecture → Tutorial → Policy case</div>
+        <div class="notice suggested">
+          <strong>Suggested sequence</strong>
+        </div>
         <div class="pill">Students can open any available component at any time</div>
         <div class="pill">Progress is saved on this device</div>
       </div>
@@ -326,9 +329,7 @@
           ${renderModuleCard(meta, 'case', caseStatus)}
         </div>
 
-        <div class="notice suggested">
-          <strong>Suggested sequence</strong>
-        </div>
+        
 
         ${result && result.weekFile === meta.file ? `<div class="notice good" style="margin-top:14px;"><strong>Latest result for this week</strong><br><span class="small">Score: ${result.score}/${result.totalQuestions} · Calibration: ${result.calibration}% · Completed: ${result.completedAt}</span></div>` : ''}
       `;
