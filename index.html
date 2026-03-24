@@ -356,7 +356,6 @@
             <button class="btn-secondary" onclick="markTutorialComplete()">${status === 'complete' ? 'Marked complete' : 'Mark tutorial complete'}</button>
             ${status !== 'not-started' ? `<button class="btn-light" onclick="markComponent('${meta.file}','tutorial',false)">Mark incomplete</button>` : ''}
           </div>
-          <div class="small" style="margin-top:10px;">Tutorial completion is tracked manually unless the Shiny app sends students back with a completion link.</div>
           <div class="small" style="margin-top:8px;">Direct tutorial link: <a href="${meta.tutorialUrl}" target="_self" rel="noopener">Open directly</a></div>
         </div>`;
       }
