@@ -91,8 +91,6 @@
       <h1>StatQuest: Weekly Modules</h1>
       <div class="sub">A single landing page for each week with lecture, R tutorial, and policy case progress.</div>
       <div class="meta">
-        <div class="pill">Students can open any available component at any time</div>
-        <div class="pill">Progress is saved on this device</div>
       </div>
     </div>
 
@@ -305,9 +303,7 @@
         <div class="week-hero">
           <div>
             <h2>${meta.label}</h2>
-          <div class="notice suggested">
-            <strong>Suggested sequence: Students can open any component at any time, but the recommended flow is Lecture → Tutorial → Policy case.</strong>
-            </div>
+          <div class="pill">Students can open any component at any time but the suggested order is: Lecture, Tutorial, and Policy Case</div>
           <div class="notice" style="min-width:260px;">
             <strong>Week progress</strong><br>
             <span class="small">${completedCount} of ${totalCount} sections complete${progress.lastUpdated ? ` · Updated ${progress.lastUpdated}` : ''}</span>
