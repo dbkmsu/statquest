@@ -313,7 +313,7 @@
         <div class="summary-grid">
           <div class="mini-stat"><strong>Lecture</strong><div class="small">${componentLabel(lectureStatus)}</div></div>
           ${meta.tutorialUrl ? `<div class="mini-stat"><strong>Tutorial</strong><div class="small">${componentLabel(tutorialStatus)}</div></div>` : ''}
-          <div class="mini-stat"><strong>Policy case</strong><div class="small">${componentLabel(caseStatus)}</div></div>
+          <div class="mini-stat"><strong>Policy Case</strong><div class="small">${componentLabel(caseStatus)}</div></div>
         </div>
 
         <div class="cards">
@@ -351,7 +351,7 @@
         </div>`;
       }
       return `<div class="module-card">
-        <div class="module-top"><div><h3>Policy case</h3><div class="small">Apply the week’s ideas to a policy scenario.</div></div>${statusBadge}</div>
+        <div class="module-top"><div><h3>Policy Case</h3><div class="small">Apply the week’s ideas to a policy scenario.</div></div>${statusBadge}</div>
         <div class="metric">Estimated time: ${meta.estimated.case || '15-20 min'}</div>
         <div class="btn-row" style="margin-top:14px;">
           <button class="btn" onclick="startOrResumeCase()">${status === 'complete' ? 'Review case' : status === 'in-progress' ? 'Resume case' : 'Start case'}</button>
@@ -529,7 +529,7 @@
       return `<div class="grid-case">
         <div><div id="app"></div></div>
         <div>
-          <div class="side-title">Policy cases</div>
+          <div class="side-title">Policy Cases</div>
           <div id="caseList" class="case-list">${renderCaseList()}</div>
           <div class="panel" style="padding:16px; margin-top:16px; box-shadow:none;">
             <div class="side-title">Current week</div>
