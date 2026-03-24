@@ -347,7 +347,8 @@
             <button class="btn" onclick="openTutorial()">${status === 'not-started' ? 'Open tutorial' : 'Reopen tutorial'}</button>
             <button class="btn-secondary" onclick="markTutorialComplete()">${status === 'complete' ? 'Marked complete' : 'Mark tutorial complete'}</button>
             ${status !== 'not-started' ? `<button class="btn-light" onclick="markComponent('${meta.file}','tutorial',false)">Mark incomplete</button>` : ''}
-          </div>`;
+          </div>
+        </div>`;
       }
       return `<div class="module-card">
         <div class="module-top"><div><h3>Policy case</h3><div class="small">Apply the week’s ideas to a policy scenario.</div></div>${statusBadge}</div>
