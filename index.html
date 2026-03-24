@@ -21,6 +21,7 @@
     .sub, .small { color:var(--muted); }
     .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
     .pill { background:#f8fafc; border:1px solid var(--border); border-radius:999px; padding:7px 12px; font-size:14px; }
+    .pill2 { background:#EB0C0C; border:1px solid var(--border); border-radius:999px; padding:7px 12px; font-size:14px; }
     .layout { display:grid; grid-template-columns: 340px 1fr; gap:18px; }
     .sidebar, .main { min-width:0; }
     .sidebar .panel, .main .panel { padding:20px; }
@@ -303,7 +304,7 @@
         <div class="week-hero">
           <div>
             <h2>${meta.label}</h2>
-          <div class="pill">Students can open any component at any time but the suggested order is: Lecture, Tutorial, and Policy Case</div>
+          <div class="pill2">Students can open any component at any time but the suggested order is: Lecture, Tutorial, and Policy Case</div>
           <div class="notice" style="min-width:260px;">
             <strong>Week progress</strong><br>
             <span class="small">${completedCount} of ${totalCount} sections complete${progress.lastUpdated ? ` · Updated ${progress.lastUpdated}` : ''}</span>
