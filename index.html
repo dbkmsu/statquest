@@ -306,7 +306,7 @@
         <div class="week-hero">
           <div>
             <h2>${meta.label}</h2>
-            <div class="sub">Choose any available component. The recommended order is lecture, then tutorial, then policy case.</div>
+            <div class="small">Students can open any component at any time, but the recommended flow is Lecture → Tutorial → Policy case.</div>
           </div>
           <div class="notice" style="min-width:260px;">
             <strong>Week progress</strong><br>
@@ -328,7 +328,6 @@
 
         <div class="notice suggested">
           <strong>Suggested sequence</strong>
-          <div class="small">Students can open any component at any time, but the recommended flow is Lecture → Tutorial → Policy case.</div>
         </div>
 
         ${result && result.weekFile === meta.file ? `<div class="notice good" style="margin-top:14px;"><strong>Latest result for this week</strong><br><span class="small">Score: ${result.score}/${result.totalQuestions} · Calibration: ${result.calibration}% · Completed: ${result.completedAt}</span></div>` : ''}
